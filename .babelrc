@@ -14,6 +14,9 @@
   ],
   "plugins": [
     "@babel/plugin-proposal-class-properties",
+    ["transform-gl-matrix", {
+      "glMatrixArray": false
+    }],
     [
       "@babel/plugin-transform-runtime",
       {

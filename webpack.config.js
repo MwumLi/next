@@ -2,19 +2,15 @@ const webpack = require('webpack');
 const path = require('path');
 const packageConfig = require('./package.json');
 
-function toCamelCase(str) {
-  return str.replace(/-([a-z])/ig, (s, p1) => p1.toUpperCase());
-}
-
 module.exports = function (env = {}) {
   return {
     mode: env.mode || 'none',
     entry: './src/index',
     output: {
       path: path.resolve(__dirname, 'dist'),
-      filename: `${packageConfig.name}.js`,
+      filename: 'spritejs.js',
       publicPath: '/js/',
-      library: [toCamelCase(packageConfig.name)],
+      library: ['spritejs'],
       libraryTarget: 'umd',
       libraryExport: 'default',
       globalObject: 'this',
