@@ -5,9 +5,9 @@ export default class {
 
   constructor() {
     this.attributes = new this.constructor.Attr(this);
-    if(Object.seal) {
-      Object.seal(this.attributes);
-    }
+    // if(Object.seal) {
+    //   Object.seal(this.attributes);
+    // }
   }
 
   get nodeName() {
@@ -19,12 +19,9 @@ export default class {
   }
 
   onPropertyChange(key, newValue, oldValue) {
-    if(key !== 'id' && key !== 'name' && key !== 'className') {
-      this.forceUpdate();
-    }
-    if(this.layer && this.layer.useCSS) {
-      this.updateCSS();
-    }
+    // if(this.layer && this.layer.useCSS) {
+    //   this.updateCSS();
+    // }
   }
 
   forceUpdate() {
@@ -46,6 +43,14 @@ export default class {
   // 获取可继承的和被样式影响的属性
   getComputedAttribute(key) {
 
+  }
+
+  setAttribute(key, value) {
+    this.attributes[key] = value;
+  }
+
+  getAttribute(key) {
+    return this.attributes[key];
   }
 
   connect(parent, zOrder) {

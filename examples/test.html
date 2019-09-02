@@ -8,8 +8,26 @@
   <script src="/js/spritejs.js"></script>
 </head>
 <body>
+  <canvas width="512" height="512"></canvas>
   <script>
-    console.log(spritejs);
+    const el = new spritejs.Element();
+    el.attributes.width = 100;
+    el.attributes.height = 100;
+    el.attributes.borderWidth = 10;
+    el.attributes.bgcolor = 'red';
+    el.attributes.x = 100;
+    el.attributes.y = 100;
+    // el.attributes.rotate = 45;
+    el.attributes.transform = 'rotate(45deg)';
+    el.attributes.transform = 'rotate(45deg) translate(100px, 100px)';
+    // el.attributes.anchor = [0.5, 0.5];
+    // console.log(el.box);
+
+    const renderer = new spritejs.Renderer(document.querySelector('canvas'));
+
+    const mesh = el.draw(renderer);
+    // mesh.rotate(Math.PI / 4);
+    renderer.drawMeshes([mesh]);
   </script>
 </body>
 </html>

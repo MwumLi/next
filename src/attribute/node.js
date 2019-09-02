@@ -1,15 +1,7 @@
-function compareValue(oldValue, newValue) {
-  if(Array.isArray(oldValue) && Array.isArray(newValue)) {
-    if(oldValue.length !== newValue.length) return false;
-    for(let i = 0; i < oldValue.length; i++) {
-      if(oldValue[i] !== newValue[1]) return false;
-    }
-    return true;
-  }
-  return oldValue === newValue;
-}
+import {toString, compareValue} from '../utils/attribute_value';
 
 const setAttribute = Symbol.for('spritejs_setAttribute');
+const getAttribute = Symbol.for('spritejs_getAttribute');
 const setDefault = Symbol.for('spritejs_setAttributeDefault');
 
 const _subject = Symbol.for('spritejs_subject');
@@ -24,8 +16,6 @@ export default class {
       id: '',
       name: '',
       className: '',
-      anchorX: 0,
-      anchorY: 0,
     });
   }
 
@@ -42,53 +32,31 @@ export default class {
     }
   }
 
+  [getAttribute](key) {
+    return this[_attr][key];
+  }
+
   set id(value) {
-    this[setAttribute]('id', String(value));
+    this[setAttribute]('id', toString(value));
   }
 
   get id() {
-    return this[_attr].id;
+    return this[getAttribute]('id');
   }
 
   set name(value) {
-    this[setAttribute]('name', String(value));
+    this[setAttribute]('name', toString(value));
   }
 
   get name() {
-    return this[_attr].name;
+    return this[getAttribute]('name');
   }
 
   set className(value) {
-    this[setAttribute]('className', String(value));
+    this[setAttribute]('className', toString(value));
   }
 
   get className() {
-    return this[_attr].className;
-  }
-
-  // 非继承属性，默认值 0
-  set anchorX(value) {
-    this[setAttribute]('anchorX', Number(value));
-  }
-
-  get anchorX() {
-    return this[_attr].anchorX;
-  }
-
-  set anchorY(value) {
-    this[setAttribute]('anchorY', Number(value));
-  }
-
-  get anchorY() {
-    return this[_attr].anchorY;
-  }
-
-  set anchor([x, y]) {
-    this.anchorX = x;
-    this.anchorY = y;
-  }
-
-  get anchor() {
-    return [this.anchorX, this.anchorY];
+    return this[getAttribute]('className');
   }
 }
