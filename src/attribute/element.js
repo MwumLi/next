@@ -54,6 +54,8 @@ export default class extends Node {
       rotate: 0,
       scale: [1, 1],
       skew: [0, 0],
+      opacity: 1,
+      zIndex: 0,
     });
   }
 
@@ -128,6 +130,11 @@ export default class extends Node {
     return [this.width, this.height];
   }
 
+  set size([width, height]) {
+    this.width = width;
+    this.height = height;
+  }
+
   get borderWidth() {
     return this[getAttribute]('borderWidth');
   }
@@ -141,7 +148,7 @@ export default class extends Node {
   }
 
   set borderColor(value) {
-    this[setAttribute]('borderWidth', toColor(value));
+    this[setAttribute]('borderColor', toColor(value));
   }
 
   get bgcolor() {
@@ -290,5 +297,21 @@ export default class extends Node {
     transformMap.set('skew', value);
     this[_transformMatrix] = getMatrix(transformMap);
     this[setAttribute]('skew', value);
+  }
+
+  get opacity() {
+    return this[getAttribute]('opacity');
+  }
+
+  set opacity(value) {
+    this[setAttribute]('opacity', Number(value));
+  }
+
+  get zIndex() {
+    return this[getAttribute]('zIndex');
+  }
+
+  set zIndex(value) {
+    this[setAttribute]('zIndex', Number(value));
   }
 }

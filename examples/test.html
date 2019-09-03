@@ -10,24 +10,29 @@
 <body>
   <canvas width="512" height="512"></canvas>
   <script>
-    const el = new spritejs.Element();
-    el.attributes.width = 100;
-    el.attributes.height = 100;
-    el.attributes.borderWidth = 10;
-    el.attributes.bgcolor = 'red';
-    el.attributes.x = 100;
-    el.attributes.y = 100;
-    // el.attributes.rotate = 45;
-    el.attributes.transform = 'rotate(45deg)';
-    el.attributes.transform = 'rotate(45deg) translate(100px, 100px)';
-    // el.attributes.anchor = [0.5, 0.5];
-    // console.log(el.box);
+    const el = new spritejs.Sprite();
+    el.attr({
+      size: [100, 100],
+      borderWidth: 10,
+      borderColor: 'rgba(0,0,0,1)',
+      bgcolor: 'red',
+      pos: [100, 100],
+      transform: 'rotate(45deg) translate(100px, 100px)',
+      opacity: 0.5,
+    });
 
-    const renderer = new spritejs.Renderer(document.querySelector('canvas'));
+    const renderer = new spritejs.Renderer(document.querySelector('canvas'), {
+      // contextType: '2d',
+    });
 
-    const mesh = el.draw(renderer);
-    // mesh.rotate(Math.PI / 4);
-    renderer.drawMeshes([mesh]);
+    function update() {
+      const meshes = el.draw(renderer);
+      console.log(meshes);
+      // mesh.rotate(Math.PI / 4);
+      renderer.drawMeshes(meshes);
+    }
+
+    update();
   </script>
 </body>
 </html>

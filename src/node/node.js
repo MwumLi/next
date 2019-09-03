@@ -18,6 +18,14 @@ export default class {
     return this.parent && this.parent.layer;
   }
 
+  remove() {
+    if(this.parent && this.parent.removeChild) {
+      this.parent.removeChild(this);
+      return true;
+    }
+    return false;
+  }
+
   onPropertyChange(key, newValue, oldValue) {
     // if(this.layer && this.layer.useCSS) {
     //   this.updateCSS();
@@ -53,11 +61,11 @@ export default class {
     return this.attributes[key];
   }
 
-  connect(parent, zOrder) {
+  // connect(parent, zOrder) {
 
-  }
+  // }
 
-  disconnect() {
+  // disconnect() {
 
-  }
+  // }
 }
