@@ -21,12 +21,15 @@
       opacity: 0.5,
     });
 
+    const group = new spritejs.Group();
+
     const renderer = new spritejs.Renderer(document.querySelector('canvas'), {
       // contextType: '2d',
     });
+    el.setResolution(renderer.canvas);
 
     function update() {
-      const meshes = el.draw(renderer);
+      const meshes = el.draw();
       console.log(meshes);
       // mesh.rotate(Math.PI / 4);
       renderer.drawMeshes(meshes);

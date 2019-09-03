@@ -3,12 +3,15 @@ import {mat2d} from 'gl-matrix';
 import Node from './node';
 import Attr from '../attribute/element';
 
+const _resolution = Symbol('resolution');
+
 export default class extends Node {
   static Attr = Attr;
 
   constructor(attrs = {}) {
     super();
     Object.assign(this.attributes, attrs);
+    this[_resolution] = {width: 300, height: 150};
   }
 
   get contentSize() {
@@ -80,6 +83,13 @@ export default class extends Node {
         thickness: borderWidth,
       });
     }
+    if(key === 'zIndex' && this.parent) {
+      this.parent.reorder();
+    }
+  }
+
+  setResolution({width, height}) {
+    this[_resolution] = {width, height};
   }
 
   updateContours() {
@@ -118,7 +128,7 @@ export default class extends Node {
     return this;
   }
 
-  draw(renderer) {
+  draw() {
     if(!this.isVisible) return [];
 
     const opacity = this.attributes.opacity;
@@ -131,7 +141,7 @@ export default class extends Node {
     if(this.hasBorder) {
       let borderBoxMesh = this.borderBoxMesh;
       if(!borderBoxMesh) {
-        borderBoxMesh = new Mesh2D(this.borderBox, renderer.canvas);
+        borderBoxMesh = new Mesh2D(this.borderBox, this[_resolution]);
         borderBoxMesh.box = this.borderBox;
         this.borderBoxMesh = borderBoxMesh;
 
@@ -150,7 +160,7 @@ export default class extends Node {
     if(this.hasContent) {
       let clientBoxMesh = this.clientBoxMesh;
       if(!clientBoxMesh) {
-        clientBoxMesh = new Mesh2D(this.clientBox, renderer.canvas);
+        clientBoxMesh = new Mesh2D(this.clientBox, this[_resolution]);
         clientBoxMesh.box = this.clientBox;
         this.clientBoxMesh = clientBoxMesh;
 

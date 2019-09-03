@@ -18,6 +18,10 @@ export default class {
     return this.parent && this.parent.layer;
   }
 
+  get zIndex() {
+    return this.attributes.zIndex;
+  }
+
   remove() {
     if(this.parent && this.parent.removeChild) {
       this.parent.removeChild(this);
@@ -61,11 +65,21 @@ export default class {
     return this.attributes[key];
   }
 
-  // connect(parent, zOrder) {
+  connect(parent, zOrder) {
+    Object.defineProperty(this, 'parent', {
+      value: parent,
+      writable: false,
+      configurable: true,
+    });
+    Object.defineProperty(this, 'zOrder', {
+      value: zOrder,
+      writable: false,
+      configurable: true,
+    });
+  }
 
-  // }
-
-  // disconnect() {
-
-  // }
+  disconnect() {
+    delete this.parent;
+    delete this.zOrder;
+  }
 }
