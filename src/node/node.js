@@ -1,10 +1,13 @@
 import Attr from '../attribute/node';
 
+const copy = Symbol.for('spritejs_copyAttribute');
+
 export default class {
   static Attr = Attr;
 
-  constructor() {
+  constructor(attrs = {}) {
     this.attributes = new this.constructor.Attr(this);
+    Object.assign(this.attributes, attrs);
     // if(Object.seal) {
     //   Object.seal(this.attributes);
     // }
@@ -20,6 +23,12 @@ export default class {
 
   get zIndex() {
     return this.attributes.zIndex;
+  }
+
+  cloneNode() {
+    const cloned = new this.constructor();
+    cloned.attributes[copy](this.attributes);
+    return cloned;
   }
 
   remove() {

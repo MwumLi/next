@@ -6,18 +6,21 @@ import toColor from '../utils/color';
 const setAttribute = Symbol.for('spritejs_setAttribute');
 const getAttribute = Symbol.for('spritejs_getAttribute');
 const setDefault = Symbol.for('spritejs_setAttributeDefault');
+const copy = Symbol.for('spritejs_copyAttribute');
 
 const _transformMatrix = Symbol('transformMatrix');
 const _transforms = Symbol('transforms');
 
-function getMatrix(transformMap) {
+function getMatrix(transformMap, [ox, oy]) {
   let m = mat2d(1, 0, 0, 1, 0, 0);
   [...transformMap].forEach(([key, value]) => {
+    if(ox || oy) m = mat2d.translate(m, [ox, oy]);
     if(key === 'matrix') {
       m *= mat2d(value);
     } else {
       mat2d[key](m, m, value);
     }
+    if(ox || oy) m = mat2d.translate(m, [-ox, -oy]);
   });
   return m;
 }
@@ -39,8 +42,8 @@ export default class extends Node {
       anchorY: 0,
       x: 0,
       y: 0,
-      width: 0,
-      height: 0,
+      width: undefined,
+      height: undefined,
       borderWidth: 0,
       borderColor: [0, 0, 0, 1],
       bgcolor: undefined,
@@ -57,6 +60,12 @@ export default class extends Node {
       opacity: 1,
       zIndex: 0,
     });
+  }
+
+  [copy](attr) {
+    super[copy](attr);
+    this[_transforms] = new Map(attr[_transforms]);
+    this[_transformMatrix] = getMatrix(this[_transforms], this.transformOrigin);
   }
 
   get anchorX() {
@@ -239,8 +248,16 @@ export default class extends Node {
         }
       }
     }
-    this[_transformMatrix] = getMatrix(transformMap);
+    this[_transformMatrix] = getMatrix(transformMap, this.transformOrigin);
     this[setAttribute]('transform', value);
+  }
+
+  get transformOrigin() {
+    return this[getAttribute]('transformOrigin');
+  }
+
+  set transformOrigin([x, y]) {
+    this[setAttribute]('transformOrigin', [toNumber(x), toNumber(y)]);
   }
 
   get rotate() {
@@ -253,7 +270,7 @@ export default class extends Node {
       transformMap.delete('rotate');
     }
     transformMap.set('rotate', Math.PI * value / 180);
-    this[_transformMatrix] = getMatrix(transformMap);
+    this[_transformMatrix] = getMatrix(transformMap, this.transformOrigin);
     this[setAttribute]('rotate', value);
   }
 
@@ -267,7 +284,7 @@ export default class extends Node {
       transformMap.delete('translate');
     }
     transformMap.set('translate', value);
-    this[_transformMatrix] = getMatrix(transformMap);
+    this[_transformMatrix] = getMatrix(transformMap, this.transformOrigin);
     this[setAttribute]('translate', value);
   }
 
@@ -281,7 +298,7 @@ export default class extends Node {
       transformMap.delete('scale');
     }
     transformMap.set('scale', value);
-    this[_transformMatrix] = getMatrix(transformMap);
+    this[_transformMatrix] = getMatrix(transformMap, this.transformOrigin);
     this[setAttribute]('scale', value);
   }
 
@@ -295,7 +312,7 @@ export default class extends Node {
       transformMap.delete('skew');
     }
     transformMap.set('skew', value);
-    this[_transformMatrix] = getMatrix(transformMap);
+    this[_transformMatrix] = getMatrix(transformMap, this.transformOrigin);
     this[setAttribute]('skew', value);
   }
 

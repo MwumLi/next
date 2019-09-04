@@ -9,14 +9,13 @@ export default class extends Node {
   static Attr = Attr;
 
   constructor(attrs = {}) {
-    super();
-    Object.assign(this.attributes, attrs);
+    super(attrs);
     this[_resolution] = {width: 300, height: 150};
   }
 
   get contentSize() {
     const {width, height} = this.attributes;
-    return [width, height];
+    return [width || 0, height || 0];
   }
 
   // content + padding
@@ -43,7 +42,7 @@ export default class extends Node {
   get isVisible() {
     const [width, height] = this.contentSize;
 
-    return this.attributes.opacity > 0 && (width > 0 && height > 0) && (this.hasBorder || this.hasContent);
+    return this.attributes.opacity > 0 && (width > 0 && height > 0) && !!(this.hasBorder || this.hasContent);
   }
 
   get hasBorder() {
@@ -55,7 +54,7 @@ export default class extends Node {
 
   get hasContent() {
     const bgcolor = this.attributes.bgcolor;
-    return bgcolor[3] > 0;
+    return bgcolor && bgcolor[3] > 0;
   }
 
   // content + padding + border + margin
@@ -90,6 +89,12 @@ export default class extends Node {
 
   setResolution({width, height}) {
     this[_resolution] = {width, height};
+    if(this.borderBoxMesh) this.borderBoxMesh.setResolution(this[_resolution]);
+    if(this.clientBoxMesh) this.clientBoxMesh.setResolution(this[_resolution]);
+  }
+
+  getResolution() {
+    return {...this[_resolution]};
   }
 
   updateContours() {
@@ -112,7 +117,7 @@ export default class extends Node {
   }
 
   forceUpdate() {
-    // TODO
+    if(this.isVisible && this.parent) this.parent.forceUpdate();
   }
 
   attr(...args) {
@@ -126,6 +131,32 @@ export default class extends Node {
     }
     Object.assign(this.attributes, args[0]);
     return this;
+  }
+
+  get renderMatrix() {
+    const {x, y} = this.attributes;
+    let m = this.transformMatrix;
+    m[4] += x;
+    m[5] += y;
+    let parent = this.parent;
+    while(parent && parent.renderMatrix) {
+      m = mat2d(parent.renderMatrix) * mat2d(m);
+      parent = parent.parent;
+    }
+    return m;
+  }
+
+  /* override */
+  connect(parent, zOrder) {
+    super.connect(parent, zOrder);
+    this.setResolution(parent[_resolution]);
+    this.forceUpdate();
+  }
+
+  disconnect() {
+    const parent = this.parent;
+    super.disconnect();
+    if(parent) parent.forceUpdate();
   }
 
   draw() {
@@ -177,10 +208,7 @@ export default class extends Node {
       ret.push(clientBoxMesh);
     }
 
-    const {x, y} = this.attributes;
-    const m = this.transformMatrix;
-    m[4] += x;
-    m[5] += y;
+    const m = this.renderMatrix;
 
     ret.forEach((mesh) => {
       const m2 = mesh.transformMatrix;

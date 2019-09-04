@@ -3,6 +3,7 @@ import {toString, compareValue} from '../utils/attribute_value';
 const setAttribute = Symbol.for('spritejs_setAttribute');
 const getAttribute = Symbol.for('spritejs_getAttribute');
 const setDefault = Symbol.for('spritejs_setAttributeDefault');
+const copy = Symbol.for('spritejs_copyAttribute');
 
 const _subject = Symbol.for('spritejs_subject');
 const _attr = Symbol('attr');
@@ -17,6 +18,10 @@ export default class {
       name: '',
       className: '',
     });
+  }
+
+  [copy](attr) {
+    this[setDefault](attr[_attr]);
   }
 
   [setDefault](attrs) {

@@ -13,29 +13,44 @@
     const el = new spritejs.Sprite();
     el.attr({
       size: [100, 100],
+      anchor: 0.5,
       borderWidth: 10,
       borderColor: 'rgba(0,0,0,1)',
       bgcolor: 'red',
-      pos: [100, 100],
-      transform: 'rotate(45deg) translate(100px, 100px)',
+      pos: [256, 256],
+      // transform: 'rotate(45deg)',
       opacity: 0.5,
+      transformOrigin: [50, 50],
     });
+
+    const el2 = el.cloneNode();
+    el2.attr({
+      anchor: 0,
+    });
+
+    const canvas = document.querySelector('canvas');
+
+    const layer = new spritejs.Layer(canvas);
 
     const group = new spritejs.Group();
 
-    const renderer = new spritejs.Renderer(document.querySelector('canvas'), {
-      // contextType: '2d',
-    });
-    el.setResolution(renderer.canvas);
+    group.appendChild(el);
+    group.appendChild(el2);
 
-    function update() {
-      const meshes = el.draw();
-      console.log(meshes);
-      // mesh.rotate(Math.PI / 4);
-      renderer.drawMeshes(meshes);
+    group.attr({
+      transformOrigin: [256, 256],
+    });
+
+    layer.appendChild(group);
+
+    function update(t) {
+      group.attr({
+        transform: `rotate(${0.1 * t})`,
+      });
+      requestAnimationFrame(update);
     }
 
-    update();
+    update(0);
   </script>
 </body>
 </html>

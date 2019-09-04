@@ -29,6 +29,29 @@ export default class extends Element {
     return this[_ordered];
   }
 
+  /* override */
+  get contentSize() {
+    const {width, height} = this.attributes;
+    const {width: rw, height: rh} = this.getResolution();
+    return [
+      width != null ? width : rw,
+      height != null ? height : rh,
+    ];
+  }
+
+  /* override */
+  get hasContent() {
+    return this.children.length > 0;
+  }
+
+  /* override */
+  setResolution({width, height}) {
+    super.setResolution({width, height});
+    this.children.forEach((child) => {
+      child.setResolution({width, height});
+    });
+  }
+
   appendChild(el) {
     el.remove();
     this.children.push(el);
@@ -102,5 +125,15 @@ export default class extends Element {
         this[_ordered].splice(idx, 0, el);
       }
     }
+  }
+
+  draw() {
+    const meshes = [];
+    this.orderedChildren.forEach((child) => {
+      const res = child.draw();
+      if(res) meshes.push(...res);
+    });
+
+    return meshes;
   }
 }
