@@ -57,6 +57,24 @@ export default class extends Node {
     return bgcolor && bgcolor[3] > 0;
   }
 
+  get originalClientBox() {
+    if(this.clientBox) {
+      const points = this.clientBox.contours[0];
+      return [points[0][0], points[0][1], points[2][0], points[2][1]];
+    }
+    return [0, 0, 0, 0];
+  }
+
+  get originalClientRect() {
+    const [left, top, right, bottom] = this.originalClientBox;
+    return [left, top, right - left, bottom - top];
+  }
+
+  get renderer() {
+    if(this.parent) return this.parent.renderer;
+    return null;
+  }
+
   // content + padding + border + margin
   // get layoutSize() {
   //   return [0, 0];

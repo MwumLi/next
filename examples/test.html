@@ -10,6 +10,8 @@
 <body>
   <canvas width="512" height="512"></canvas>
   <script>
+    const textureURL = 'https://p4.ssl.qhimg.com/t012170360e1552ce17.png';
+
     const el = new spritejs.Sprite();
     el.attr({
       size: [100, 100],
@@ -26,6 +28,7 @@
     const el2 = el.cloneNode();
     el2.attr({
       anchor: 0,
+      texture: textureURL,
     });
 
     const canvas = document.querySelector('canvas');

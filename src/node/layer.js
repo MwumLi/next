@@ -7,7 +7,7 @@ const defaultOptions = {
 };
 
 const _autoUpdate = Symbol('autoUpdate');
-const _updateTimer = Symbol('updateTimer');
+const _renderer = Symbol('renderer');
 
 export default class extends Group {
   constructor(canvas, options = {}) {
@@ -15,8 +15,13 @@ export default class extends Group {
     const opts = Object.assign({}, defaultOptions, options);
     this[_autoUpdate] = opts.autoUpdate;
     delete options.autoUpdate;
-    this.renderer = new Renderer(canvas, opts);
+    this[_renderer] = new Renderer(canvas, opts);
     this.setResolution(canvas);
+  }
+
+  /* override */
+  get renderer() {
+    return this[_renderer];
   }
 
   render() {
