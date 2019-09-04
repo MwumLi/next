@@ -21,7 +21,7 @@
       bgcolor: 'red',
       pos: [256, 256],
       // transform: 'rotate(45deg)',
-      opacity: 0.5,
+      opacity: 0,
       transformOrigin: [50, 50],
     });
 
@@ -29,11 +29,15 @@
     el2.attr({
       anchor: 0,
       texture: textureURL,
+      textureRect: [50, 50, 100, 100],
+      // textureRepeat: true,
     });
 
     const canvas = document.querySelector('canvas');
 
-    const layer = new spritejs.Layer(canvas);
+    const layer = new spritejs.Layer(canvas, {
+      contextType: 'webgl',
+    });
 
     const group = new spritejs.Group();
 

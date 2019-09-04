@@ -27,6 +27,7 @@ export default class extends Group {
   render() {
     const meshes = this.draw();
     if(meshes && meshes.length) {
+      this[_renderer].clear();
       this.renderer.drawMeshes(meshes);
     }
   }

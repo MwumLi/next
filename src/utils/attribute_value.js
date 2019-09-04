@@ -63,9 +63,9 @@ export function compareValue(oldValue, newValue) {
   if(Array.isArray(oldValue) && Array.isArray(newValue)) {
     if(oldValue.length !== newValue.length) return false;
     for(let i = 0; i < oldValue.length; i++) {
-      if(oldValue[i] !== newValue[1]) return false;
+      if(oldValue[i] !== newValue[i]) return false;
     }
     return true;
   }
-  return oldValue === newValue;
+  return (oldValue == null && newValue == null) || oldValue === newValue;
 }

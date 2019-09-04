@@ -10,7 +10,10 @@ export default class extends Element {
   constructor(subject) {
     super(subject);
     this[setDefault]({
-      texture: null,
+      texture: undefined,
+      textureRect: undefined,
+      textureRepeat: false,
+      sourceRect: undefined,
     });
   }
 
@@ -22,5 +25,29 @@ export default class extends Element {
     const subject = this[_subject];
     subject.setTexture(value);
     this[setAttribute]('texture', value);
+  }
+
+  get textureRect() {
+    return this[getAttribute]('textureRect');
+  }
+
+  set textureRect(value) {
+    this[setAttribute]('textureRect', value);
+  }
+
+  get sourceRect() {
+    return this[getAttribute]('sourceRect');
+  }
+
+  set sourceRect(value) {
+    this[setAttribute]('sourceRect', value);
+  }
+
+  get textureRepeat() {
+    return this[getAttribute]('textureRepeat');
+  }
+
+  set textureRepeat(value) {
+    this[setAttribute]('textureRepeat', !!value);
   }
 }

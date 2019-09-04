@@ -1,4 +1,5 @@
 import {loadTexture, createTexture} from '../utils/texture_loader';
+import {compareValue} from '../utils/attribute_value';
 import Element from './element';
 import Attr from '../attribute/sprite';
 
@@ -16,17 +17,34 @@ export default class extends Element {
 
   draw() {
     const meshes = super.draw();
-    const clientBoxMesh = this.clientBoxMesh;
-    // console.log(clientBoxMesh);
-    const textureImage = this[_textureImage];
-    if(textureImage) {
-      const texture = clientBoxMesh.texture;
-      if(!texture || texture.image !== textureImage) {
-        const newTexture = createTexture(textureImage, this.renderer);
-        // console.log(newTexture);
-        clientBoxMesh.setTexture(newTexture, {
-          rect: this.originalClientRect,
-        });
+    if(meshes && meshes.length) {
+      const clientBoxMesh = this.clientBoxMesh;
+      // console.log(clientBoxMesh);
+      const textureImage = this[_textureImage];
+      if(textureImage) {
+        const texture = clientBoxMesh.texture;
+        const clientRect = this.originalClientRect;
+        let textureRect = this.attributes.textureRect;
+        const textureRepeat = this.attributes.textureRepeat;
+        const sourceRect = this.attributes.sourceRect;
+
+        if(!texture || texture.image !== textureImage
+          || texture.options.repeat !== textureRepeat
+          || !compareValue(texture.options.rect, textureRect)
+          || !compareValue(texture.options.srcRect, sourceRect)) {
+          const newTexture = createTexture(textureImage, this.renderer);
+          if(textureRect) {
+            textureRect[0] += clientRect[0];
+            textureRect[1] += clientRect[1];
+          } else {
+            textureRect = clientRect;
+          }
+          clientBoxMesh.setTexture(newTexture, {
+            rect: textureRect,
+            repeat: textureRepeat,
+            srcRect: sourceRect,
+          });
+        }
       }
     }
 
