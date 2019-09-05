@@ -1,18 +1,32 @@
 import {loadTexture, createTexture} from '../utils/texture_loader';
 import {compareValue} from '../utils/attribute_value';
-import Element from './element';
+import Block from './block';
 import Attr from '../attribute/sprite';
 
 const _textureImage = Symbol('textureImage');
 
-export default class extends Element {
+export default class extends Block {
   static Attr = Attr;
 
   async setTexture(url) {
     const textureImage = await loadTexture(url);
     this[_textureImage] = textureImage;
+    this.updateContours();
     this.forceUpdate();
     return textureImage;
+  }
+
+  get contentSize() {
+    let {width, height} = this.attributes;
+    if(width == null || height == null) {
+      let img = this[_textureImage];
+      if(!img) {
+        img = {width: 0, height: 0};
+      }
+      width = width == null ? img.width : width;
+      height = height == null ? img.height : height;
+    }
+    return [width, height];
   }
 
   draw() {

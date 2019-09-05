@@ -1,16 +1,20 @@
+import {mat2d} from 'gl-matrix';
 import Attr from '../attribute/node';
 
 const copy = Symbol.for('spritejs_copyAttribute');
+
+const _resolution = Symbol('resolution');
 
 export default class {
   static Attr = Attr;
 
   constructor(attrs = {}) {
     this.attributes = new this.constructor.Attr(this);
+    this[_resolution] = {width: 300, height: 150};
     Object.assign(this.attributes, attrs);
-    // if(Object.seal) {
-    //   Object.seal(this.attributes);
-    // }
+    if(Object.seal) {
+      Object.seal(this.attributes);
+    }
   }
 
   get nodeName() {
@@ -23,6 +27,19 @@ export default class {
 
   get zIndex() {
     return this.attributes.zIndex;
+  }
+
+  get renderMatrix() {
+    const {x, y} = this.attributes;
+    let m = this.transformMatrix;
+    m[4] += x;
+    m[5] += y;
+    let parent = this.parent;
+    while(parent && parent.renderMatrix) {
+      m = mat2d(parent.renderMatrix) * mat2d(m);
+      parent = parent.parent;
+    }
+    return m;
   }
 
   cloneNode() {
@@ -40,13 +57,16 @@ export default class {
   }
 
   onPropertyChange(key, newValue, oldValue) {
+    if(key !== 'id' && key !== 'name' && key !== 'className') {
+      this.forceUpdate();
+    }
     // if(this.layer && this.layer.useCSS) {
     //   this.updateCSS();
     // }
   }
 
   forceUpdate() {
-
+    if(this.isVisible && this.parent) this.parent.forceUpdate();
   }
 
   updateCSS() {
@@ -72,6 +92,29 @@ export default class {
 
   getAttribute(key) {
     return this.attributes[key];
+  }
+
+  attr(...args) {
+    if(args.length > 1) {
+      const [key, value] = args;
+      this.setAttribute(key, value);
+      return this;
+    }
+    if(typeof args[0] === 'string') {
+      return this.getAttribute(args[0]);
+    }
+    Object.assign(this.attributes, args[0]);
+    return this;
+  }
+
+  setResolution({width, height}) {
+    this[_resolution] = {width, height};
+    if(this.borderBoxMesh) this.borderBoxMesh.setResolution(this[_resolution]);
+    if(this.clientBoxMesh) this.clientBoxMesh.setResolution(this[_resolution]);
+  }
+
+  getResolution() {
+    return {...this[_resolution]};
   }
 
   connect(parent, zOrder) {

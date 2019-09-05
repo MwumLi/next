@@ -1,16 +1,14 @@
 import {Figure2D, Mesh2D} from '@mesh.js/core';
 import {mat2d} from 'gl-matrix';
 import Node from './node';
-import Attr from '../attribute/element';
-
-const _resolution = Symbol('resolution');
+import Attr from '../attribute/block';
+import {setFillColor, setStrokeColor} from '../utils/color';
 
 export default class extends Node {
   static Attr = Attr;
 
   constructor(attrs = {}) {
     super(attrs);
-    this[_resolution] = {width: 300, height: 150};
   }
 
   get contentSize() {
@@ -20,20 +18,23 @@ export default class extends Node {
 
   // content + padding
   get clientSize() {
-    const {paddingTop, paddingRight, paddingBottom, paddingLeft, width, height} = this.attributes;
+    const {paddingTop, paddingRight, paddingBottom, paddingLeft} = this.attributes;
+    const [width, height] = this.contentSize;
     return [paddingLeft + width + paddingRight,
       paddingTop + height + paddingBottom];
   }
 
   get borderSize() {
-    const {paddingTop, paddingRight, paddingBottom, paddingLeft, width, height, borderWidth} = this.attributes;
+    const {paddingTop, paddingRight, paddingBottom, paddingLeft, borderWidth} = this.attributes;
+    const [width, height] = this.contentSize;
     return [paddingLeft + width + paddingRight + borderWidth,
       paddingTop + height + paddingBottom + borderWidth];
   }
 
   // content + padding + border
   get offsetSize() {
-    const {paddingTop, paddingRight, paddingBottom, paddingLeft, width, height, borderWidth} = this.attributes;
+    const {paddingTop, paddingRight, paddingBottom, paddingLeft, borderWidth} = this.attributes;
+    const [width, height] = this.contentSize;
     const bw2 = 2 * borderWidth;
     return [paddingLeft + width + paddingRight + bw2,
       paddingTop + height + paddingBottom + bw2];
@@ -42,7 +43,7 @@ export default class extends Node {
   get isVisible() {
     const [width, height] = this.contentSize;
 
-    return this.attributes.opacity > 0 && (width > 0 && height > 0) && !!(this.hasBorder || this.hasContent);
+    return this.attributes.opacity > 0 && (width > 0 && height > 0) && !!(this.hasBorder || this.hasBackground);
   }
 
   get hasBorder() {
@@ -52,7 +53,7 @@ export default class extends Node {
     return borderWidth > 0 && borderColor[3] > 0;
   }
 
-  get hasContent() {
+  get hasBackground() {
     const bgcolor = this.attributes.bgcolor;
     return bgcolor && bgcolor[3] > 0;
   }
@@ -60,7 +61,9 @@ export default class extends Node {
   get originalClientBox() {
     if(this.clientBox) {
       const points = this.clientBox.contours[0];
-      return [points[0][0], points[0][1], points[2][0], points[2][1]];
+      if(points.length > 2) {
+        return [points[0][0], points[0][1], points[2][0], points[2][1]];
+      }
     }
     return [0, 0, 0, 0];
   }
@@ -82,37 +85,19 @@ export default class extends Node {
 
   onPropertyChange(key, newValue, oldValue) {
     super.onPropertyChange(key, newValue, oldValue);
-    if(key !== 'id' && key !== 'name' && key !== 'className') {
-      this.forceUpdate();
-    }
     if(key === 'anchorX' || key === 'anchorY' || key === 'width' || key === 'height' || key === 'borderWidth') {
       this.updateContours();
     }
     if(this.clientBoxMesh && key === 'bgcolor') {
-      this.clientBoxMesh.setFill({
-        color: newValue,
-      });
+      setFillColor(this.clientBoxMesh, {color: newValue});
     }
     if(this.borderBoxMesh && (key === 'borderColor' || key === 'borderWidth')) {
       const {borderColor, borderWidth} = this.attributes;
-      this.borderBoxMesh.setStroke({
-        color: borderColor,
-        thickness: borderWidth,
-      });
+      setStrokeColor(this.borderBoxMesh, {color: borderColor, lineWidth: borderWidth});
     }
     if(key === 'zIndex' && this.parent) {
       this.parent.reorder();
     }
-  }
-
-  setResolution({width, height}) {
-    this[_resolution] = {width, height};
-    if(this.borderBoxMesh) this.borderBoxMesh.setResolution(this[_resolution]);
-    if(this.clientBoxMesh) this.clientBoxMesh.setResolution(this[_resolution]);
-  }
-
-  getResolution() {
-    return {...this[_resolution]};
   }
 
   updateContours() {
@@ -134,40 +119,10 @@ export default class extends Node {
     this.clientBox = innerFigure;
   }
 
-  forceUpdate() {
-    if(this.isVisible && this.parent) this.parent.forceUpdate();
-  }
-
-  attr(...args) {
-    if(args.length > 1) {
-      const [key, value] = args;
-      this.setAttribute(key, value);
-      return this;
-    }
-    if(typeof args[0] === 'string') {
-      return this.getAttribute(args[0]);
-    }
-    Object.assign(this.attributes, args[0]);
-    return this;
-  }
-
-  get renderMatrix() {
-    const {x, y} = this.attributes;
-    let m = this.transformMatrix;
-    m[4] += x;
-    m[5] += y;
-    let parent = this.parent;
-    while(parent && parent.renderMatrix) {
-      m = mat2d(parent.renderMatrix) * mat2d(m);
-      parent = parent.parent;
-    }
-    return m;
-  }
-
   /* override */
   connect(parent, zOrder) {
     super.connect(parent, zOrder);
-    this.setResolution(parent[_resolution]);
+    this.setResolution(parent.getResolution());
     this.forceUpdate();
   }
 
@@ -187,17 +142,16 @@ export default class extends Node {
 
     const ret = [];
 
+    const resolution = this.getResolution();
+
     if(this.hasBorder) {
       let borderBoxMesh = this.borderBoxMesh;
       if(!borderBoxMesh) {
-        borderBoxMesh = new Mesh2D(this.borderBox, this[_resolution]);
+        borderBoxMesh = new Mesh2D(this.borderBox, resolution);
         borderBoxMesh.box = this.borderBox;
         this.borderBoxMesh = borderBoxMesh;
 
-        borderBoxMesh.setStroke({
-          color: borderColor,
-          thickness: borderWidth,
-        });
+        setStrokeColor(borderBoxMesh, {color: borderColor, lineWidth: borderWidth});
         borderBoxMesh.uniforms.u_opacity = opacity;
       } else if(borderBoxMesh.box !== this.borderBox) {
         borderBoxMesh.contours = this.borderBox.contours;
@@ -206,17 +160,15 @@ export default class extends Node {
       ret.push(borderBoxMesh);
     }
 
-    if(this.hasContent) {
+    if(this.hasBackground) {
       let clientBoxMesh = this.clientBoxMesh;
       if(!clientBoxMesh) {
-        clientBoxMesh = new Mesh2D(this.clientBox, this[_resolution]);
+        clientBoxMesh = new Mesh2D(this.clientBox, resolution);
         clientBoxMesh.box = this.clientBox;
         this.clientBoxMesh = clientBoxMesh;
 
         if(bgcolor && bgcolor[3] > 0) {
-          clientBoxMesh.setFill({
-            color: bgcolor,
-          });
+          setFillColor(clientBoxMesh, {color: bgcolor});
         }
         clientBoxMesh.uniforms.u_opacity = opacity;
       } else if(clientBoxMesh.box !== this.clientBox) {

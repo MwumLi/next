@@ -1,11 +1,11 @@
-import Element from './element';
+import Block from './block';
 import Attr from '../attribute/group';
 
 const _zOrder = Symbol('zOrder');
 
 const _ordered = Symbol('ordered');
 
-export default class extends Element {
+export default class extends Block {
   static Attr = Attr;
 
   constructor(attrs = {}) {
@@ -40,7 +40,7 @@ export default class extends Element {
   }
 
   /* override */
-  get hasContent() {
+  get hasBackground() {
     return this.children.length > 0;
   }
 

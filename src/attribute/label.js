@@ -1,5 +1,5 @@
-import Element from './element';
+import Block from './block';
 
-export default class extends Element {
+export default class extends Block {
 
 }

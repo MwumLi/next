@@ -1,8 +1,16 @@
 const webpack = require('webpack');
 const path = require('path');
-const packageConfig = require('./package.json');
+const fs = require('fs');
 
 module.exports = function (env = {}) {
+  let babelConf;
+
+  const babelRC = env.esnext ? './.es6.babelrc' : './.babelrc';
+  if(fs.existsSync(babelRC)) {
+    babelConf = JSON.parse(fs.readFileSync(babelRC));
+    babelConf.babelrc = false;
+  }
+
   return {
     mode: env.mode || 'none',
     entry: './src/index',
@@ -15,18 +23,26 @@ module.exports = function (env = {}) {
       libraryExport: 'default',
       globalObject: 'this',
     },
-    // resolve: {
-    //
-    // },
-
+    resolve: {
+      alias: {
+        '@mesh.js/core': '@mesh.js/core/src',
+      },
+    },
     module: {
       rules: [
         {
           test: /\.js$/,
-          exclude: /node_modules\/.*/,
+          exclude: /node_modules\/(?!@mesh.js).*/,
           use: {
             loader: 'babel-loader',
-            options: {babelrc: true},
+            options: babelConf,
+          },
+        },
+        {
+          test: /\.(frag|vert|glsl)$/,
+          use: {
+            loader: 'raw-loader',
+            options: {},
           },
         },
       ],

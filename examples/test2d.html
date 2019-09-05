@@ -14,7 +14,7 @@
 
     const el = new spritejs.Sprite();
     el.attr({
-      // size: [100, 100],
+      size: [100, 100],
       anchor: 0.5,
       borderWidth: 10,
       borderColor: 'rgba(0,0,0,1)',
@@ -29,39 +29,20 @@
     el2.attr({
       anchor: 0,
       texture: textureURL,
-      // textureRect: [50, 50, 100, 100],
+      textureRect: [50, 50, 100, 100],
       // textureRepeat: true,
-    });
-
-    const gradient = new spritejs.Gradient({
-      vector: [0, 0, 100, 100],
-      colors: [
-        {offset: 0, color: 'red'},
-        {offset: 1, color: 'blue'},
-      ],
-    });
-
-    const path = new spritejs.Path();
-    path.d = 'M0 0L0 100L100 100z';
-
-    path.attr({
-      fillColor: 'green',
-      strokeColor: gradient,
-      lineWidth: '3px',
-      pos: [100, 100],
     });
 
     const canvas = document.querySelector('canvas');
 
     const layer = new spritejs.Layer(canvas, {
-      contextType: 'webgl',
+      contextType: '2d',
     });
 
     const group = new spritejs.Group();
 
     group.appendChild(el);
     group.appendChild(el2);
-    group.appendChild(path);
 
     group.attr({
       transformOrigin: [256, 256],
