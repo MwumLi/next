@@ -19,7 +19,7 @@ export function loadTexture(src, alias) {
 const _textureMap = Symbol('textureMap');
 
 export function createTexture(image, renderer) {
-  renderer[_textureMap] = renderer[_textureMap] || new WeakMap();
+  renderer[_textureMap] = renderer[_textureMap] || new Map();
   if(renderer[_textureMap].has(image)) return renderer[_textureMap].get(image);
   const texture = renderer.createTexture(image);
   renderer[_textureMap].set(image, texture);
