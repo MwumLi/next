@@ -6,9 +6,15 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
   <script src="/js/spritejs.js"></script>
+  <style>
+    canvas {
+      position: absolute;
+    }
+  </style>
 </head>
 <body>
-  <canvas width="512" height="512"></canvas>
+  <canvas id="bglayer" width="512" height="512"></canvas>
+  <canvas id="fglayer" width="512" height="512"></canvas>
   <script>
     const textureURL = 'https://p4.ssl.qhimg.com/t012170360e1552ce17.png';
 
@@ -29,7 +35,7 @@
     el2.attr({
       anchor: 0,
       texture: textureURL,
-      // textureRect: [50, 50, 100, 100],
+      textureRect: [50, 50, 100, 100],
       // textureRepeat: true,
     });
 
@@ -51,10 +57,15 @@
       pos: [100, 100],
     });
 
-    const canvas = document.querySelector('canvas');
+    const fgcanvas = document.getElementById('fglayer');
+    const bgcanvas = document.getElementById('bglayer');
 
-    const layer = new spritejs.Layer(canvas, {
-      contextType: 'webgl',
+    const layer = new spritejs.Layer(fgcanvas, {
+      // contextType: 'webgl',
+    });
+
+    const bglayer = new spritejs.Layer(bgcanvas, {
+
     });
 
     const group = new spritejs.Group();

@@ -69,22 +69,22 @@ export default class {
     if(this.isVisible && this.parent) this.parent.forceUpdate();
   }
 
-  updateCSS() {
+  // updateCSS() {
 
-  }
+  // }
 
-  reflow() {
+  // reflow() {
 
-  }
+  // }
 
-  relayout() {
+  // relayout() {
 
-  }
+  // }
 
   // 获取可继承的和被样式影响的属性
-  getComputedAttribute(key) {
+  // getComputedAttribute(key) {
 
-  }
+  // }
 
   setAttribute(key, value) {
     this.attributes[key] = value;

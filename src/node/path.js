@@ -45,6 +45,19 @@ export default class extends Node {
   }
 
   /* override */
+  connect(parent, zOrder) {
+    super.connect(parent, zOrder);
+    this.setResolution(parent.getResolution());
+    this.forceUpdate();
+  }
+
+  disconnect() {
+    const parent = this.parent;
+    super.disconnect();
+    if(parent) parent.forceUpdate();
+  }
+
+  /* override */
   draw() {
     const path = this.path;
     if(path) {

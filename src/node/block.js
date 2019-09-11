@@ -43,7 +43,7 @@ export default class extends Node {
   get isVisible() {
     const [width, height] = this.contentSize;
 
-    return this.attributes.opacity > 0 && (width > 0 && height > 0) && !!(this.hasBorder || this.hasBackground);
+    return this.attributes.opacity > 0 && (!!this.hasBorder || width > 0 && height > 0 && this.hasBackground);
   }
 
   get hasBorder() {

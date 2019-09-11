@@ -4,6 +4,7 @@ import Node from './node/node';
 import Block from './node/block';
 import Sprite from './node/sprite';
 import Path from './node/path';
+import Label from './node/label';
 import Group from './node/group';
 import Layer from './node/layer';
 
@@ -15,6 +16,7 @@ export default {
   Block,
   Sprite,
   Path,
+  Label,
   Group,
   Layer,
   parseColor,

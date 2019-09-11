@@ -16,11 +16,12 @@ export function loadTexture(src, alias) {
   return Promise.resolve(loadedTextures[src]);
 }
 
-const textureMap = new WeakMap();
+const _textureMap = Symbol('textureMap');
 
 export function createTexture(image, renderer) {
-  if(textureMap.has(image)) return textureMap.get(image);
+  renderer[_textureMap] = renderer[_textureMap] || new WeakMap();
+  if(renderer[_textureMap].has(image)) return renderer[_textureMap].get(image);
   const texture = renderer.createTexture(image);
-  textureMap.set(image, texture);
+  renderer[_textureMap].set(image, texture);
   return texture;
 }

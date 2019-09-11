@@ -4,6 +4,7 @@ import Block from './block';
 import Attr from '../attribute/sprite';
 
 const _textureImage = Symbol('textureImage');
+const _textureContext = Symbol('textureContext');
 
 export default class extends Block {
   static Attr = Attr;
@@ -19,12 +20,19 @@ export default class extends Block {
   get contentSize() {
     let {width, height} = this.attributes;
     if(width == null || height == null) {
-      let img = this[_textureImage];
-      if(!img) {
-        img = {width: 0, height: 0};
+      const img = this[_textureImage];
+      const textureRect = this.attributes.textureRect;
+      let w = 0;
+      let h = 0;
+      if(textureRect) {
+        w = textureRect[0] + textureRect[2];
+        h = textureRect[1] + textureRect[3];
+      } else if(img) {
+        w = img.width;
+        h = img.height;
       }
-      width = width == null ? img.width : width;
-      height = height == null ? img.height : height;
+      width = width == null ? w : width;
+      height = height == null ? h : height;
     }
     return [width, height];
   }
@@ -42,11 +50,14 @@ export default class extends Block {
         const textureRepeat = this.attributes.textureRepeat;
         const sourceRect = this.attributes.sourceRect;
 
-        if(!texture || texture.image !== textureImage
+        if(!texture
+          || this[_textureContext] && this[_textureContext] !== this.renderer
+          || texture.image !== textureImage
           || texture.options.repeat !== textureRepeat
           || !compareValue(texture.options.rect, textureRect)
           || !compareValue(texture.options.srcRect, sourceRect)) {
           const newTexture = createTexture(textureImage, this.renderer);
+
           if(textureRect) {
             textureRect[0] += clientRect[0];
             textureRect[1] += clientRect[1];
@@ -58,6 +69,7 @@ export default class extends Block {
             repeat: textureRepeat,
             srcRect: sourceRect,
           });
+          this[_textureContext] = this.renderer;
         }
       }
     }
