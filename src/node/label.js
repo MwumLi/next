@@ -97,7 +97,7 @@ export default class extends Block {
           y += paddingTop;
 
           clientBoxMesh.setTexture(newTexture, {
-            rect: [x, y],
+            rect: [x, y, width, height],
           });
           this[_updateTextureRect] = false;
           this[_textureContext] = this.renderer;
