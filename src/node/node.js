@@ -1,9 +1,11 @@
 import {mat2d} from 'gl-matrix';
 import Attr from '../attribute/node';
+import Animation from '../animation';
 
 const copy = Symbol.for('spritejs_copyAttribute');
 
 const _resolution = Symbol('resolution');
+const _animations = Symbol('animations');
 
 export default class {
   static Attr = Attr;
@@ -15,14 +17,25 @@ export default class {
     if(Object.seal) {
       Object.seal(this.attributes);
     }
+    this[_animations] = new Set();
+  }
+
+  get renderer() {
+    if(this.parent) return this.parent.renderer;
+    return null;
+  }
+
+  get layer() {
+    if(this.parent) return this.parent.layer;
+    return null;
+  }
+
+  get animations() {
+    return this[_animations];
   }
 
   get nodeName() {
     return 'node';
-  }
-
-  get layer() {
-    return this.parent && this.parent.layer;
   }
 
   get zIndex() {
@@ -133,5 +146,79 @@ export default class {
   disconnect() {
     delete this.parent;
     delete this.zOrder;
+  }
+
+  animate(frames, timing) {
+    const animation = new Animation(this, frames, timing);
+    if(this.effects) animation.applyEffects(this.effects);
+    if(this.layer) {
+      animation.baseTimeline = this.layer.timeline;
+      animation.play();
+      animation.finished.then(() => {
+        this[_animations].delete(animation);
+      });
+    }
+    this[_animations].add(animation);
+    return animation;
+  }
+
+  transition(sec, easing = 'linear') {
+    const that = this,
+      _animation = Symbol('animation');
+
+    easing = easing || 'linear';
+
+    let delay = 0;
+    if(typeof sec === 'object') {
+      delay = sec.delay || 0;
+      sec = sec.duration;
+    }
+
+    return {
+      [_animation]: null,
+      cancel(preserveState = false) {
+        const animation = this[_animation];
+        if(animation) {
+          animation.cancel(preserveState);
+        }
+      },
+      end() {
+        const animation = this[_animation];
+        if(animation && (animation.playState === 'running' || animation.playState === 'pending')) {
+          animation.finish();
+        }
+      },
+      reverse() {
+        const animation = this[_animation];
+        if(animation) {
+          if(animation.playState === 'running' || animation.playState === 'pending') {
+            animation.playbackRate = -animation.playbackRate;
+          } else {
+            const direction = animation.timing.direction;
+            animation.timing.direction = direction === 'reverse' ? 'normal' : 'reverse';
+            animation.play();
+          }
+        }
+        return animation.finished;
+      },
+      attr(prop, val) {
+        this.end();
+        if(typeof prop === 'string') {
+          prop = {[prop]: val};
+        }
+        Object.entries(prop).forEach(([key, value]) => {
+          if(typeof value === 'function') {
+            prop[key] = value(that.attr(key));
+          }
+        });
+        this[_animation] = that.animate([prop], {
+          duration: sec * 1000,
+          delay: delay * 1000,
+          fill: 'forwards',
+          easing,
+        });
+        return this[_animation].finished;
+      },
+    };
   }
 }

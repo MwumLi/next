@@ -22,6 +22,7 @@ export default class extends Block {
       textAlign: 'left',
       strokeColor: undefined,
       fillColor: [0, 0, 0, 1],
+      verticalAlign: 'middle',
     });
   }
 
@@ -30,7 +31,7 @@ export default class extends Block {
   }
 
   set text(value) {
-    return this[setAttribute]('text', String(value));
+    this[setAttribute]('text', String(value));
   }
 
   get fontSize() {
@@ -38,7 +39,7 @@ export default class extends Block {
   }
 
   set fontSize(value) {
-    return this[setAttribute]('fontSize', toNumber(value));
+    this[setAttribute]('fontSize', toNumber(value));
   }
 
   get fontFamily() {
@@ -46,7 +47,7 @@ export default class extends Block {
   }
 
   set fontFamily(value) {
-    return this[setAttribute]('fontFamily', String(value));
+    this[setAttribute]('fontFamily', String(value));
   }
 
   get fontStyle() {
@@ -54,7 +55,7 @@ export default class extends Block {
   }
 
   set fontStyle(value) {
-    return this[setAttribute]('fontStyle', String(value));
+    this[setAttribute]('fontStyle', String(value));
   }
 
   get fontVariant() {
@@ -62,7 +63,7 @@ export default class extends Block {
   }
 
   set fontVariant(value) {
-    return this[setAttribute]('fontVariant', String(value));
+    this[setAttribute]('fontVariant', String(value));
   }
 
   get fontWeight() {
@@ -70,7 +71,7 @@ export default class extends Block {
   }
 
   set fontWeight(value) {
-    return this[setAttribute]('fontWeight', String(value));
+    this[setAttribute]('fontWeight', String(value));
   }
 
   get fontStretch() {
@@ -78,7 +79,7 @@ export default class extends Block {
   }
 
   set fontStretch(value) {
-    return this[setAttribute]('fontStretch', String(value));
+    this[setAttribute]('fontStretch', String(value));
   }
 
   get lineHeight() {
@@ -86,7 +87,7 @@ export default class extends Block {
   }
 
   set lineHeight(value) {
-    return this[setAttribute]('lineHeight', toNumber(value));
+    this[setAttribute]('lineHeight', toNumber(value));
   }
 
   get textAlign() {
@@ -94,11 +95,19 @@ export default class extends Block {
   }
 
   set textAlign(value) {
-    return this[setAttribute]('textAlign', String(value));
+    this[setAttribute]('textAlign', String(value));
   }
 
   get strokeColor() {
     return this[getAttribute]('strokeColor');
+  }
+
+  set verticalAlign(value) {
+    this[setAttribute]('verticalAlign', String(value));
+  }
+
+  get verticalAlign() {
+    return this[getAttribute]('verticalAlign');
   }
 
   set strokeColor(value) {

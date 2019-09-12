@@ -1,5 +1,6 @@
 import {Figure2D, Mesh2D} from '@mesh.js/core';
 import {mat2d} from 'gl-matrix';
+import pasition from 'pasition';
 import Node from './node';
 import Attr from '../attribute/path';
 import {setFillColor, setStrokeColor} from '../utils/color';
@@ -8,6 +9,23 @@ import {setFillColor, setStrokeColor} from '../utils/color';
 
 export default class extends Node {
   static Attr = Attr;
+
+  constructor(attrs = {}) {
+    super(attrs);
+    this.effects = {
+      d(from, to, p, s, e) {
+        const ep = (p - s) / (e - s);
+        if(ep <= 0) return from;
+        if(ep >= 1) return to;
+        const shapes = pasition._preprocessing(pasition.path2shapes(from), pasition.path2shapes(to));
+        const shape = pasition._lerp(...shapes, ep)[0];
+        const path = shape.reduce((str, c) => {
+          return `${str}${c.slice(2).join(' ')} `;
+        }, `M${shape[0][0]} ${shape[0][1]}C`).trim();
+        return path;
+      },
+    };
+  }
 
   set d(value) {
     this.attributes.d = value;

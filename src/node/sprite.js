@@ -45,7 +45,7 @@ export default class extends Block {
       const textureImage = this[_textureImage];
       if(textureImage) {
         const texture = clientBoxMesh.texture;
-        const clientRect = this.originalClientRect;
+        const contentRect = this.originalContentRect;
         let textureRect = this.attributes.textureRect;
         const textureRepeat = this.attributes.textureRepeat;
         const sourceRect = this.attributes.sourceRect;
@@ -59,10 +59,10 @@ export default class extends Block {
           const newTexture = createTexture(textureImage, this.renderer);
 
           if(textureRect) {
-            textureRect[0] += clientRect[0];
-            textureRect[1] += clientRect[1];
+            textureRect[0] += contentRect[0];
+            textureRect[1] += contentRect[1];
           } else {
-            textureRect = clientRect;
+            textureRect = contentRect;
           }
           clientBoxMesh.setTexture(newTexture, {
             rect: textureRect,

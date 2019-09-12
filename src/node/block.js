@@ -43,7 +43,7 @@ export default class extends Node {
   get isVisible() {
     const [width, height] = this.contentSize;
 
-    return this.attributes.opacity > 0 && (!!this.hasBorder || width > 0 && height > 0 && this.hasBackground);
+    return this.attributes.opacity > 0 && (!!this.hasBorder || width > 0 && height > 0);
   }
 
   get hasBorder() {
@@ -58,24 +58,21 @@ export default class extends Node {
     return bgcolor && bgcolor[3] > 0;
   }
 
-  get originalClientBox() {
+  get originalClientRect() {
     if(this.clientBox) {
       const points = this.clientBox.contours[0];
       if(points.length > 2) {
-        return [points[0][0], points[0][1], points[2][0], points[2][1]];
+        const [left, top, right, bottom] = [points[0][0], points[0][1], points[2][0], points[2][1]];
+        return [left, top, right - left, bottom - top];
       }
     }
     return [0, 0, 0, 0];
   }
 
-  get originalClientRect() {
-    const [left, top, right, bottom] = this.originalClientBox;
-    return [left, top, right - left, bottom - top];
-  }
-
-  get renderer() {
-    if(this.parent) return this.parent.renderer;
-    return null;
+  get originalContentRect() {
+    const [left, top, width, height] = this.originalClientRect;
+    const padding = this.attributes.padding;
+    return [left + padding[0], top + padding[1], width - padding[0] - padding[2], height - padding[1] - padding[3]];
   }
 
   // content + padding + border + margin
@@ -85,7 +82,8 @@ export default class extends Node {
 
   onPropertyChange(key, newValue, oldValue) {
     super.onPropertyChange(key, newValue, oldValue);
-    if(key === 'anchorX' || key === 'anchorY' || key === 'width' || key === 'height' || key === 'borderWidth') {
+    if(key === 'anchorX' || key === 'anchorY' || key === 'width' || key === 'height' || key === 'borderWidth'
+      || key === 'paddingLeft' || key === 'paddingRight' || key === 'paddingTop' || key === 'paddingBottom') {
       this.updateContours();
     }
     if(this.clientBoxMesh && key === 'bgcolor') {
@@ -160,23 +158,21 @@ export default class extends Node {
       ret.push(borderBoxMesh);
     }
 
-    if(this.hasBackground) {
-      let clientBoxMesh = this.clientBoxMesh;
-      if(!clientBoxMesh) {
-        clientBoxMesh = new Mesh2D(this.clientBox, resolution);
-        clientBoxMesh.box = this.clientBox;
-        this.clientBoxMesh = clientBoxMesh;
+    let clientBoxMesh = this.clientBoxMesh;
+    if(!clientBoxMesh) {
+      clientBoxMesh = new Mesh2D(this.clientBox, resolution);
+      clientBoxMesh.box = this.clientBox;
+      this.clientBoxMesh = clientBoxMesh;
 
-        if(bgcolor && bgcolor[3] > 0) {
-          setFillColor(clientBoxMesh, {color: bgcolor});
-        }
-        clientBoxMesh.uniforms.u_opacity = opacity;
-      } else if(clientBoxMesh.box !== this.clientBox) {
-        clientBoxMesh.contours = this.clientBox.contours;
-        clientBoxMesh.box = this.clientBox;
+      if(bgcolor && bgcolor[3] > 0) {
+        setFillColor(clientBoxMesh, {color: bgcolor});
       }
-      ret.push(clientBoxMesh);
+      clientBoxMesh.uniforms.u_opacity = opacity;
+    } else if(clientBoxMesh.box !== this.clientBox) {
+      clientBoxMesh.contours = this.clientBox.contours;
+      clientBoxMesh.box = this.clientBox;
     }
+    ret.push(clientBoxMesh);
 
     const m = this.renderMatrix;
 

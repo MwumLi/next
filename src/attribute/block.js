@@ -4,6 +4,7 @@ import {parseColor} from '../utils/color';
 
 const setAttribute = Symbol.for('spritejs_setAttribute');
 const getAttribute = Symbol.for('spritejs_getAttribute');
+const attributes = Symbol.for('spritejs_attributes');
 const setDefault = Symbol.for('spritejs_setAttributeDefault');
 
 export default class extends Node {
@@ -22,6 +23,16 @@ export default class extends Node {
       paddingRight: 0,
       paddingBottom: 0,
       paddingLeft: 0,
+    });
+  }
+
+  get [attributes]() {
+    const ret = super[attributes];
+    return Object.assign(ret, {
+      anchor: [this.anchorX, this.anchorY],
+      pos: [this.x, this.y],
+      size: [this.width, this.height],
+      padding: [this.paddingTop, this.paddingRight, this.paddingBottom, this.paddingLeft],
     });
   }
 

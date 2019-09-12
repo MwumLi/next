@@ -27,7 +27,7 @@
       bgcolor: 'red',
       pos: [256, 256],
       // transform: 'rotate(45deg)',
-      opacity: 0.2,
+      // opacity: 0.2,
       transformOrigin: [50, 50],
     });
 
@@ -35,7 +35,8 @@
     el2.attr({
       anchor: 0,
       texture: textureURL,
-      textureRect: [50, 50, 100, 100],
+      // textureRect: [50, 50, 100, 100],
+      padding: 20,
       // textureRepeat: true,
     });
 
@@ -49,6 +50,7 @@
 
     const path = new spritejs.Path();
     path.d = 'M0 0L0 100L100 100z';
+    // path.d = 'M100 100C0 0 0 0 0 0 67.90 66.047 67.904 66.047 67.904 66.047 100 100 100 100 100 100';
 
     path.attr({
       fillColor: 'green',
@@ -61,18 +63,31 @@
     const bgcanvas = document.getElementById('bglayer');
 
     const layer = new spritejs.Layer(fgcanvas, {
-      // contextType: 'webgl',
+      // contextType: '2d',
     });
 
     const bglayer = new spritejs.Layer(bgcanvas, {
 
     });
 
+    const l = new spritejs.Label();
+    l.attr({
+      text: 'abc',
+      size: [100, 30],
+      pos: [150, 150],
+      bgcolor: 'red',
+      textAlign: 'center',
+      padding: 20,
+      verticalAlign: 'top',
+      fillColor: 'blue',
+    });
+
     const group = new spritejs.Group();
 
-    group.appendChild(el);
-    group.appendChild(el2);
+    // group.appendChild(el);
+    // group.appendChild(el2);
     group.appendChild(path);
+    // group.appendChild(l);
 
     group.attr({
       transformOrigin: [256, 256],

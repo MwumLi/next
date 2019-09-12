@@ -17,11 +17,16 @@ export default class extends Group {
     delete options.autoUpdate;
     this[_renderer] = new Renderer(canvas, opts);
     this.setResolution(canvas);
+    this.options = options;
   }
 
   /* override */
   get renderer() {
     return this[_renderer];
+  }
+
+  get layer() {
+    return this;
   }
 
   render() {
