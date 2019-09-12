@@ -3,9 +3,10 @@ import {toString, toNumber, compareValue} from '../utils/attribute_value';
 
 const setAttribute = Symbol.for('spritejs_setAttribute');
 const getAttribute = Symbol.for('spritejs_getAttribute');
-const attributes = Symbol.for('spritejs_attributes');
 const setDefault = Symbol.for('spritejs_setAttributeDefault');
-const copy = Symbol.for('spritejs_copyAttribute');
+
+const attributes = Symbol.for('spritejs_attributes');
+const changedAttrs = Symbol.for('spritejs_changedAttrs');
 
 const _subject = Symbol.for('spritejs_subject');
 const _attr = Symbol('attr');
@@ -26,6 +27,7 @@ function getMatrix(transformMap, [ox, oy]) {
 
 const _transformMatrix = Symbol('transformMatrix');
 const _transforms = Symbol('transforms');
+const _changedAttrs = Symbol('changedAttrs');
 
 // 规范：属性只能是原始类型或元素是原始类型的数组
 export default class {
@@ -56,20 +58,24 @@ export default class {
       opacity: 1,
       zIndex: 0,
     });
+
+    this[_changedAttrs] = new Set();
   }
 
-  [copy](attr) {
-    this[setDefault](attr[_attr]);
-    this[_transforms] = new Map(attr[_transforms]);
-    this[_transformMatrix] = getMatrix(this[_transforms], this.transformOrigin);
-  }
-
-  [setDefault](attrs) {
-    Object.assign(this[_attr], attrs);
+  get [changedAttrs]() {
+    const ret = {};
+    [...this[_changedAttrs]].forEach((key) => {
+      ret[key] = this[_attr][key];
+    });
+    return ret;
   }
 
   get [attributes]() {
     return Object.assign({}, this[_attr]);
+  }
+
+  [setDefault](attrs) {
+    Object.assign(this[_attr], attrs);
   }
 
   [setAttribute](key, value, quiet) {
@@ -77,6 +83,8 @@ export default class {
     const subject = this[_subject];
     if(!compareValue(oldValue, value)) {
       this[_attr][key] = value;
+      if(this[_changedAttrs].has(key)) this[_changedAttrs].delete(key);
+      this[_changedAttrs].add(key);
       subject.onPropertyChange(key, value, oldValue, this);
     }
   }

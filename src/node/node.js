@@ -2,7 +2,8 @@ import {mat2d} from 'gl-matrix';
 import Attr from '../attribute/node';
 import Animation from '../animation';
 
-const copy = Symbol.for('spritejs_copyAttribute');
+const attributes = Symbol.for('spritejs_attributes');
+const changedAttrs = Symbol.for('spritejs_changedAttrs');
 
 const _resolution = Symbol('resolution');
 const _animations = Symbol('animations');
@@ -57,7 +58,8 @@ export default class {
 
   cloneNode() {
     const cloned = new this.constructor();
-    cloned.attributes[copy](this.attributes);
+    const attrs = this.attributes[changedAttrs];
+    cloned.attr(attrs);
     return cloned;
   }
 
