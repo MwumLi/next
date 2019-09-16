@@ -7,6 +7,9 @@ import Path from './node/path';
 import Label from './node/label';
 import Group from './node/group';
 import Layer from './node/layer';
+import Scene from './node/scene';
+
+import createEvents from './event/pointer-events';
 
 import {parseColor, Gradient} from './utils/color';
 
@@ -19,6 +22,8 @@ export default {
   Label,
   Group,
   Layer,
+  Scene,
   parseColor,
   Gradient,
+  createEvents,
 };

@@ -9,7 +9,7 @@ const _textureContext = Symbol('textureContext');
 
 const _updateTextureRect = Symbol('updateTextureRect');
 
-export default class extends Block {
+export default class Label extends Block {
   static Attr = Attr;
 
   updateText() {

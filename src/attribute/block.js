@@ -7,7 +7,7 @@ const getAttribute = Symbol.for('spritejs_getAttribute');
 const attributes = Symbol.for('spritejs_attributes');
 const setDefault = Symbol.for('spritejs_setAttributeDefault');
 
-export default class extends Node {
+export default class Block extends Node {
   constructor(subject) {
     super(subject);
 

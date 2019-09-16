@@ -6,7 +6,7 @@ import Attr from '../attribute/sprite';
 const _textureImage = Symbol('textureImage');
 const _textureContext = Symbol('textureContext');
 
-export default class extends Block {
+export default class Sprite extends Block {
   static Attr = Attr;
 
   async setTexture(url) {

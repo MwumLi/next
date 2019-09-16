@@ -1,5 +1,5 @@
 import Block from './block';
 
-export default class extends Block {
+export default class Group extends Block {
 
 }

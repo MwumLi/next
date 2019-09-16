@@ -7,14 +7,15 @@
   <title>Document</title>
   <script src="/js/spritejs.js"></script>
   <style>
-    canvas {
+    #container {
       position: absolute;
+      width: 512px;
+      height: 512px;
     }
   </style>
 </head>
 <body>
-  <canvas id="bglayer" width="512" height="512"></canvas>
-  <canvas id="fglayer" width="512" height="512"></canvas>
+  <div id="container"></div>
   <script>
     const textureURL = 'https://p4.ssl.qhimg.com/t012170360e1552ce17.png';
 
@@ -58,23 +59,18 @@
       lineWidth: '3px',
       pos: [100, 100],
     });
+    
+    const container = document.getElementById('container');
+    const scene = new spritejs.Scene(container, {displayRatio: 2});
 
-    const fgcanvas = document.getElementById('fglayer');
-    const bgcanvas = document.getElementById('bglayer');
-
-    const layer = new spritejs.Layer(fgcanvas, {
-      // contextType: '2d',
-    });
-
-    const bglayer = new spritejs.Layer(bgcanvas, {
-
-    });
+    // const bglayer = scene.layer('bglayer');
+    const fglayer = scene.layer('fglayer');
 
     const l = new spritejs.Label();
     l.attr({
       text: 'abc',
       size: [100, 30],
-      pos: [150, 150],
+      // pos: [350, 150],
       bgcolor: 'red',
       textAlign: 'center',
       padding: 20,
@@ -93,7 +89,7 @@
       transformOrigin: [256, 256],
     });
 
-    layer.appendChild(group);
+    fglayer.appendChild(group);
 
     function update(t) {
       group.attr({

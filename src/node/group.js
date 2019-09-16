@@ -5,7 +5,7 @@ const _zOrder = Symbol('zOrder');
 
 const _ordered = Symbol('ordered');
 
-export default class extends Block {
+export default class Group extends Block {
   static Attr = Attr;
 
   constructor(attrs = {}) {

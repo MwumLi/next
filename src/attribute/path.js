@@ -6,7 +6,7 @@ const setDefault = Symbol.for('spritejs_setAttributeDefault');
 const setAttribute = Symbol.for('spritejs_setAttribute');
 const getAttribute = Symbol.for('spritejs_getAttribute');
 
-export default class extends Node {
+export default class Path extends Node {
   constructor(subject) {
     super(subject);
     this[setDefault]({

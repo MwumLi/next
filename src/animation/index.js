@@ -19,7 +19,7 @@ Effects.default = function (from, to, p, s, e) {
   return from;
 };
 
-export default class extends Animator {
+export default class Animation extends Animator {
   constructor(sprite, frames, timing) {
     const initAttrs = sprite.attributes[attributes];
     super(initAttrs, frames, timing);

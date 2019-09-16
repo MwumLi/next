@@ -1,4 +1,5 @@
 import {Renderer} from '@mesh.js/core';
+import {Timeline} from 'sprite-animator';
 import Group from './group';
 
 const defaultOptions = {
@@ -8,8 +9,9 @@ const defaultOptions = {
 
 const _autoUpdate = Symbol('autoUpdate');
 const _renderer = Symbol('renderer');
+const _timeline = Symbol('timeline');
 
-export default class extends Group {
+export default class Layer extends Group {
   constructor(canvas, options = {}) {
     super();
     const opts = Object.assign({}, defaultOptions, options);
@@ -18,6 +20,8 @@ export default class extends Group {
     this[_renderer] = new Renderer(canvas, opts);
     this.setResolution(canvas);
     this.options = options;
+    this.canvas = canvas;
+    this[_timeline] = new Timeline();
   }
 
   /* override */
@@ -27,6 +31,22 @@ export default class extends Group {
 
   get layer() {
     return this;
+  }
+
+  get timeline() {
+    return this[_timeline];
+  }
+
+  /* override */
+  setResolution({width, height}) {
+    if(this.canvas) {
+      this.canvas.width = width;
+      this.canvas.height = height;
+    }
+    if(this.renderer.glRenderer) {
+      this.renderer.glRenderer.gl.viewport(0, 0, width, height);
+    }
+    super.setResolution({width, height});
   }
 
   render() {

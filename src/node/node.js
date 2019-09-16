@@ -2,13 +2,17 @@ import {mat2d} from 'gl-matrix';
 import Attr from '../attribute/node';
 import Animation from '../animation';
 
-const attributes = Symbol.for('spritejs_attributes');
 const changedAttrs = Symbol.for('spritejs_changedAttrs');
 
 const _resolution = Symbol('resolution');
 const _animations = Symbol('animations');
 
-export default class {
+const _eventListeners = Symbol('eventListeners');
+const _captureEventListeners = Symbol('captureEventListeners');
+
+const _mouseCapture = Symbol('mouseCapture');
+
+export default class Node {
   static Attr = Attr;
 
   constructor(attrs = {}) {
@@ -19,6 +23,8 @@ export default class {
       Object.seal(this.attributes);
     }
     this[_animations] = new Set();
+    this[_eventListeners] = {};
+    this[_captureEventListeners] = {};
   }
 
   get renderer() {
@@ -39,6 +45,34 @@ export default class {
     return 'node';
   }
 
+  get tagName() {
+    return 'NODE';
+  }
+
+  get id() {
+    return this.attributes.id;
+  }
+
+  set id(value) {
+    this.attributes.id = value;
+  }
+
+  get name() {
+    return this.attributes.name;
+  }
+
+  set name(value) {
+    this.attributes.name = value;
+  }
+
+  get className() {
+    return this.attributes.className;
+  }
+
+  set className(value) {
+    this.attributes.className = value;
+  }
+
   get zIndex() {
     return this.attributes.zIndex;
   }
@@ -54,6 +88,87 @@ export default class {
       parent = parent.parent;
     }
     return m;
+  }
+
+  addEventListener(type, listener, options) {
+    if(typeof options === 'boolean') options = {capture: options};
+    const {capture, once} = options;
+    const eventListeners = capture ? _captureEventListeners : _eventListeners;
+    this[eventListeners][type] = this[eventListeners][type] || [];
+    this[eventListeners][type].push({listener, once});
+
+    return this;
+  }
+
+  removeEventListener(type, listener, options) {
+    if(typeof options === 'boolean') options = {capture: options};
+    const capture = options.capture;
+
+    const eventListeners = capture ? _captureEventListeners : _eventListeners;
+
+    if(this[eventListeners][type]) {
+      const listeners = this[eventListeners][type];
+      if(listeners) {
+        for(let i = 0; i < listeners.length; i++) {
+          const {listener: _listener} = listeners[i];
+          if(_listener === listener) {
+            this[eventListeners][type].splice(i, 1);
+            break;
+          }
+        }
+      }
+    }
+
+    return this;
+  }
+
+  setMouseCapture() {
+    this[_mouseCapture] = true;
+  }
+
+  releaseMouseCapture() {
+    this[_mouseCapture] = false;
+  }
+
+  isMouseCaptured(event) {
+    return (event.type === 'mousemove' || event.type === 'mousedown' || event.type === 'mouseup') && this[_mouseCapture];
+  }
+
+  dispatchEvent(event) {
+    event.target = this;
+    const type = event.type;
+    const elements = [this];
+    let parent = this.parent;
+    while(parent) {
+      elements.push(parent);
+      parent = this.parent;
+    }
+    // capture phase
+    for(let i = elements.length - 1; i >= 0; i--) {
+      const element = elements[i];
+      const listeners = element[_captureEventListeners][type];
+      if(listeners && listeners.length) {
+        listeners.forEach(({listener, once}) => {
+          listener.call(this, event);
+          if(once) elements.removeEventListener(listener);
+        });
+      }
+      if(event.cancelBubble) break;
+    }
+    // bubbling
+    if(!event.cancelBubble) {
+      for(let i = 0; i < elements.length; i++) {
+        const element = elements[i];
+        const listeners = element[_eventListeners][type];
+        if(listeners && listeners.length) {
+          listeners.forEach(({listener, once}) => {
+            listener.call(this, event);
+            if(once) elements.removeEventListener(listener);
+          });
+        }
+        if(event.cancelBubble) break;
+      }
+    }
   }
 
   cloneNode() {
@@ -84,23 +199,6 @@ export default class {
     if(this.isVisible && this.parent) this.parent.forceUpdate();
   }
 
-  // updateCSS() {
-
-  // }
-
-  // reflow() {
-
-  // }
-
-  // relayout() {
-
-  // }
-
-  // 获取可继承的和被样式影响的属性
-  // getComputedAttribute(key) {
-
-  // }
-
   setAttribute(key, value) {
     this.attributes[key] = value;
   }
@@ -124,8 +222,7 @@ export default class {
 
   setResolution({width, height}) {
     this[_resolution] = {width, height};
-    if(this.borderBoxMesh) this.borderBoxMesh.setResolution(this[_resolution]);
-    if(this.clientBoxMesh) this.clientBoxMesh.setResolution(this[_resolution]);
+    this.forceUpdate();
   }
 
   getResolution() {

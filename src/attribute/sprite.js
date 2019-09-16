@@ -6,7 +6,7 @@ const getAttribute = Symbol.for('spritejs_getAttribute');
 
 const _subject = Symbol.for('spritejs_subject');
 
-export default class extends Block {
+export default class Sprite extends Block {
   constructor(subject) {
     super(subject);
     this[setDefault]({
