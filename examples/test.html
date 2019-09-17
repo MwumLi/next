@@ -104,6 +104,15 @@
     }
 
     update(0);
+
+    path.addEventListener('click', (e) => {
+      console.log(e);
+      e.stopPropagation();
+    });
+
+    group.addEventListener('click', (e) => {
+      console.log(e);
+    }, {capture: true});
   </script>
 </body>
 </html>

@@ -57,7 +57,7 @@ export default class Path extends Node {
   }
 
   get isVisible() {
-    return !!this.d;
+    return this.attributes.opacity > 0 && !!this.d;
   }
 
   get mesh() {
@@ -99,7 +99,7 @@ export default class Path extends Node {
   }
 
   isPointCollision(x, y) {
-    return !!this.mesh && this.mesh.isPointCollision(x, y, 'both');
+    return this.isVisible && !!this.mesh && this.mesh.isPointCollision(x, y, 'both');
   }
 
   /* override */

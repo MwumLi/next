@@ -10,7 +10,7 @@ const _animations = Symbol('animations');
 const _eventListeners = Symbol('eventListeners');
 const _captureEventListeners = Symbol('captureEventListeners');
 
-const _mouseCapture = Symbol('mouseCapture');
+// const _mouseCapture = Symbol('mouseCapture');
 
 export default class Node {
   static Attr = Attr;
@@ -90,7 +90,7 @@ export default class Node {
     return m;
   }
 
-  addEventListener(type, listener, options) {
+  addEventListener(type, listener, options = {}) {
     if(typeof options === 'boolean') options = {capture: options};
     const {capture, once} = options;
     const eventListeners = capture ? _captureEventListeners : _eventListeners;
@@ -122,16 +122,30 @@ export default class Node {
     return this;
   }
 
-  setMouseCapture() {
-    this[_mouseCapture] = true;
+  // setMouseCapture() {
+  //   this[_mouseCapture] = true;
+  // }
+
+  // releaseMouseCapture() {
+  //   this[_mouseCapture] = false;
+  // }
+
+  // isMouseCaptured(event) {
+  //   return (event.type === 'mousemove' || event.type === 'mousedown' || event.type === 'mouseup') && this[_mouseCapture];
+  // }
+
+
+  isPointCollision(x, y) {
+    return false;
   }
 
-  releaseMouseCapture() {
-    this[_mouseCapture] = false;
-  }
-
-  isMouseCaptured(event) {
-    return (event.type === 'mousemove' || event.type === 'mousedown' || event.type === 'mouseup') && this[_mouseCapture];
+  dispatchPointerEvent(event) {
+    const {x, y} = event;
+    if(this.isPointCollision(x, y)) {
+      this.dispatchEvent(event);
+      return true;
+    }
+    return false;
   }
 
   dispatchEvent(event) {
@@ -141,8 +155,9 @@ export default class Node {
     let parent = this.parent;
     while(parent) {
       elements.push(parent);
-      parent = this.parent;
+      parent = parent.parent;
     }
+
     // capture phase
     for(let i = elements.length - 1; i >= 0; i--) {
       const element = elements[i];

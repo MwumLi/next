@@ -127,6 +127,16 @@ export default class Group extends Block {
     }
   }
 
+  /* override */
+  dispatchPointerEvent(event) {
+    const children = this.orderedChildren;
+    for(let i = children.length - 1; i >= 0; i--) {
+      const child = children[i];
+      if(child.dispatchPointerEvent(event)) return true;
+    }
+    return false;
+  }
+
   draw() {
     const meshes = [];
     this.orderedChildren.forEach((child) => {

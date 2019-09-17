@@ -1,6 +1,32 @@
 import {createCanvas} from '@mesh.js/core/src/utils/canvas';
 import Layer from './layer';
 import Group from './group';
+import createPointerEvents from '../event/pointer-events';
+
+function delegateEvents(scene) {
+  const events = ['mousedown', 'mouseup', 'mousemove',
+    'touchstart', 'touchend', 'touchmove', 'touchcancel',
+    'click', 'dblclick'];
+
+  const container = scene.container;
+  const {left, top} = scene.options;
+
+  events.forEach((eventType) => {
+    container.addEventListener(eventType, (event) => {
+      const layers = scene.orderedChildren;
+      const pointerEvents = createPointerEvents(event, {offsetLeft: left, offsetTop: top});
+      pointerEvents.forEach((evt) => {
+        for(let i = 0; i < layers.length; i++) {
+          const layer = layers[i];
+          if(layer.options.handleEvent !== false) {
+            const ret = layer.dispatchPointerEvent(evt);
+            if(ret) return true;
+          }
+        }
+      });
+    }, {passive: true});
+  });
+}
 
 export default class Scene extends Group {
   /**
@@ -24,6 +50,7 @@ export default class Scene extends Group {
       });
     }
     this.setResolution(options);
+    delegateEvents(this);
   }
 
   /* override */

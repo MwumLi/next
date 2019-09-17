@@ -149,6 +149,7 @@ export default class Block extends Node {
   // }
 
   isPointCollision(x, y) {
+    if(!this.isVisible) return false;
     if(this.clientBoxMesh && this.clientBoxMesh.isPointCollision(x, y, 'fill')) {
       return true;
     }

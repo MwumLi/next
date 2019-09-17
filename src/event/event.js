@@ -8,6 +8,14 @@ export default class Event {
     this.cancelBubble = false;
   }
 
+  get type() {
+    return this[_type];
+  }
+
+  get bubbles() {
+    return this[_bubbles];
+  }
+
   stopPropagation() {
     this.cancelBubble = true;
   }
