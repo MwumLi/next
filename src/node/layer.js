@@ -48,7 +48,6 @@ export default class Layer extends Group {
     }
     if(this.parent && this.parent.options) {
       const {left, top} = this.parent.options;
-      console.log(left, top);
       this.renderer.setGlobalTransform(1, 0, 0, 1, left, top);
     }
     super.setResolution({width, height});
