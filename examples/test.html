@@ -9,8 +9,8 @@
   <style>
     #container {
       position: absolute;
-      width: 512px;
-      height: 512px;
+      width: 1200px;
+      height: 600px;
     }
   </style>
 </head>
@@ -61,7 +61,12 @@
     });
     
     const container = document.getElementById('container');
-    const scene = new spritejs.Scene(container, {displayRatio: 2});
+    const scene = new spritejs.Scene(container, {
+      // displayRatio: 2,
+      width: 600,
+      height: 600,
+      mode: 'sticky-height',
+    });
 
     // const bglayer = scene.layer('bglayer');
     const fglayer = scene.layer('fglayer');
