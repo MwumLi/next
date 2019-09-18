@@ -69,6 +69,13 @@
       mode: 'sticky-height',
     });
 
+    scene.preload([
+      'https://p5.ssl.qhimg.com/t01f47a319aebf27174.png',
+      'https://s3.ssl.qhres.com/static/a6a7509c33a290a6.json',
+    ]).then((res) => {
+      path.attr({texture: 'guanguan1.png'});
+    });
+
     // const bglayer = scene.layer('bglayer');
     const fglayer = scene.layer('fglayer');
 

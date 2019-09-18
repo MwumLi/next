@@ -4,6 +4,8 @@ import Group from './group';
 import createPointerEvents from '../event/pointer-events';
 import Event from '../event/event';
 
+import {loadTexture, loadFrames} from '../utils/texture_loader';
+
 function delegateEvents(scene) {
   const events = ['mousedown', 'mouseup', 'mousemove',
     'touchstart', 'touchend', 'touchmove', 'touchcancel',
@@ -115,6 +117,39 @@ export default class Scene extends Group {
       if(mode === 'sticky-bottom') options.top = options.height - h;
     }
     super.setResolution(options);
+  }
+
+  async preload(...resources) {
+    const ret = [],
+      tasks = [];
+
+    for(let i = 0; i < resources.length; i++) {
+      const res = resources[i];
+      let task;
+
+      if(typeof res === 'string') {
+        task = loadTexture(res);
+      } else if(Array.isArray(res)) {
+        task = loadFrames(...res);
+      } else {
+        const {id, src} = res;
+        task = loadTexture(src, id);
+      }
+      /* istanbul ignore if  */
+      if(!(task instanceof Promise)) {
+        task = Promise.resolve(task);
+      }
+
+      tasks.push(task.then((r) => {
+        ret.push(r);
+        const preloadEvent = new Event('preload');
+        preloadEvent.detail = {current: r, loaded: ret, resources};
+        this.dispatchEvent(preloadEvent);
+      }));
+    }
+
+    await Promise.all(tasks);
+    return ret;
   }
 
   layer(id) {
