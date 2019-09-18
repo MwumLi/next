@@ -3,6 +3,7 @@ import {mat2d} from 'gl-matrix';
 import Node from './node';
 import Attr from '../attribute/block';
 import {setFillColor, setStrokeColor} from '../utils/color';
+import {createRadiusBox} from '../utils/border_radius';
 
 const _borderBoxMesh = Symbol('borderBoxMesh');
 const _clientBoxMesh = Symbol('clientBoxMesh');
@@ -87,8 +88,8 @@ export default class Block extends Node {
         borderBoxMesh.box = this.borderBox;
         this[_borderBoxMesh] = borderBoxMesh;
 
-        const {borderColor, borderWidth, opacity} = this.attributes;
-        setStrokeColor(borderBoxMesh, {color: borderColor, lineWidth: borderWidth});
+        const {borderColor, borderWidth, borderDash, borderDashOffset, opacity} = this.attributes;
+        setStrokeColor(borderBoxMesh, {color: borderColor, lineWidth: borderWidth, lineDash: borderDash, lineDashOffset: borderDashOffset});
         borderBoxMesh.uniforms.u_opacity = opacity;
       } else if(borderBoxMesh.box !== this.borderBox) {
         borderBoxMesh.contours = this.borderBox.contours;
@@ -159,15 +160,20 @@ export default class Block extends Node {
   onPropertyChange(key, newValue, oldValue) {
     super.onPropertyChange(key, newValue, oldValue);
     if(key === 'anchorX' || key === 'anchorY' || key === 'width' || key === 'height' || key === 'borderWidth'
-      || key === 'paddingLeft' || key === 'paddingRight' || key === 'paddingTop' || key === 'paddingBottom') {
+      || key === 'paddingLeft' || key === 'paddingRight' || key === 'paddingTop' || key === 'paddingBottom'
+      || /^border(TopLeft|TopRight|BottomRight|BottomLeft)Radius$/.test(key)) {
       this.updateContours();
     }
     if(this[_clientBoxMesh] && key === 'bgcolor') {
       setFillColor(this[_clientBoxMesh], {color: newValue});
     }
-    if(this[_borderBoxMesh] && (key === 'borderColor' || key === 'borderWidth')) {
-      const {borderColor, borderWidth} = this.attributes;
-      setStrokeColor(this[_borderBoxMesh], {color: borderColor, lineWidth: borderWidth});
+    if(this[_borderBoxMesh]
+      && (key === 'borderColor'
+      || key === 'borderWidth'
+      || key === 'borderDash'
+      || key === 'borderDashOffset')) {
+      const {borderColor, borderWidth, borderDash, borderDashOffset} = this.attributes;
+      setStrokeColor(this[_borderBoxMesh], {color: borderColor, lineWidth: borderWidth, lineDash: borderDash, lineDashOffset: borderDashOffset});
     }
     if(key === 'zIndex' && this.parent) {
       this.parent.reorder();
@@ -175,7 +181,7 @@ export default class Block extends Node {
   }
 
   updateContours() {
-    const {anchorX, anchorY, borderWidth} = this.attributes;
+    const {anchorX, anchorY, borderWidth, borderRadius} = this.attributes;
     const [width, height] = this.borderSize;
     const offsetSize = this.offsetSize;
 
@@ -184,13 +190,13 @@ export default class Block extends Node {
     const left = -anchorX * offsetSize[0] + bw;
     const top = -anchorY * offsetSize[1] + bw;
 
-    const figure = new Figure2D();
-    figure.rect(left, top, width, height);
-    this.borderBox = figure;
+    this.borderBox = this.borderBox || new Figure2D();
+    createRadiusBox(this.borderBox, [left, top, width, height], borderRadius);
+    // figure.rect(left, top, width, height);
 
-    const innerFigure = new Figure2D();
-    innerFigure.rect(left + bw, top + bw, width - borderWidth, height - borderWidth);
-    this.clientBox = innerFigure;
+    this.clientBox = this.clientBox || new Figure2D();
+    createRadiusBox(this.clientBox, [left + bw, top + bw, width - borderWidth, height - borderWidth], borderRadius);
+    // innerFigure.rect(left + bw, top + bw, width - borderWidth, height - borderWidth);
   }
 
   /* override */

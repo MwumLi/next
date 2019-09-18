@@ -16,6 +16,8 @@ export default class Path extends Node {
       lineWidth: 0,
       lineJoin: 'miter', // 'miter' or 'bevel'
       lineCap: 'butt', // 'butt' or 'square'
+      lineDash: null,
+      lineDashOffset: 0,
       miterLimit: 10,
     });
   }
@@ -68,6 +70,23 @@ export default class Path extends Node {
   set lineCap(value) {
     if(value !== 'butt' || value !== 'square') throw new TypeError('Invalid lineCap type.');
     this[setAttribute]('lineCap', value);
+  }
+
+  get lineDash() {
+    return this[getAttribute]('lineDash');
+  }
+
+  set lineDash(value) {
+    if(value != null && !Array.isArray(value)) value = [value];
+    this[setAttribute]('lineDash', value.map(toNumber));
+  }
+
+  get lineDashOffset() {
+    return this[getAttribute]('lineDashOffset');
+  }
+
+  set lineDashOffset(value) {
+    this[setAttribute]('lineDashOffset', toNumber(value));
   }
 
   get miterLimit() {

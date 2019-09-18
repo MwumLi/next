@@ -45,6 +45,18 @@ export default class Group extends Block {
   }
 
   /* override */
+  cloneNode(deep = false) {
+    const node = super.cloneNode();
+    if(deep) {
+      this.children.forEach((child) => {
+        const childNode = child.cloneNode(deep);
+        node.appendChild(childNode);
+      });
+    }
+    return node;
+  }
+
+  /* override */
   setResolution({width, height}) {
     super.setResolution({width, height});
     this.children.forEach((child) => {

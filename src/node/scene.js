@@ -2,6 +2,7 @@ import {createCanvas} from '@mesh.js/core/src/utils/canvas';
 import Layer from './layer';
 import Group from './group';
 import createPointerEvents from '../event/pointer-events';
+import Event from '../event/event';
 
 function delegateEvents(scene) {
   const events = ['mousedown', 'mouseup', 'mousemove',
@@ -11,16 +12,49 @@ function delegateEvents(scene) {
   const container = scene.container;
   const {left, top} = scene.options;
 
+  container.addEventListener('mouseleave', (event) => {
+    const previousTarget = scene._mouseTarget;
+    if(previousTarget) {
+      const leaveEvent = new Event('mouseleave');
+      leaveEvent.originalEvent = event;
+      previousTarget.dispatchEvent(leaveEvent);
+      scene._mouseTarget = undefined;
+    }
+  }, {passive: true});
+
   events.forEach((eventType) => {
     container.addEventListener(eventType, (event) => {
       const layers = scene.orderedChildren;
       const pointerEvents = createPointerEvents(event, {offsetLeft: left, offsetTop: top});
       pointerEvents.forEach((evt) => {
+        // evt.scene = scene;
         for(let i = 0; i < layers.length; i++) {
           const layer = layers[i];
           if(layer.options.handleEvent !== false) {
             const ret = layer.dispatchPointerEvent(evt);
-            if(ret) return true;
+            if(ret) break;
+          }
+        }
+        if(evt.type === 'mousemove') {
+          const target = evt.target;
+          const previousTarget = scene._mouseTarget;
+          if(target !== previousTarget) {
+            const entries = Object.entries(event);
+            if(previousTarget) {
+              const leaveEvent = new Event('mouseleave');
+              entries.forEach(([key, value]) => {
+                leaveEvent[key] = value;
+              });
+              previousTarget.dispatchEvent(leaveEvent);
+            }
+            if(target) {
+              const enterEvent = new Event('mouseenter');
+              entries.forEach(([key, value]) => {
+                enterEvent[key] = value;
+              });
+              target.dispatchEvent(enterEvent);
+            }
+            scene._mouseTarget = evt.target;
           }
         }
       });

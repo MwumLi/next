@@ -81,6 +81,10 @@
       padding: 20,
       verticalAlign: 'top',
       fillColor: 'blue',
+      borderWidth: 2,
+      borderColor: 'green',
+      borderDash: 5,
+      borderRadius: [50, 50, 0, 0],
     });
 
     const group = new spritejs.Group();
@@ -109,6 +113,17 @@
       console.log(e);
       e.stopPropagation();
     });
+
+    l.addEventListener('mouseenter', (e) => {
+      console.log(e);
+      e.stopPropagation();
+    });
+
+    l.addEventListener('mouseleave', (e) => {
+      console.log(e);
+      e.stopPropagation();
+    });
+
 
     group.addEventListener('click', (e) => {
       console.log(e);

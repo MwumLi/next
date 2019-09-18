@@ -14,15 +14,25 @@ export default class Block extends Node {
     this[setDefault]({
       anchorX: 0,
       anchorY: 0,
+      /* anchor */
       width: undefined,
       height: undefined,
+      /* size */
       borderWidth: 0,
       borderColor: [0, 0, 0, 1],
+      borderDash: undefined,
+      borderDashOffset: 0,
+      borderTopLeftRadius: [0, 0],
+      borderTopRightRadius: [0, 0],
+      borderBottomRightRadius: [0, 0],
+      borderBottomLeftRadius: [0, 0],
+      /* border radius */
       bgcolor: undefined,
       paddingTop: 0,
       paddingRight: 0,
       paddingBottom: 0,
       paddingLeft: 0,
+      /* padding */
     });
   }
 
@@ -101,6 +111,76 @@ export default class Block extends Node {
 
   set borderColor(value) {
     this[setAttribute]('borderColor', parseColor(value));
+  }
+
+  get borderDash() {
+    return this[getAttribute]('borderDash');
+  }
+
+  set borderDash(value) {
+    if(value != null && !Array.isArray(value)) value = [value];
+    this[setAttribute]('borderDash', value.map(toNumber));
+  }
+
+  get borderDashOffset() {
+    return this[getAttribute]('borderDashOffset');
+  }
+
+  set borderDashOffset(value) {
+    this[setAttribute]('borderDashOffset', toNumber(value));
+  }
+
+  get borderTopLeftRadius() {
+    return this[getAttribute]('borderTopLeftRadius');
+  }
+
+  set borderTopLeftRadius(value) {
+    if(!Array.isArray(value)) value = [value, value];
+    this[setAttribute]('borderTopLeftRadius', value.map(toNumber));
+  }
+
+  get borderTopRightRadius() {
+    return this[getAttribute]('borderTopRightRadius');
+  }
+
+  set borderTopRightRadius(value) {
+    if(!Array.isArray(value)) value = [value, value];
+    this[setAttribute]('borderTopRightRadius', value.map(toNumber));
+  }
+
+  get borderBottomRightRadius() {
+    return this[getAttribute]('borderBottomRightRadius');
+  }
+
+  set borderBottomRightRadius(value) {
+    if(!Array.isArray(value)) value = [value, value];
+    this[setAttribute]('borderBottomRightRadius', value.map(toNumber));
+  }
+
+  get borderBottomLeftRadius() {
+    return this[getAttribute]('borderBottomLeftRadius');
+  }
+
+  set borderBottomLeftRadius(value) {
+    if(!Array.isArray(value)) value = [value, value];
+    this[setAttribute]('borderBottomLeftRadius', value.map(toNumber));
+  }
+
+  get borderRadius() {
+    return [...this.borderTopLeftRadius, ...this.borderTopRightRadius,
+      ...this.borderBottomRightRadius, ...this.borderBottomLeftRadius];
+  }
+
+  set borderRadius(value) {
+    if(!Array.isArray(value)) value = Array(8).fill(value);
+    else if(value.length === 2) value = [value[0], value[1], value[0], value[1], value[0], value[1], value[0], value[1]];
+    else if(value.length === 4) value = [value[0], value[1], value[2], value[3], value[0], value[1], value[2], value[3]];
+    else if(value.length === 6) value = [value[0], value[1], value[2], value[3], value[4], value[5], value[2], value[3]];
+    else if(value.length !== 8) throw new TypeError('Invalid borderRadius value.');
+    this.borderTopLeftRadius = [value[0], value[1]];
+    this.borderTopRightRadius = [value[2], value[3]];
+    this.borderBottomRightRadius = [value[4], value[5]];
+    this.borderBottomLeftRadius = [value[6], value[7]];
   }
 
   get bgcolor() {

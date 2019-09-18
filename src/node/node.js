@@ -122,19 +122,6 @@ export default class Node {
     return this;
   }
 
-  // setMouseCapture() {
-  //   this[_mouseCapture] = true;
-  // }
-
-  // releaseMouseCapture() {
-  //   this[_mouseCapture] = false;
-  // }
-
-  // isMouseCaptured(event) {
-  //   return (event.type === 'mousemove' || event.type === 'mousedown' || event.type === 'mouseup') && this[_mouseCapture];
-  // }
-
-
   isPointCollision(x, y) {
     return false;
   }
@@ -151,9 +138,10 @@ export default class Node {
   dispatchEvent(event) {
     event.target = this;
     const type = event.type;
+
     const elements = [this];
     let parent = this.parent;
-    while(parent) {
+    while(event.bubbles && parent) {
       elements.push(parent);
       parent = parent.parent;
     }
@@ -168,7 +156,7 @@ export default class Node {
           if(once) elements.removeEventListener(listener);
         });
       }
-      if(event.cancelBubble) break;
+      if(!event.bubbles && event.cancelBubble) break;
     }
     // bubbling
     if(!event.cancelBubble) {
@@ -181,7 +169,7 @@ export default class Node {
             if(once) elements.removeEventListener(listener);
           });
         }
-        if(event.cancelBubble) break;
+        if(!event.bubbles || event.cancelBubble) break;
       }
     }
   }

@@ -40,7 +40,7 @@ export function setFillColor(mesh, {color: fillColor}) {
   return mesh;
 }
 
-export function setStrokeColor(mesh, {color: strokeColor, lineWidth, lineCap, lineJoin, miterLimit}) {
+export function setStrokeColor(mesh, {color: strokeColor, lineWidth, lineCap, lineJoin, lineDash, lineDashOffset, miterLimit}) {
   if(strokeColor.vector) {
     // gradient
     const {vector, colors} = strokeColor;
@@ -59,5 +59,7 @@ export function setStrokeColor(mesh, {color: strokeColor, lineWidth, lineCap, li
     cap: lineCap,
     join: lineJoin,
     miterLimit,
+    lineDash,
+    lineDashOffset,
   });
 }

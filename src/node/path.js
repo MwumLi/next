@@ -50,9 +50,10 @@ export default class Path extends Node {
     if(this[_mesh] && key === 'fillColor') {
       setFillColor(this[_mesh], {color: newValue});
     }
-    if(this[_mesh] && (key === 'strokeColor' || key === 'lineWidth' || key === 'lineCap' || key === 'lineJoin')) {
-      const {lineCap, lineJoin, lineWidth, strokeColor, miterLimit} = this.attributes;
-      setStrokeColor(this[_mesh], {color: strokeColor, lineCap, lineJoin, lineWidth, miterLimit});
+    if(this[_mesh] && (key === 'strokeColor' || key === 'lineWidth' || key === 'lineCap' || key === 'lineJoin'
+      || key === 'lineDash' || key === 'lineDashOffset')) {
+      const {lineCap, lineJoin, lineWidth, strokeColor, lineDash, lineDashOffset, miterLimit} = this.attributes;
+      setStrokeColor(this[_mesh], {color: strokeColor, lineCap, lineJoin, lineWidth, lineDash, lineDashOffset, miterLimit});
     }
   }
 
@@ -104,10 +105,9 @@ export default class Path extends Node {
 
   /* override */
   updateContours() {
-    const figure = new Figure2D();
-    figure.addPath(this.attributes.d);
-
-    this.path = figure;
+    this.path = this.path || new Figure2D();
+    this.path.beginPath();
+    this.path.addPath(this.attributes.d);
   }
 
   /* override */
