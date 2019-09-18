@@ -147,11 +147,13 @@ export default class Block extends Node {
   // }
 
   isPointCollision(x, y) {
-    if(!this.isVisible) return false;
-    if(this.clientBoxMesh && this.clientBoxMesh.isPointCollision(x, y, 'fill')) {
+    const pointerEvents = this.attributes.pointerEvents;
+    if(pointerEvents === 'none') return false;
+    if(pointerEvents !== 'all' && !this.isVisible) return false;
+    if(pointerEvents !== 'visibleStroke' && this.clientBoxMesh && this.clientBoxMesh.isPointCollision(x, y, 'fill')) {
       return true;
     }
-    return this.hasBorder && this.borderBoxMesh.isPointCollision(x, y, 'stroke');
+    return pointerEvents !== 'visibleFill' && this.hasBorder && this.borderBoxMesh.isPointCollision(x, y, 'stroke');
   }
 
   onPropertyChange(key, newValue, oldValue) {

@@ -68,7 +68,7 @@ export default class Scene extends Group {
   /**
     width
     height
-    mode: 'static', 'scale', 'sticky-width', 'sticky-height, 'sticky-top', 'sticky-bottom', 'sticky-left', 'sticky-right'
+    mode: 'static', 'scale', 'stickyWidth', 'stickyHeight, 'stickyTop', 'stickyBottom', 'stickyLeft', 'stickyRight'
    */
   constructor(container, options = {}) {
     super();
@@ -104,17 +104,17 @@ export default class Scene extends Group {
 
     const mode = options.mode;
     const {clientWidth, clientHeight} = container;
-    if(mode === 'sticky-height' || mode === 'sticky-left' || mode === 'sticky-right') {
+    if(mode === 'stickyHeight' || mode === 'stickyLeft' || mode === 'stickyRight') {
       const w = options.width;
       options.width = clientWidth * options.height / clientHeight;
-      if(mode === 'sticky-height') options.left = 0.5 * (options.width - w);
-      if(mode === 'sticky-right') options.left = options.width - w;
+      if(mode === 'stickyHeight') options.left = 0.5 * (options.width - w);
+      if(mode === 'stickyRight') options.left = options.width - w;
       // console.log(clientWidth, width);
-    } else if(mode === 'sticky-width' || mode === 'sticky-top' || mode === 'sticky-bottom') {
+    } else if(mode === 'stickyWidth' || mode === 'stickyTop' || mode === 'stickyBottom') {
       const h = options.height;
       options.height = clientHeight * options.width / clientWidth;
-      if(mode === 'sticky-width') options.top = 0.5 * (options.height - h);
-      if(mode === 'sticky-bottom') options.top = options.height - h;
+      if(mode === 'stickyWidth') options.top = 0.5 * (options.height - h);
+      if(mode === 'stickyBottom') options.top = options.height - h;
     }
     super.setResolution(options);
   }

@@ -120,7 +120,13 @@ export default class Path extends Node {
   }
 
   isPointCollision(x, y) {
-    return this.isVisible && !!this.mesh && this.mesh.isPointCollision(x, y, 'both');
+    const pointerEvents = this.attributes.pointerEvents;
+    if(pointerEvents === 'none') return false;
+    if(pointerEvents !== 'all' && !this.isVisible) return false;
+    let which = 'both';
+    if(pointerEvents === 'visibleFill') which = 'fill';
+    if(pointerEvents === 'visibleStroke') which = 'stroke';
+    return !!this.mesh && this.mesh.isPointCollision(x, y, which);
   }
 
   /* override */

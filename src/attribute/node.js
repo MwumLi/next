@@ -86,6 +86,7 @@ export default class Node {
       offsetPath: undefined,
       offsetDistance: 0,
       offsetRotate: 'auto',
+      pointerEvents: 'visible', // none | visible | visibleFill | visibleStroke | all
     });
 
     this[_changedAttrs] = new Set();
@@ -312,5 +313,16 @@ export default class Node {
   set offsetRotate(value) {
     this[setAttribute]('offsetRotate', value);
     updateOffset(this);
+  }
+
+  get pointerEvents() {
+    return this[getAttribute]('pointerEvents');
+  }
+
+  set pointerEvents(value) {
+    if(value !== 'none' && value !== 'visible' && value !== 'visibleFill' && value !== 'visibleStroke' && value !== 'all') {
+      throw new TypeError('Invalid pointerEvents type.');
+    }
+    this[setAttribute]('pointerEvents', value);
   }
 }
