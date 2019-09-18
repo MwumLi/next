@@ -1,4 +1,5 @@
 import {mat2d} from 'gl-matrix';
+import {Figure2D} from '@mesh.js/core';
 import {toString, toNumber, compareValue} from '../utils/attribute_value';
 
 const setAttribute = Symbol.for('spritejs_setAttribute');
@@ -17,6 +18,11 @@ function getMatrix(transformMap, [ox, oy]) {
     if(ox || oy) m = mat2d.translate(m, [ox, oy]);
     if(key === 'matrix') {
       m *= mat2d(value);
+    } else if(key === 'offsetTranslate') {
+      m[4] += value[0];
+      m[5] += value[1];
+    } else if(key === 'offsetRotate') {
+      m = mat2d.rotate(m, value);
     } else {
       mat2d[key](m, m, value);
     }
@@ -28,6 +34,26 @@ function getMatrix(transformMap, [ox, oy]) {
 const _transformMatrix = Symbol('transformMatrix');
 const _transforms = Symbol('transforms');
 const _changedAttrs = Symbol('changedAttrs');
+const _offsetFigure = Symbol('offsetFigure');
+
+function updateOffset(attr) {
+  const distance = attr.offsetDistance;
+  const point = attr[_offsetFigure].getPointAtLength(distance);
+  if(point) {
+    const transformMap = attr[_transforms];
+    let rotateValue = attr.offsetRotate;
+    if(rotateValue === 'auto') {
+      rotateValue = point.angle;
+    } else if(rotateValue === 'reverse') {
+      rotateValue = Math.PI + point.angle;
+    } else {
+      rotateValue = Math.PI * rotateValue / 180;
+    }
+    transformMap.set('offsetRotate', rotateValue);
+    transformMap.set('offsetTranslate', [point.x, point.y]);
+    attr[_transformMatrix] = getMatrix(transformMap, attr.transformOrigin);
+  }
+}
 
 // 规范：属性只能是原始类型或元素是原始类型的数组
 export default class Node {
@@ -57,9 +83,13 @@ export default class Node {
       skew: [0, 0],
       opacity: 1,
       zIndex: 0,
+      offsetPath: undefined,
+      offsetDistance: 0,
+      offsetRotate: 'auto',
     });
 
     this[_changedAttrs] = new Set();
+    this[_offsetFigure] = new Figure2D();
   }
 
   get [changedAttrs]() {
@@ -252,5 +282,35 @@ export default class Node {
 
   set zIndex(value) {
     this[setAttribute]('zIndex', Number(value));
+  }
+
+  get offsetPath() {
+    return this[getAttribute]('offsetPath');
+  }
+
+  set offsetPath(value) {
+    this[_offsetFigure].beginPath();
+    this[_offsetFigure].addPath(value);
+    this[setAttribute]('offsetPath', value);
+    updateOffset(this);
+  }
+
+  get offsetDistance() {
+    return this[getAttribute]('offsetDistance');
+  }
+
+  set offsetDistance(value) {
+    value = toNumber(value);
+    this[setAttribute]('offsetDistance', value);
+    updateOffset(this);
+  }
+
+  get offsetRotate() {
+    return this[getAttribute]('offsetRotate');
+  }
+
+  set offsetRotate(value) {
+    this[setAttribute]('offsetRotate', value);
+    updateOffset(this);
   }
 }
