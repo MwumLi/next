@@ -4,9 +4,11 @@ import Node from './node';
 import Attr from '../attribute/block';
 import {setFillColor, setStrokeColor} from '../utils/color';
 import {createRadiusBox} from '../utils/border_radius';
+import {parseFilterString, applyFilters} from '../utils/filter';
 
 const _borderBoxMesh = Symbol('borderBoxMesh');
 const _clientBoxMesh = Symbol('clientBoxMesh');
+const _filters = Symbol('filters');
 
 export default class Block extends Node {
   static Attr = Attr;
@@ -88,6 +90,9 @@ export default class Block extends Node {
         const {borderColor, borderWidth, borderDash, borderDashOffset, opacity} = this.attributes;
         setStrokeColor(borderBoxMesh, {color: borderColor, lineWidth: borderWidth, lineDash: borderDash, lineDashOffset: borderDashOffset});
         borderBoxMesh.uniforms.u_opacity = opacity;
+        if(this[_filters]) {
+          applyFilters(borderBoxMesh, this[_filters]);
+        }
       } else if(borderBoxMesh.box !== this.borderBox) {
         borderBoxMesh.contours = this.borderBox.contours;
         borderBoxMesh.box = this.borderBox;
@@ -118,6 +123,9 @@ export default class Block extends Node {
           setFillColor(clientBoxMesh, {color: bgcolor});
         }
         clientBoxMesh.uniforms.u_opacity = opacity;
+        if(this[_filters]) {
+          applyFilters(clientBoxMesh, this[_filters]);
+        }
       } else if(clientBoxMesh.box !== this.clientBox) {
         clientBoxMesh.contours = this.clientBox.contours;
         clientBoxMesh.box = this.clientBox;
@@ -176,6 +184,15 @@ export default class Block extends Node {
     }
     if(key === 'zIndex' && this.parent) {
       this.parent.reorder();
+    }
+    if(key === 'filter') {
+      this[_filters] = parseFilterString(newValue);
+      if(this[_clientBoxMesh]) {
+        applyFilters(this[_clientBoxMesh], this[_filters]);
+      }
+      if(this[_borderBoxMesh]) {
+        applyFilters(this[_borderBoxMesh], this[_filters]);
+      }
     }
   }
 

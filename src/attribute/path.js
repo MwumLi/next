@@ -107,9 +107,10 @@ export default class Path extends Node {
   }
 
   set texture(value) {
-    const subject = this[_subject];
-    subject.setTexture(value);
-    this[setAttribute]('texture', value);
+    if(this[setAttribute]('texture', value)) {
+      const subject = this[_subject];
+      subject.setTexture(value);
+    }
   }
 
   get textureRect() {

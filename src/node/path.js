@@ -6,10 +6,12 @@ import Attr from '../attribute/path';
 import {setFillColor, setStrokeColor} from '../utils/color';
 import {loadTexture, createTexture} from '../utils/texture_loader';
 import {compareValue} from '../utils/attribute_value';
+import {parseFilterString, applyFilters} from '../utils/filter';
 
 const _mesh = Symbol('mesh');
 const _textureImage = Symbol('textureImage');
 const _textureContext = Symbol('textureContext');
+const _filters = Symbol('filters');
 
 export default class Path extends Node {
   static Attr = Attr;
@@ -75,6 +77,12 @@ export default class Path extends Node {
       const {lineCap, lineJoin, lineWidth, strokeColor, lineDash, lineDashOffset, miterLimit} = this.attributes;
       setStrokeColor(this[_mesh], {color: strokeColor, lineCap, lineJoin, lineWidth, lineDash, lineDashOffset, miterLimit});
     }
+    if(key === 'filter') {
+      this[_filters] = parseFilterString(newValue);
+      if(this[_mesh]) {
+        applyFilters(this[_mesh], this[_filters]);
+      }
+    }
   }
 
   get isVisible() {
@@ -102,6 +110,9 @@ export default class Path extends Node {
             lineJoin,
             miterLimit,
           });
+        }
+        if(this[_filters]) {
+          applyFilters(mesh, this[_filters]);
         }
         this[_mesh] = mesh;
       } else if(mesh.path !== path) {

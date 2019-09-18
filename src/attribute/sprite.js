@@ -22,9 +22,10 @@ export default class Sprite extends Block {
   }
 
   set texture(value) {
-    const subject = this[_subject];
-    subject.setTexture(value);
-    this[setAttribute]('texture', value);
+    if(this[setAttribute]('texture', value)) {
+      const subject = this[_subject];
+      subject.setTexture(value);
+    }
   }
 
   get textureRect() {

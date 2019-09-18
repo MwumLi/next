@@ -39,10 +39,10 @@ export default class Block extends Node {
   get [attributes]() {
     const ret = super[attributes];
     return Object.assign(ret, {
-      anchor: [this.anchorX, this.anchorY],
-      pos: [this.x, this.y],
-      size: [this.width, this.height],
-      padding: [this.paddingTop, this.paddingRight, this.paddingBottom, this.paddingLeft],
+      anchor: this.anchor,
+      size: this.size,
+      padding: this.padding,
+      borderRadius: this.borderRadius,
     });
   }
 
