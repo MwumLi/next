@@ -64,11 +64,8 @@ export default class Block extends Node {
 
   get originalClientRect() {
     if(this.clientBox) {
-      const points = this.clientBox.contours[0];
-      if(points.length > 2) {
-        const [left, top, right, bottom] = [points[0][0], points[0][1], points[2][0], points[2][1]];
-        return [left, top, right - left, bottom - top];
-      }
+      const boundingBox = this.clientBoxMesh.boundingBox;
+      return [boundingBox[0][0], boundingBox[0][1], boundingBox[1][0] - boundingBox[0][0], boundingBox[1][1] - boundingBox[0][1]];
     }
     return [0, 0, 0, 0];
   }

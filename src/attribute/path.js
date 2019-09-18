@@ -5,6 +5,7 @@ import {toNumber} from '../utils/attribute_value';
 const setDefault = Symbol.for('spritejs_setAttributeDefault');
 const setAttribute = Symbol.for('spritejs_setAttribute');
 const getAttribute = Symbol.for('spritejs_getAttribute');
+const _subject = Symbol.for('spritejs_subject');
 
 export default class Path extends Node {
   constructor(subject) {
@@ -19,6 +20,10 @@ export default class Path extends Node {
       lineDash: null,
       lineDashOffset: 0,
       miterLimit: 10,
+      texture: undefined,
+      textureRect: undefined,
+      textureRepeat: false,
+      sourceRect: undefined,
     });
   }
 
@@ -95,5 +100,39 @@ export default class Path extends Node {
 
   set miterLimit(value) {
     this[setAttribute]('miterLimit', toNumber(value));
+  }
+
+  get texture() {
+    return this[getAttribute]('texture');
+  }
+
+  set texture(value) {
+    const subject = this[_subject];
+    subject.setTexture(value);
+    this[setAttribute]('texture', value);
+  }
+
+  get textureRect() {
+    return this[getAttribute]('textureRect');
+  }
+
+  set textureRect(value) {
+    this[setAttribute]('textureRect', value);
+  }
+
+  get sourceRect() {
+    return this[getAttribute]('sourceRect');
+  }
+
+  set sourceRect(value) {
+    this[setAttribute]('sourceRect', value);
+  }
+
+  get textureRepeat() {
+    return this[getAttribute]('textureRepeat');
+  }
+
+  set textureRepeat(value) {
+    this[setAttribute]('textureRepeat', !!value);
   }
 }

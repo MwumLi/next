@@ -193,9 +193,6 @@ export default class Node {
     if(key !== 'id' && key !== 'name' && key !== 'className') {
       this.forceUpdate();
     }
-    // if(this.layer && this.layer.useCSS) {
-    //   this.updateCSS();
-    // }
   }
 
   forceUpdate() {

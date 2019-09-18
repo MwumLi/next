@@ -50,7 +50,7 @@
     });
 
     const path = new spritejs.Path();
-    path.d = 'M0 0L0 100L100 100z';
+    path.d = 'M50 50L50 100L100 100z';
     // path.d = 'M100 100C0 0 0 0 0 0 67.90 66.047 67.904 66.047 67.904 66.047 100 100 100 100 100 100';
 
     path.attr({
@@ -58,6 +58,7 @@
       strokeColor: gradient,
       lineWidth: '3px',
       pos: [100, 100],
+      texture: textureURL,
     });
     
     const container = document.getElementById('container');

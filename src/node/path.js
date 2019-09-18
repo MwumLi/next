@@ -4,8 +4,12 @@ import pasition from 'pasition';
 import Node from './node';
 import Attr from '../attribute/path';
 import {setFillColor, setStrokeColor} from '../utils/color';
+import {loadTexture, createTexture} from '../utils/texture_loader';
+import {compareValue} from '../utils/attribute_value';
 
 const _mesh = Symbol('mesh');
+const _textureImage = Symbol('textureImage');
+const _textureContext = Symbol('textureContext');
 
 export default class Path extends Node {
   static Attr = Attr;
@@ -27,12 +31,28 @@ export default class Path extends Node {
     };
   }
 
+  async setTexture(url) {
+    const textureImage = await loadTexture(url);
+    this[_textureImage] = textureImage;
+    this.updateContours();
+    this.forceUpdate();
+    return textureImage;
+  }
+
   set d(value) {
     this.attributes.d = value;
   }
 
   get d() {
     return this.attributes.d;
+  }
+
+  get originalContentRect() {
+    if(this.path) {
+      const boundingBox = this.path.boundingBox;
+      return [boundingBox[0][0], boundingBox[0][1], boundingBox[1][0] - boundingBox[0][0], boundingBox[1][1] - boundingBox[0][1]];
+    }
+    return [0, 0, 0, 0];
   }
 
   /* override */
@@ -127,6 +147,36 @@ export default class Path extends Node {
   draw() {
     const mesh = this.mesh;
     if(mesh) {
+      const textureImage = this[_textureImage];
+      if(textureImage) {
+        const texture = mesh.texture;
+        const contentRect = this.originalContentRect;
+        let textureRect = this.attributes.textureRect;
+        const textureRepeat = this.attributes.textureRepeat;
+        const sourceRect = this.attributes.sourceRect;
+
+        if(!texture
+          || this[_textureContext] && this[_textureContext] !== this.renderer
+          || texture.image !== textureImage
+          || texture.options.repeat !== textureRepeat
+          || !compareValue(texture.options.rect, textureRect)
+          || !compareValue(texture.options.srcRect, sourceRect)) {
+          const newTexture = createTexture(textureImage, this.renderer);
+
+          if(textureRect) {
+            textureRect[0] += contentRect[0];
+            textureRect[1] += contentRect[1];
+          } else {
+            textureRect = contentRect;
+          }
+          mesh.setTexture(newTexture, {
+            rect: textureRect,
+            repeat: textureRepeat,
+            srcRect: sourceRect,
+          });
+          this[_textureContext] = this.renderer;
+        }
+      }
       return [mesh];
     }
 
