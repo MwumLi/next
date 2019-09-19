@@ -13,7 +13,7 @@ class Gradient {
 }
 
 export function parseColor(color) {
-  if(Array.isArray(color)) return color;
+  // if(Array.isArray(color)) return color;
   if(color instanceof Gradient) return color;
   const ret = rgba(color);
   if(!ret || !ret.length) throw new TypeError('Invalid color value.');

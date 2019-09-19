@@ -1,15 +1,15 @@
 import {Animator, Effects} from 'sprite-animator';
-import {parseColor} from '../utils/color';
+import rgba from 'color-rgba';
 
 const attributes = Symbol.for('spritejs_attributes');
 
 Effects.default = function (from, to, p, s, e) {
   if(typeof from === 'string' && from.indexOf('rgba') === 0) {
-    from = parseColor(from);
+    from = rgba(from);
   }
 
   if(typeof to === 'string' && to.indexOf('rgba') === 0) {
-    to = parseColor(to);
+    to = rgba(to);
   }
 
   if(Array.isArray(from) && Array.isArray(to)) {
