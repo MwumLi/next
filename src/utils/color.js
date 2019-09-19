@@ -17,7 +17,7 @@ export function parseColor(color) {
   if(color instanceof Gradient) return color;
   const ret = rgba(color);
   if(!ret || !ret.length) throw new TypeError('Invalid color value.');
-  return [ret[0] / 255, ret[1] / 255, ret[2] / 255, ret[3]];
+  return `rgba(${ret.join()})`;
 }
 
 export {Gradient};

@@ -5,6 +5,8 @@ import Attr from '../attribute/block';
 import {setFillColor, setStrokeColor} from '../utils/color';
 import {createRadiusBox} from '../utils/border_radius';
 import {parseFilterString, applyFilters} from '../utils/filter';
+import ownerDocument from '../document';
+import getBoundingBox from '../utils/bounding_box';
 
 const _borderBoxMesh = Symbol('borderBoxMesh');
 const _clientBoxMesh = Symbol('clientBoxMesh');
@@ -54,14 +56,11 @@ export default class Block extends Node {
 
   get hasBorder() {
     const borderWidth = this.attributes.borderWidth;
-    const borderColor = this.attributes.borderColor;
-
-    return borderWidth > 0 && borderColor[3] > 0;
+    return borderWidth > 0;
   }
 
   get hasBackground() {
-    const bgcolor = this.attributes.bgcolor;
-    return bgcolor && bgcolor[3] > 0;
+    return !!this.attributes.bgcolor;
   }
 
   get originalClientRect() {
@@ -76,6 +75,19 @@ export default class Block extends Node {
     const [left, top, width, height] = this.originalClientRect;
     const padding = this.attributes.padding;
     return [left + padding[0], top + padding[1], width - padding[0] - padding[2], height - padding[1] - padding[3]];
+  }
+
+  getBoundingClientRect() {
+    let boundingBox = null;
+    if(this.clientBoxMesh) {
+      boundingBox = [...this.clientBoxMesh.boundingBox];
+      const borderWidth = this.attributes.borderWidth;
+      if(borderWidth) {
+        boundingBox[0] = [boundingBox[0][0] - borderWidth, boundingBox[0][1] - borderWidth];
+        boundingBox[1] = [boundingBox[1][0] + borderWidth, boundingBox[1][1] + borderWidth];
+      }
+    }
+    return getBoundingBox(boundingBox, this.renderMatrix);
   }
 
   get borderBoxMesh() {
@@ -119,7 +131,7 @@ export default class Block extends Node {
 
         const {bgcolor, opacity} = this.attributes;
 
-        if(bgcolor && bgcolor[3] > 0) {
+        if(this.hasBorder) {
           setFillColor(clientBoxMesh, {color: bgcolor});
         }
         clientBoxMesh.uniforms.u_opacity = opacity;
@@ -158,7 +170,7 @@ export default class Block extends Node {
     const pointerEvents = this.attributes.pointerEvents;
     if(pointerEvents === 'none') return false;
     if(pointerEvents !== 'all' && !this.isVisible) return false;
-    if(pointerEvents !== 'visibleStroke' && this.clientBoxMesh && this.clientBoxMesh.isPointCollision(x, y, 'fill')) {
+    if(pointerEvents !== 'visibleStroke' && this.hasBackground && this.clientBoxMesh.isPointCollision(x, y, 'fill')) {
       return true;
     }
     return pointerEvents !== 'visibleFill' && this.hasBorder && this.borderBoxMesh.isPointCollision(x, y, 'stroke');
@@ -246,3 +258,5 @@ export default class Block extends Node {
     return ret;
   }
 }
+
+ownerDocument.registerNode(Block, 'block');

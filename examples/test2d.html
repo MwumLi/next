@@ -35,7 +35,8 @@
 
     const canvas = document.querySelector('canvas');
 
-    const layer = new spritejs.Layer(canvas, {
+    const layer = new spritejs.Layer({
+      canvas,
       // contextType: '2d',
     });
 

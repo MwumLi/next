@@ -1,6 +1,7 @@
 import {mat2d} from 'gl-matrix';
 import Attr from '../attribute/node';
 import Animation from '../animation';
+import ownerDocument from '../document';
 
 const changedAttrs = Symbol.for('spritejs_changedAttrs');
 
@@ -39,14 +40,6 @@ export default class Node {
 
   get animations() {
     return this[_animations];
-  }
-
-  get nodeName() {
-    return 'node';
-  }
-
-  get tagName() {
-    return 'NODE';
   }
 
   get id() {
@@ -321,3 +314,5 @@ export default class Node {
     };
   }
 }
+
+ownerDocument.registerNode(Node, 'node');

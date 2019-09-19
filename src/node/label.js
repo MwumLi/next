@@ -2,6 +2,7 @@ import createText from '@mesh.js/core/src/utils/create-text';
 import {createTexture} from '../utils/texture_loader';
 import Block from './block';
 import Attr from '../attribute/label';
+import ownerDocument from '../document';
 
 const _textImage = Symbol('textImage');
 const _textImageTask = Symbol('textImageTask');
@@ -58,6 +59,14 @@ export default class Label extends Block {
     return [width, height];
   }
 
+  get text() {
+    return this.attributes.text;
+  }
+
+  set text(value) {
+    this.attributes.text = value;
+  }
+
   draw() {
     const meshes = super.draw();
     if(meshes && meshes.length) {
@@ -107,3 +116,5 @@ export default class Label extends Block {
     return meshes;
   }
 }
+
+ownerDocument.registerNode(Label, 'label');

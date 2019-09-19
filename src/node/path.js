@@ -7,6 +7,8 @@ import {setFillColor, setStrokeColor} from '../utils/color';
 import {loadTexture, createTexture} from '../utils/texture_loader';
 import {compareValue} from '../utils/attribute_value';
 import {parseFilterString, applyFilters} from '../utils/filter';
+import ownerDocument from '../document';
+import getBoundingBox from '../utils/bounding_box';
 
 const _mesh = Symbol('mesh');
 const _textureImage = Symbol('textureImage');
@@ -140,6 +142,12 @@ export default class Path extends Node {
     return !!this.mesh && this.mesh.isPointCollision(x, y, which);
   }
 
+  getBoundingClientRect() {
+    let boundingBox = null;
+    if(this.mesh) boundingBox = this.mesh.boundingBox;
+    return getBoundingBox(boundingBox, this.renderMatrix);
+  }
+
   /* override */
   updateContours() {
     this.path = this.path || new Figure2D();
@@ -200,3 +208,5 @@ export default class Path extends Node {
     return [];
   }
 }
+
+ownerDocument.registerNode(Path, 'path');

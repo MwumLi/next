@@ -3,8 +3,8 @@ import Layer from './layer';
 import Group from './group';
 import createPointerEvents from '../event/pointer-events';
 import Event from '../event/event';
-
 import {loadTexture, loadFrames} from '../utils/texture_loader';
+import ownerDocument from '../document';
 
 function delegateEvents(scene) {
   const events = ['mousedown', 'mouseup', 'mousemove',
@@ -70,9 +70,9 @@ export default class Scene extends Group {
     height
     mode: 'static', 'scale', 'stickyWidth', 'stickyHeight, 'stickyTop', 'stickyBottom', 'stickyLeft', 'stickyRight'
    */
-  constructor(container, options = {}) {
+  constructor(options = {}) {
     super();
-    this.container = container;
+    this.container = options.container;
     this.options = options;
     options.displayRatio = options.displayRatio || 1.0;
     options.mode = options.mode || 'static';
@@ -152,7 +152,8 @@ export default class Scene extends Group {
     return ret;
   }
 
-  layer(id) {
+  layer(id, options = {}) {
+    options = Object.assign({}, this.options, options);
     const layers = this.orderedChildren;
     for(let i = 0; i < layers.length; i++) {
       if(layers[i].id === id) return layers[i];
@@ -177,9 +178,14 @@ export default class Scene extends Group {
 
     this.container.appendChild(canvas);
     if(!this.container.style.overflow) this.container.style.overflow = 'hidden';
-    const layer = new Layer(canvas, this.options);
+
+    options.canvas = canvas;
+
+    const layer = new Layer(options);
     layer.id = id;
     this.appendChild(layer);
     return layer;
   }
 }
+
+ownerDocument.registerNode(Scene, 'scene');

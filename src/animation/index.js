@@ -1,8 +1,17 @@
 import {Animator, Effects} from 'sprite-animator';
+import {parseColor} from '../utils/color';
 
 const attributes = Symbol.for('spritejs_attributes');
 
 Effects.default = function (from, to, p, s, e) {
+  if(typeof from === 'string' && from.indexOf('rgba') === 0) {
+    from = parseColor(from);
+  }
+
+  if(typeof to === 'string' && to.indexOf('rgba') === 0) {
+    to = parseColor(to);
+  }
+
   if(Array.isArray(from) && Array.isArray(to)) {
     return from.map((v, i) => {
       return v + (p - s) / (e - s) * (to[i] - v);

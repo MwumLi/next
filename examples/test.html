@@ -9,7 +9,7 @@
   <style>
     #container {
       position: absolute;
-      width: 1200px;
+      width: 600px;
       height: 600px;
     }
   </style>
@@ -62,7 +62,8 @@
     });
     
     const container = document.getElementById('container');
-    const scene = new spritejs.Scene(container, {
+    const scene = new spritejs.Scene({
+      container,
       // displayRatio: 2,
       width: 600,
       height: 600,
@@ -93,7 +94,7 @@
       borderColor: 'green',
       borderDash: 5,
       // borderRadius: [50, 50, 0, 0],
-      pointerEvents: 'visibleStroke',
+      pointerEvents: 'visibleFill',
     });
 
     const group = new spritejs.Group();

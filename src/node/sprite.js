@@ -2,6 +2,7 @@ import {loadTexture, createTexture} from '../utils/texture_loader';
 import {compareValue} from '../utils/attribute_value';
 import Block from './block';
 import Attr from '../attribute/sprite';
+import ownerDocument from '../document';
 
 const _textureImage = Symbol('textureImage');
 const _textureContext = Symbol('textureContext');
@@ -77,3 +78,5 @@ export default class Sprite extends Block {
     return meshes;
   }
 }
+
+ownerDocument.registerNode(Sprite, 'sprite');

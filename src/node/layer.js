@@ -1,6 +1,7 @@
 import {Renderer} from '@mesh.js/core';
 import {Timeline} from 'sprite-animator';
 import Group from './group';
+import ownerDocument from '../document';
 
 const defaultOptions = {
   antialias: true,
@@ -12,8 +13,9 @@ const _renderer = Symbol('renderer');
 const _timeline = Symbol('timeline');
 
 export default class Layer extends Group {
-  constructor(canvas, options = {}) {
+  constructor(options = {}) {
     super();
+    const canvas = options.canvas;
     const opts = Object.assign({}, defaultOptions, options);
     this[_autoUpdate] = opts.autoUpdate;
     delete options.autoUpdate;
@@ -74,3 +76,5 @@ export default class Layer extends Group {
     }
   }
 }
+
+ownerDocument.registerNode(Layer, 'layer');

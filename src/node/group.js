@@ -1,5 +1,7 @@
 import Block from './block';
 import Attr from '../attribute/group';
+import ownerDocument from '../document';
+import {querySelector, querySelectorAll} from '../selector';
 
 const _zOrder = Symbol('zOrder');
 
@@ -17,6 +19,10 @@ export default class Group extends Block {
 
   reorder() {
     this[_ordered] = null;
+  }
+
+  get childNodes() {
+    return this.children;
   }
 
   get orderedChildren() {
@@ -158,4 +164,30 @@ export default class Group extends Block {
 
     return meshes;
   }
+
+  getElementById(id) {
+    return querySelector(`#${id}`, this);
+  }
+
+  getElementsByName(name) {
+    return querySelectorAll(`[name="${name}"]`, this);
+  }
+
+  getElementsByClassName(className) {
+    return querySelectorAll(`.${className}`, this);
+  }
+
+  getElementsByTagName(tagName) {
+    return querySelectorAll(tagName, this);
+  }
+
+  querySelector(selector) {
+    return querySelector(selector, this);
+  }
+
+  querySelectorAll(selector) {
+    return querySelectorAll(selector, this);
+  }
 }
+
+ownerDocument.registerNode(Group, 'group');
