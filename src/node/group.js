@@ -83,6 +83,12 @@ export default class Group extends Block {
     }
   }
 
+  append(...els) {
+    els.forEach((el) => {
+      this.appendChild(el);
+    });
+  }
+
   replaceChild(el, ref) {
     el.remove();
     const refIdx = this.children.indexOf(ref);

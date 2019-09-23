@@ -131,7 +131,7 @@ export default class Block extends Node {
 
         const {bgcolor, opacity} = this.attributes;
 
-        if(this.hasBorder) {
+        if(this.hasBackground) {
           setFillColor(clientBoxMesh, {color: bgcolor});
         }
         clientBoxMesh.uniforms.u_opacity = opacity;
@@ -218,11 +218,11 @@ export default class Block extends Node {
     const left = -anchorX * offsetSize[0] + bw;
     const top = -anchorY * offsetSize[1] + bw;
 
-    this.borderBox = this.borderBox || new Figure2D();
+    this.borderBox = new Figure2D();
     createRadiusBox(this.borderBox, [left, top, width, height], borderRadius);
     // figure.rect(left, top, width, height);
 
-    this.clientBox = this.clientBox || new Figure2D();
+    this.clientBox = new Figure2D();
     createRadiusBox(this.clientBox, [left + bw, top + bw, width - borderWidth, height - borderWidth], borderRadius);
     // innerFigure.rect(left + bw, top + bw, width - borderWidth, height - borderWidth);
   }

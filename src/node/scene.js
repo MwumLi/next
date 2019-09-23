@@ -75,7 +75,7 @@ export default class Scene extends Group {
     this.container = options.container;
     this.options = options;
     options.displayRatio = options.displayRatio || 1.0;
-    options.mode = options.mode || 'static';
+    options.mode = options.mode || 'scale';
 
     options.left = 0;
     options.top = 0;
@@ -167,14 +167,18 @@ export default class Scene extends Group {
     if(mode === 'static') {
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
+      canvas.style.top = '50%';
+      canvas.style.left = '50%';
+      canvas.style.transform = 'translate(-50%, -50%)';
+      canvas.style.webkitTransform = 'translate(-50%, -50%)';
     } else {
-      canvas.style.width = '100%';
-      canvas.style.height = '100%';
+      canvas.style.top = '0';
+      canvas.style.left = '0';
+      const {clientWidth, clientHeight} = this.container;
+      canvas.style.width = `${clientWidth}px`;
+      canvas.style.height = `${clientHeight}px`;
     }
-    canvas.style.top = '50%';
-    canvas.style.left = '50%';
-    canvas.style.transform = 'translate(-50%, -50%)';
-    canvas.style.webkitTransform = 'translate(-50%, -50%)';
+    canvas.dataset.layerId = id;
 
     this.container.appendChild(canvas);
     if(!this.container.style.overflow) this.container.style.overflow = 'hidden';

@@ -31,10 +31,15 @@ Effects.default = function (from, to, p, s, e) {
 export default class Animation extends Animator {
   constructor(sprite, frames, timing) {
     const initAttrs = sprite.attributes[attributes];
-    frames = frames.map((frame) => {
+    frames = frames.map(({...frame}) => {
+      const ret = {};
+      const offset = frame.offset;
+      if(offset != null) {
+        delete frame.offset;
+        ret.offset = offset;
+      }
       const node = sprite.cloneNode();
       node.attr(frame);
-      const ret = {};
       Object.keys(frame).forEach((key) => {
         ret[key] = node.attributes[key];
       });

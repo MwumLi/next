@@ -150,8 +150,7 @@ export default class Path extends Node {
 
   /* override */
   updateContours() {
-    this.path = this.path || new Figure2D();
-    this.path.beginPath();
+    this.path = new Figure2D();
     this.path.addPath(this.attributes.d);
   }
 

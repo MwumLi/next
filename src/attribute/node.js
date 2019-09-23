@@ -255,6 +255,7 @@ export default class Node {
   }
 
   set scale(value) {
+    if(!Array.isArray(value)) value = [value, value];
     if(this[setAttribute]('scale', value)) {
       const transformMap = this[_transforms];
       if(transformMap.has('scale')) {

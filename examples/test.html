@@ -23,7 +23,7 @@
     el.attr({
       // size: [100, 100],
       anchor: 0.5,
-      borderWidth: 10,
+      borderWidth: 0,
       borderColor: 'rgba(0,0,0,1)',
       bgcolor: 'red',
       pos: [256, 256],
@@ -38,6 +38,9 @@
       texture: textureURL,
       // textureRect: [50, 50, 100, 100],
       padding: 20,
+      bgcolor: 'red',
+      zIndex: 1000,
+      // borderRadius: 10,
       // textureRepeat: true,
     });
 
@@ -85,7 +88,7 @@
       text: 'abc',
       size: [100, 30],
       // pos: [350, 150],
-      bgcolor: 'red',
+      bgcolor: '#f4f2e6',
       textAlign: 'center',
       padding: 20,
       verticalAlign: 'top',
@@ -93,15 +96,15 @@
       borderWidth: 2,
       borderColor: 'green',
       borderDash: 5,
-      // borderRadius: [50, 50, 0, 0],
+      borderRadius: [50, 50, 0, 0],
       pointerEvents: 'visibleFill',
     });
 
     const group = new spritejs.Group();
 
     // group.appendChild(el);
-    // group.appendChild(el2);
-    group.appendChild(path);
+    group.appendChild(el2);
+    // group.appendChild(path);
     group.appendChild(l);
 
     group.attr({
