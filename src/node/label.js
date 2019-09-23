@@ -13,6 +13,11 @@ const _updateTextureRect = Symbol('updateTextureRect');
 export default class Label extends Block {
   static Attr = Attr;
 
+  constructor(attrs = {}) {
+    if(typeof attrs === 'string') attrs = {text: attrs};
+    super(attrs);
+  }
+
   updateText() {
     if(!this[_textImageTask]) {
       this[_textImageTask] = new Promise((resolve) => {
@@ -20,6 +25,7 @@ export default class Label extends Block {
           this[_textImageTask] = null;
           const {text, font, fillColor, strokeColor} = this.attributes;
           this[_textImage] = await createText(text, {font, fillColor, strokeColor});
+          this.updateContours();
           this.forceUpdate();
           resolve(this[_textImage]);
         });

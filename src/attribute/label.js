@@ -19,7 +19,7 @@ export default class Label extends Block {
       fontVariant: 'normal',
       fontWeight: 'normal',
       fontStretch: 'normal',
-      lineHeight: 16,
+      lineHeight: '',
       /* font */
       textAlign: 'left',
       strokeColor: undefined,
@@ -36,7 +36,7 @@ export default class Label extends Block {
   }
 
   get text() {
-    return this[getAttribute]('text');
+    return this[getAttribute]('text') || ' ';
   }
 
   set text(value) {
@@ -92,7 +92,7 @@ export default class Label extends Block {
   }
 
   get lineHeight() {
-    return this[getAttribute]('lineHeight');
+    return this[getAttribute]('lineHeight') || this.fontSize;
   }
 
   set lineHeight(value) {
