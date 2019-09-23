@@ -19,6 +19,7 @@ export default class Path extends Node {
   static Attr = Attr;
 
   constructor(attrs = {}) {
+    if(typeof attrs === 'string') attrs = {d: attrs};
     super(attrs);
     this.effects = {
       d(from, to, p, s, e) {

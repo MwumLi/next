@@ -29,7 +29,7 @@
   <div id="stage"></div>
   <script>
   (async function () {
-    const {Scene, Sprite, Block} = spritejs;
+    const {Scene, Sprite} = spritejs;
     const container = document.getElementById('stage');
     const scene = new Scene({
       container,
@@ -62,9 +62,8 @@
     });
     bglayer.append(region);
 
-    const robot = new Sprite();
+    const robot = new Sprite('guanguan1.png');
     robot.attr({
-      texture: 'guanguan1.png',
       anchor: [0.5, 1],
       pos: [280, 600],
       transformOrigin: [0, -300],
@@ -201,7 +200,7 @@
         fill: 'forwards',
       }).finished;
     }
-
+    window.scene = scene;
     // noprotect
     while(1) {
       /* eslint-disable no-await-in-loop */

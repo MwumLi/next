@@ -64,6 +64,28 @@ function delegateEvents(scene) {
   });
 }
 
+function setSize(options, canvas) {
+  let {width, height, mode, container} = options;
+  const {clientWidth, clientHeight} = container;
+
+  width = width || clientWidth;
+  height = height || clientHeight;
+
+  if(mode === 'static') {
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+    canvas.style.top = '50%';
+    canvas.style.left = '50%';
+    canvas.style.transform = 'translate(-50%, -50%)';
+    canvas.style.webkitTransform = 'translate(-50%, -50%)';
+  } else {
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = `${clientWidth}px`;
+    canvas.style.height = `${clientHeight}px`;
+  }
+}
+
 export default class Scene extends Group {
   /**
     width
@@ -79,12 +101,26 @@ export default class Scene extends Group {
 
     options.left = 0;
     options.top = 0;
+    options.autoResize = options.autoResize || true;
 
-    if(options.width == null || options.height == null) {
-      global.addEventListener('resize', () => {
-        this.setResolution();
+    // if(options.width == null || options.height == null) {
+    //   global.addEventListener('resize', () => {
+    //     this.setResolution();
+    //   });
+    // }
+
+    if(options.autoResize) {
+      const _resizeHandler = () => {
+        this.resize();
+      };
+      /* istanbul ignore next */
+      this.container.addEventListener('DOMNodeRemovedFromDocument', () => {
+        global.removeEventListener('resize', _resizeHandler);
       });
+
+      global.addEventListener('resize', _resizeHandler);
     }
+
     this.setResolution(options);
     delegateEvents(this);
   }
@@ -92,31 +128,39 @@ export default class Scene extends Group {
   /* override */
   setResolution({width, height} = {}) {
     const container = this.container;
+    const {clientWidth, clientHeight} = container;
     if(width == null || height == null) {
-      const {clientWidth, clientHeight} = container;
       width = width == null ? clientWidth : width;
       height = height == null ? clientHeight : height;
     }
 
-    const options = this.options;
-    options.width = options.displayRatio * width;
-    options.height = options.displayRatio * height;
+    const {mode, displayRatio} = this.options;
+    width *= displayRatio;
+    height *= displayRatio;
 
-    const mode = options.mode;
-    const {clientWidth, clientHeight} = container;
     if(mode === 'stickyHeight' || mode === 'stickyLeft' || mode === 'stickyRight') {
-      const w = options.width;
-      options.width = clientWidth * options.height / clientHeight;
-      if(mode === 'stickyHeight') options.left = 0.5 * (options.width - w);
-      if(mode === 'stickyRight') options.left = options.width - w;
-      // console.log(clientWidth, width);
+      const w = width;
+      width = clientWidth * height / clientHeight;
+      if(mode === 'stickyHeight') this.options.left = 0.5 * (width - w);
+      if(mode === 'stickyRight') this.options.left = width - w;
     } else if(mode === 'stickyWidth' || mode === 'stickyTop' || mode === 'stickyBottom') {
-      const h = options.height;
-      options.height = clientHeight * options.width / clientWidth;
-      if(mode === 'stickyWidth') options.top = 0.5 * (options.height - h);
-      if(mode === 'stickyBottom') options.top = options.height - h;
+      const h = height;
+      height = clientHeight * width / clientWidth;
+      if(mode === 'stickyWidth') this.options.top = 0.5 * (height - h);
+      if(mode === 'stickyBottom') this.options.top = height - h;
     }
-    super.setResolution(options);
+    super.setResolution({width, height});
+  }
+
+  resize() {
+    const options = this.options;
+    this.children.forEach((layer) => {
+      setSize(options, layer.canvas);
+    });
+    const {mode, width, height} = options;
+    if(mode !== 'scale' && mode !== 'static' || mode === 'static' && (width == null || height == null)) {
+      this.setResolution({width, height});
+    }
   }
 
   async preload(...resources) {
@@ -159,25 +203,12 @@ export default class Scene extends Group {
       if(layers[i].id === id) return layers[i];
     }
 
-    const {width, height, mode} = this.options;
-
+    const {width, height} = this.options;
     const canvas = createCanvas(width, height, {offscreen: false});
     canvas.style.position = 'absolute';
 
-    if(mode === 'static') {
-      canvas.style.width = `${width}px`;
-      canvas.style.height = `${height}px`;
-      canvas.style.top = '50%';
-      canvas.style.left = '50%';
-      canvas.style.transform = 'translate(-50%, -50%)';
-      canvas.style.webkitTransform = 'translate(-50%, -50%)';
-    } else {
-      canvas.style.top = '0';
-      canvas.style.left = '0';
-      const {clientWidth, clientHeight} = this.container;
-      canvas.style.width = `${clientWidth}px`;
-      canvas.style.height = `${clientHeight}px`;
-    }
+    setSize(this.options, canvas);
+
     canvas.dataset.layerId = id;
 
     this.container.appendChild(canvas);

@@ -15,10 +15,6 @@ const _filters = Symbol('filters');
 export default class Block extends Node {
   static Attr = Attr;
 
-  constructor(attrs = {}) {
-    super(attrs);
-  }
-
   get contentSize() {
     const {width, height} = this.attributes;
     return [width || 0, height || 0];
@@ -170,7 +166,7 @@ export default class Block extends Node {
     const pointerEvents = this.attributes.pointerEvents;
     if(pointerEvents === 'none') return false;
     if(pointerEvents !== 'all' && !this.isVisible) return false;
-    if(pointerEvents !== 'visibleStroke' && this.hasBackground && this.clientBoxMesh.isPointCollision(x, y, 'fill')) {
+    if(pointerEvents !== 'visibleStroke' && this.clientBoxMesh.isPointCollision(x, y, 'fill')) {
       return true;
     }
     return pointerEvents !== 'visibleFill' && this.hasBorder && this.borderBoxMesh.isPointCollision(x, y, 'stroke');

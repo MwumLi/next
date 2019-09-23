@@ -10,6 +10,11 @@ const _textureContext = Symbol('textureContext');
 export default class Sprite extends Block {
   static Attr = Attr;
 
+  constructor(attrs = {}) {
+    if(typeof attrs === 'string') attrs = {texture: attrs};
+    super(attrs);
+  }
+
   async setTexture(url) {
     const textureImage = await loadTexture(url);
     this[_textureImage] = textureImage;
