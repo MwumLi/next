@@ -83,6 +83,16 @@ export default class Node {
     return m;
   }
 
+  get ancestors() {
+    let parent = this.parent;
+    const ret = [];
+    while(parent) {
+      ret.push(parent);
+      parent = parent.parent;
+    }
+    return ret;
+  }
+
   addEventListener(type, listener, options = {}) {
     if(typeof options === 'boolean') options = {capture: options};
     const {capture, once} = options;
@@ -215,6 +225,7 @@ export default class Node {
 
   setResolution({width, height}) {
     this[_resolution] = {width, height};
+    this.updateContours();
     this.forceUpdate();
   }
 

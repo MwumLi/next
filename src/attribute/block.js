@@ -20,6 +20,7 @@ export default class Block extends Node {
       /* size */
       borderWidth: 0,
       borderColor: [0, 0, 0, 1],
+      /* border */
       borderDash: undefined,
       borderDashOffset: 0,
       borderTopLeftRadius: [0, 0],
@@ -111,6 +112,16 @@ export default class Block extends Node {
 
   set borderColor(value) {
     this[setAttribute]('borderColor', parseColor(value));
+  }
+
+  get border() {
+    return [this.borderWidth, this.borderColor];
+  }
+
+  set border(value) {
+    if(!Array.isArray(value)) value = [value];
+    this.borderWidth = value[0];
+    if(value[1] != null) this.borderColor = value[1];
   }
 
   get borderDash() {

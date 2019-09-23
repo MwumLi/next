@@ -46,9 +46,9 @@ export default class Group extends Block {
   }
 
   /* override */
-  get hasBackground() {
-    return this.children.length > 0;
-  }
+  // get hasBackground() {
+  //   return this.children.length > 0;
+  // }
 
   /* override */
   cloneNode(deep = false) {
@@ -158,11 +158,11 @@ export default class Group extends Block {
       const child = children[i];
       if(child.dispatchPointerEvent(event)) return true;
     }
-    return false;
+    return super.dispatchPointerEvent(event);
   }
 
   draw() {
-    const meshes = [];
+    const meshes = [...super.draw()];
     this.orderedChildren.forEach((child) => {
       const res = child.draw();
       if(res) meshes.push(...res);

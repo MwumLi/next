@@ -114,6 +114,8 @@ export default class Path extends Node {
             miterLimit,
           });
         }
+        const opacity = this.attributes.opacity;
+        mesh.uniforms.u_opacity = opacity;
         if(this[_filters]) {
           applyFilters(mesh, this[_filters]);
         }

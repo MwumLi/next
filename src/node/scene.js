@@ -6,6 +6,8 @@ import Event from '../event/event';
 import {loadTexture, loadFrames} from '../utils/texture_loader';
 import ownerDocument from '../document';
 
+const _enteredTargets = Symbol('enteredTargets');
+
 function delegateEvents(scene) {
   const events = ['mousedown', 'mouseup', 'mousemove',
     'touchstart', 'touchend', 'touchmove', 'touchcancel',
@@ -15,12 +17,14 @@ function delegateEvents(scene) {
   const {left, top} = scene.options;
 
   container.addEventListener('mouseleave', (event) => {
-    const previousTarget = scene._mouseTarget;
-    if(previousTarget) {
+    const enteredTargets = scene[_enteredTargets];
+    if(enteredTargets.size) {
       const leaveEvent = new Event('mouseleave');
       leaveEvent.originalEvent = event;
-      previousTarget.dispatchEvent(leaveEvent);
-      scene._mouseTarget = undefined;
+      [...enteredTargets].forEach((target) => {
+        target.dispatchEvent(leaveEvent);
+      });
+      scene[_enteredTargets].clear();
     }
   }, {passive: true});
 
@@ -39,25 +43,49 @@ function delegateEvents(scene) {
         }
         if(evt.type === 'mousemove') {
           const target = evt.target;
-          const previousTarget = scene._mouseTarget;
-          if(target !== previousTarget) {
-            const entries = Object.entries(event);
-            if(previousTarget) {
-              const leaveEvent = new Event('mouseleave');
-              entries.forEach(([key, value]) => {
-                leaveEvent[key] = value;
-              });
-              previousTarget.dispatchEvent(leaveEvent);
-            }
+          const enteredTargets = scene[_enteredTargets];
+          let enterSet;
+
+          if(target) {
+            const ancestors = target.ancestors || [];
+            enterSet = new Set([target, ...ancestors]);
+          } else {
+            enterSet = new Set();
+          }
+
+          const entries = Object.entries(event);
+          if(!enteredTargets.has(target)) {
             if(target) {
               const enterEvent = new Event('mouseenter');
               entries.forEach(([key, value]) => {
                 enterEvent[key] = value;
               });
+
+              enteredTargets.add(target);
               target.dispatchEvent(enterEvent);
+              const ancestors = target.ancestors;
+
+              if(ancestors) {
+                ancestors.forEach((ancestor) => {
+                  if(!enteredTargets.has(ancestor)) {
+                    enteredTargets.add(ancestor);
+                    ancestor.dispatchEvent(enterEvent);
+                  }
+                });
+              }
             }
-            scene._mouseTarget = evt.target;
           }
+
+          const leaveEvent = new Event('mouseleave');
+          entries.forEach(([key, value]) => {
+            leaveEvent[key] = value;
+          });
+          [...enteredTargets].forEach((target) => {
+            if(!enterSet.has(target)) {
+              enteredTargets.delete(target);
+              target.dispatchEvent(leaveEvent);
+            }
+          });
         }
       });
     }, {passive: true});
@@ -121,6 +149,7 @@ export default class Scene extends Group {
       global.addEventListener('resize', _resizeHandler);
     }
 
+    this[_enteredTargets] = new Set();
     this.setResolution(options);
     delegateEvents(this);
   }

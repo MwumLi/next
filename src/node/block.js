@@ -15,6 +15,10 @@ const _filters = Symbol('filters');
 export default class Block extends Node {
   static Attr = Attr;
 
+  constructor(attrs = {}) {
+    super(attrs);
+  }
+
   get contentSize() {
     const {width, height} = this.attributes;
     return [width || 0, height || 0];
@@ -216,11 +220,12 @@ export default class Block extends Node {
 
     this.borderBox = new Figure2D();
     createRadiusBox(this.borderBox, [left, top, width, height], borderRadius);
-    // figure.rect(left, top, width, height);
-
+    const clientRect = [left + bw - 1,
+      top + bw - 1,
+      width - borderWidth + 2,
+      height - borderWidth + 2];
     this.clientBox = new Figure2D();
-    createRadiusBox(this.clientBox, [left + bw, top + bw, width - borderWidth, height - borderWidth], borderRadius);
-    // innerFigure.rect(left + bw, top + bw, width - borderWidth, height - borderWidth);
+    createRadiusBox(this.clientBox, clientRect, borderRadius);
   }
 
   /* override */
