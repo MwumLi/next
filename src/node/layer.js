@@ -40,6 +40,23 @@ export default class Layer extends Group {
   }
 
   /* override */
+  // get contentSize() {
+  //   const {width, height} = this.attributes;
+  //   const {width: rw, height: rh} = this.getResolution();
+  //   return [
+  //     width != null ? width : rw,
+  //     height != null ? height : rh,
+  //   ];
+  // }
+
+  onPropertyChange(key, newValue, oldValue) {
+    super.onPropertyChange(key, newValue, oldValue);
+    if(key === 'bgcolor') {
+      this.canvas.style.backgroundColor = newValue;
+    }
+  }
+
+  /* override */
   setResolution({width, height}) {
     if(this.canvas) {
       this.canvas.width = width;

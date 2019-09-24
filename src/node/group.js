@@ -36,13 +36,8 @@ export default class Group extends Block {
   }
 
   /* override */
-  get contentSize() {
-    const {width, height} = this.attributes;
-    const {width: rw, height: rh} = this.getResolution();
-    return [
-      width != null ? width : rw,
-      height != null ? height : rh,
-    ];
+  get isVisible() {
+    return this.attributes.opacity > 0 && this.children.length > 0;
   }
 
   /* override */

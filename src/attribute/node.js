@@ -23,6 +23,9 @@ function getMatrix(transformMap, [ox, oy]) {
       m[5] += value[1];
     } else if(key === 'offsetRotate') {
       m = mat2d.rotate(m, value);
+    } else if(key === 'skew') {
+      const [x, y] = value;
+      m *= mat2d(1, Math.tan(y), Math.tan(x), 1, 0, 0);
     } else {
       mat2d[key](m, m, value);
     }
