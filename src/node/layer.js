@@ -40,14 +40,14 @@ export default class Layer extends Group {
   }
 
   /* override */
-  // get contentSize() {
-  //   const {width, height} = this.attributes;
-  //   const {width: rw, height: rh} = this.getResolution();
-  //   return [
-  //     width != null ? width : rw,
-  //     height != null ? height : rh,
-  //   ];
-  // }
+  get contentSize() {
+    const {width, height} = this.attributes;
+    const {width: rw, height: rh} = this.getResolution();
+    return [
+      width != null ? width : rw,
+      height != null ? height : rh,
+    ];
+  }
 
   onPropertyChange(key, newValue, oldValue) {
     super.onPropertyChange(key, newValue, oldValue);
