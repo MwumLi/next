@@ -1,4 +1,4 @@
-import createText from '@mesh.js/core/src/utils/create-text';
+import createText from '../utils/create_text';
 import {createTexture} from '../utils/texture_loader';
 import Block from './block';
 import Attr from '../attribute/label';
@@ -113,8 +113,8 @@ export default class Label extends Block {
 
           const {anchorX, anchorY} = this.attributes;
 
-          x -= w * anchorX;
-          y -= h * anchorY;
+          x -= this.clientSize[0] * anchorX;
+          y -= this.clientSize[1] * anchorY;
 
           clientBoxMesh.setTexture(newTexture, {
             rect: [x, y, width, height],

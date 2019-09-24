@@ -10,10 +10,15 @@ class Gradient {
       return {offset, color: parseColor(color)};
     });
   }
+
+  toString() {
+    return JSON.stringify({vector: this.vector, colors: this.colors});
+  }
 }
 
 export function parseColor(color) {
   // if(Array.isArray(color)) return color;
+  if(!color) color = 'transparent';
   if(color instanceof Gradient) return color;
   const ret = rgba(color);
   if(!ret || !ret.length) throw new TypeError('Invalid color value.');
