@@ -20,7 +20,7 @@ function delegateEvents(scene) {
     const enteredTargets = scene[_enteredTargets];
     if(enteredTargets.size) {
       const leaveEvent = new Event('mouseleave');
-      leaveEvent.originalEvent = event;
+      leaveEvent.setOriginalEvent(event);
       [...enteredTargets].forEach((target) => {
         target.dispatchEvent(leaveEvent);
       });
@@ -57,6 +57,7 @@ function delegateEvents(scene) {
           if(!enteredTargets.has(target)) {
             if(target) {
               const enterEvent = new Event('mouseenter');
+              enterEvent.setOriginalEvent(event);
               entries.forEach(([key, value]) => {
                 enterEvent[key] = value;
               });
@@ -77,6 +78,7 @@ function delegateEvents(scene) {
           }
 
           const leaveEvent = new Event('mouseleave');
+          leaveEvent.setOriginalEvent(event);
           entries.forEach(([key, value]) => {
             leaveEvent[key] = value;
           });
@@ -219,7 +221,7 @@ export default class Scene extends Group {
     return ret;
   }
 
-  layer(id, options = {}) {
+  layer(id = 'default', options = {}) {
     options = Object.assign({}, this.options, options);
     const layers = this.orderedChildren;
     for(let i = 0; i < layers.length; i++) {

@@ -20,6 +20,10 @@ export default class Event {
     this.cancelBubble = false;
   }
 
+  setOriginalEvent(originalEvent) {
+    this[_originalEvent] = originalEvent;
+  }
+
   get originalEvent() {
     return this[_originalEvent];
   }

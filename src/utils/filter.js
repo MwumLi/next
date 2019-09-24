@@ -5,22 +5,30 @@ export function parseFilterString(filterStr) {
   if(!filterStr || filterStr === 'none') return null;
 
   const filterReg = /^(?:(url|blur|brightness|contrast|drop-shadow|grayscale|hue-rotate|invert|opacity|saturate|sepia)\(([^()]+)\))+$/i;
-  const filters = filterStr.split(/\s+/g);
+  const filters = filterStr.match(/^(?:(url|blur|brightness|contrast|drop-shadow|grayscale|hue-rotate|invert|opacity|saturate|sepia)\(([^()]+)\))+$/ig);
 
   const ret = [];
-  filters.forEach((filter) => {
-    const matched = filter.match(filterReg);
-    if(!matched) throw new TypeError('Invalid fitler string.');
-    let [, type, args] = matched;
-    args = args.trim().split(/\s+/g).map((n) => {
-      let value = toNumber(n);
-      if(/%$/.test(n)) {
-        value /= 100;
-      }
-      return value;
+  if(filters) {
+    filters.forEach((filter) => {
+      const matched = filter.match(filterReg);
+      if(!matched) throw new TypeError('Invalid fitler string.');
+      let [, type, args] = matched;
+      args = args.trim().split(/\s+/g).map((n, i) => {
+        let value;
+        if(type === 'url' || type === 'drop-shadow' && i === 3) {
+          value = n;
+        } else {
+          value = toNumber(n);
+        }
+
+        if(/%$/.test(n)) {
+          value /= 100;
+        }
+        return value;
+      });
+      ret.push({type, args});
     });
-    ret.push({type, args});
-  });
+  }
 
   return ret;
 }

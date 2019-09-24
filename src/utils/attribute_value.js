@@ -3,7 +3,7 @@ export function sizeToPixel(value, defaultWidth) { // eslint-disable-line comple
   if(matched) {
     value = {size: parseFloat(matched[1]), unit: matched[2]};
   } else {
-    value = {size: parseInt(value, 10), unit: 'px'};
+    value = {size: parseFloat(value), unit: 'px'};
   }
   let {size, unit} = value;
   if(unit === 'pt') {
