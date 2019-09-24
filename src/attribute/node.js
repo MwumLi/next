@@ -349,4 +349,8 @@ export default class Node {
   set filter(value) {
     this[setAttribute]('filter', value);
   }
+
+  set offset(value) {
+    /* ignore setting offset for animations */
+  }
 }

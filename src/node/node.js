@@ -248,11 +248,43 @@ export default class Node {
       writable: false,
       configurable: true,
     });
+    if(parent.timeline) this.activateAnimations();
   }
 
   disconnect() {
     delete this.parent;
     delete this.zOrder;
+    this.deactivateAnimations();
+  }
+
+  activateAnimations() {
+    const layer = this.layer;
+    if(layer) {
+      const animations = this[_animations];
+      animations.forEach((animation) => {
+        animation.baseTimeline = layer.timeline;
+        animation.play();
+        animation.finished.then(() => {
+          animations.delete(animation);
+        });
+      });
+      const children = this.children;
+      if(children) {
+        children.forEach((child) => {
+          child.activateAnimations();
+        });
+      }
+    }
+  }
+
+  deactivateAnimations() {
+    this[_animations].forEach(animation => animation.cancel());
+    const children = this.children;
+    if(children) {
+      children.forEach((child) => {
+        child.deactivateAnimations();
+      });
+    }
   }
 
   animate(frames, timing) {
