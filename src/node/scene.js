@@ -131,17 +131,12 @@ export default class Scene extends Group {
     options.top = 0;
     options.autoResize = options.autoResize || true;
 
-    // if(options.width == null || options.height == null) {
-    //   global.addEventListener('resize', () => {
-    //     this.setResolution();
-    //   });
-    // }
-
     if(options.autoResize) {
       if(global.addEventListener) {
+        const that = this;
         global.addEventListener('resize', function listener() {
-          if(typeof document !== 'undefined' && document.contains(this.container)) {
-            this.resize();
+          if(typeof document !== 'undefined' && document.contains(that.container)) {
+            that.resize();
           } else {
             global.removeEventListener('resize', listener);
           }
@@ -215,8 +210,7 @@ export default class Scene extends Group {
 
       tasks.push(task.then((r) => {
         ret.push(r);
-        const preloadEvent = new Event('preload');
-        preloadEvent.detail = {current: r, loaded: ret, resources};
+        const preloadEvent = new Event({type: 'preload', detail: {current: r, loaded: ret, resources}});
         this.dispatchEvent(preloadEvent);
       }));
     }

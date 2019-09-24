@@ -1,8 +1,6 @@
 import Event from './event';
 
 export default function createPointerEvents(originalEvent, {offsetTop = 0, offsetLeft = 0} = {}) {
-  const {bubbles} = originalEvent;
-
   let x,
     y;
   const originalCoordinates = [];
@@ -32,17 +30,32 @@ export default function createPointerEvents(originalEvent, {offsetTop = 0, offse
       x = originalCoordinate.x * resolutionWidth / viewportWidth - offsetLeft;
       y = originalCoordinate.y * resolutionHeight / viewportHeight - offsetTop;
     }
-    const event = new Event(originalEvent.type, {bubbles});
-    Object.assign(event, {
-      layerX: x,
-      layerY: y,
-      originalX: originalCoordinate.x,
-      originalY: originalCoordinate.y,
-      x,
-      y,
-      identifier: originalCoordinate.identifier,
-      originalEvent,
+    const event = new Event(originalEvent);
+
+    Object.defineProperties(event, {
+      layerX: {
+        value: x,
+      },
+      layerY: {
+        value: y,
+      },
+      originalX: {
+        value: originalCoordinate.x,
+      },
+      originalY: {
+        value: originalCoordinate.y,
+      },
+      x: {
+        value: x,
+      },
+      y: {
+        value: y,
+      },
+      identifier: {
+        value: originalCoordinate.identifier,
+      },
     });
+
     ret.push(event);
   });
 

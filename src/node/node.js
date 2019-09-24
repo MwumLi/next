@@ -2,6 +2,7 @@ import {mat2d} from 'gl-matrix';
 import Attr from '../attribute/node';
 import Animation from '../animation';
 import ownerDocument from '../document';
+import SpriteEvent from '../event/event';
 
 const changedAttrs = Symbol.for('spritejs_changedAttrs');
 
@@ -139,6 +140,9 @@ export default class Node {
   }
 
   dispatchEvent(event) {
+    if(!(event instanceof SpriteEvent)) {
+      event = new SpriteEvent(event);
+    }
     event.target = this;
     const type = event.type;
 
