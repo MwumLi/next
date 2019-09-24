@@ -38,54 +38,54 @@ function delegateEvents(scene) {
           const layer = layers[i];
           if(layer.options.handleEvent !== false) {
             const ret = layer.dispatchPointerEvent(evt);
-            if(ret && evt.type === 'mousemove') {
-              const target = evt.target;
-              const enteredTargets = scene[_enteredTargets];
-              let enterSet;
-
-              if(target) {
-                const ancestors = target.ancestors || [];
-                enterSet = new Set([target, ...ancestors]);
-              } else {
-                enterSet = new Set();
-              }
-
-              const entries = Object.entries(event);
-              if(!enteredTargets.has(target)) {
-                if(target) {
-                  const enterEvent = new Event('mouseenter');
-                  entries.forEach(([key, value]) => {
-                    enterEvent[key] = value;
-                  });
-
-                  enteredTargets.add(target);
-                  target.dispatchEvent(enterEvent);
-                  const ancestors = target.ancestors;
-
-                  if(ancestors) {
-                    ancestors.forEach((ancestor) => {
-                      if(!enteredTargets.has(ancestor)) {
-                        enteredTargets.add(ancestor);
-                        ancestor.dispatchEvent(enterEvent);
-                      }
-                    });
-                  }
-                }
-              }
-
-              const leaveEvent = new Event('mouseleave');
-              entries.forEach(([key, value]) => {
-                leaveEvent[key] = value;
-              });
-              [...enteredTargets].forEach((target) => {
-                if(!enterSet.has(target)) {
-                  enteredTargets.delete(target);
-                  target.dispatchEvent(leaveEvent);
-                }
-              });
-            }
-            if(ret && evt.target !== layer) break;
+            if(ret) break;
           }
+        }
+        if(evt.type === 'mousemove') {
+          const target = evt.target;
+          const enteredTargets = scene[_enteredTargets];
+          let enterSet;
+
+          if(target) {
+            const ancestors = target.ancestors || [];
+            enterSet = new Set([target, ...ancestors]);
+          } else {
+            enterSet = new Set();
+          }
+
+          const entries = Object.entries(event);
+          if(!enteredTargets.has(target)) {
+            if(target) {
+              const enterEvent = new Event('mouseenter');
+              entries.forEach(([key, value]) => {
+                enterEvent[key] = value;
+              });
+
+              enteredTargets.add(target);
+              target.dispatchEvent(enterEvent);
+              const ancestors = target.ancestors;
+
+              if(ancestors) {
+                ancestors.forEach((ancestor) => {
+                  if(!enteredTargets.has(ancestor)) {
+                    enteredTargets.add(ancestor);
+                    ancestor.dispatchEvent(enterEvent);
+                  }
+                });
+              }
+            }
+          }
+
+          const leaveEvent = new Event('mouseleave');
+          entries.forEach(([key, value]) => {
+            leaveEvent[key] = value;
+          });
+          [...enteredTargets].forEach((target) => {
+            if(!enterSet.has(target)) {
+              enteredTargets.delete(target);
+              target.dispatchEvent(leaveEvent);
+            }
+          });
         }
       });
     }, {passive: true});

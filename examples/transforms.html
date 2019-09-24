@@ -70,7 +70,7 @@
     }
 
     const fglayer = scene.layer('fglayer');
-    fglayer.attributes.bgcolor = '#fee139';
+    fglayer.canvas.style.backgroundColor = '#fee139';
 
     const [translateBtn, rotateBtn, scaleBtn, skewBtn, stopBtn]
       = ['translate', 'rotate', 'scale', 'skew', 'stop'].map((type, i) => {
