@@ -72,6 +72,9 @@ export default class Path extends Node {
     if(key === 'd') {
       this.updateContours();
     }
+    if(key === 'opacity') {
+      if(this[_mesh]) this[_mesh].uniforms.u_opacity = newValue;
+    }
     if(this[_mesh] && key === 'fillColor') {
       setFillColor(this[_mesh], {color: newValue});
     }

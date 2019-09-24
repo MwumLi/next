@@ -138,15 +138,15 @@ export default class Scene extends Group {
     // }
 
     if(options.autoResize) {
-      const _resizeHandler = () => {
-        this.resize();
-      };
-      /* istanbul ignore next */
-      this.container.addEventListener('DOMNodeRemovedFromDocument', () => {
-        global.removeEventListener('resize', _resizeHandler);
-      });
-
-      global.addEventListener('resize', _resizeHandler);
+      if(global.addEventListener) {
+        global.addEventListener('resize', function listener() {
+          if(typeof document !== 'undefined' && document.contains(this.container)) {
+            this.resize();
+          } else {
+            global.removeEventListener('resize', listener);
+          }
+        });
+      }
     }
 
     this[_enteredTargets] = new Set();

@@ -176,12 +176,16 @@ export default class Block extends Node {
     return pointerEvents !== 'visibleFill' && this.hasBorder && this.borderBoxMesh.isPointCollision(x, y, 'stroke');
   }
 
-  onPropertyChange(key, newValue, oldValue) {
+  onPropertyChange(key, newValue, oldValue) { // eslint-disable-line complexity
     super.onPropertyChange(key, newValue, oldValue);
     if(key === 'anchorX' || key === 'anchorY' || key === 'width' || key === 'height' || key === 'borderWidth'
       || key === 'paddingLeft' || key === 'paddingRight' || key === 'paddingTop' || key === 'paddingBottom'
       || /^border(TopLeft|TopRight|BottomRight|BottomLeft)Radius$/.test(key)) {
       this.updateContours();
+    }
+    if(key === 'opacity') {
+      if(this[_clientBoxMesh]) this[_clientBoxMesh].uniforms.u_opacity = newValue;
+      if(this[_borderBoxMesh]) this[_borderBoxMesh].uniforms.u_opacity = newValue;
     }
     if(this[_clientBoxMesh] && key === 'bgcolor') {
       setFillColor(this[_clientBoxMesh], {color: newValue});

@@ -111,6 +111,11 @@ export default class Label extends Block {
           x += paddingLeft;
           y += paddingTop;
 
+          const {anchorX, anchorY} = this.attributes;
+
+          x -= w * anchorX;
+          y -= h * anchorY;
+
           clientBoxMesh.setTexture(newTexture, {
             rect: [x, y, width, height],
           });
