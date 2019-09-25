@@ -76,11 +76,12 @@ export default class Group extends Block {
         this[_ordered].push(el);
       }
     }
+    return el;
   }
 
   append(...els) {
-    els.forEach((el) => {
-      this.appendChild(el);
+    return els.map((el) => {
+      return this.appendChild(el);
     });
   }
 
@@ -101,6 +102,7 @@ export default class Group extends Block {
       }
     }
     ref.disconnect();
+    return el;
   }
 
   removeChild(el) {
@@ -112,12 +114,13 @@ export default class Group extends Block {
         this[_ordered].splice(_idx, 1);
       }
       el.disconnect();
-      return true;
+      return el;
     }
-    return false;
+    return null;
   }
 
   insertBefore(el, ref) {
+    if(ref == null) return this.appendChild(el);
     el.remove();
     const refIdx = this.children.indexOf(ref);
     if(refIdx < 0) {
@@ -144,6 +147,7 @@ export default class Group extends Block {
         this[_ordered].splice(idx, 0, el);
       }
     }
+    return el;
   }
 
   /* override */

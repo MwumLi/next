@@ -11,6 +11,7 @@ const changedAttrs = Symbol.for('spritejs_changedAttrs');
 
 const _subject = Symbol.for('spritejs_subject');
 const _attr = Symbol('attr');
+const _default = Symbol('default');
 
 function getMatrix(transformMap, [ox, oy]) {
   let m = mat2d(1, 0, 0, 1, 0, 0);
@@ -65,6 +66,7 @@ export default class Node {
     this[_attr] = {};
     this[_transformMatrix] = mat2d(1, 0, 0, 1, 0, 0);
     this[_transforms] = new Map();
+    this[_default] = {};
 
     Object.defineProperty(subject, 'transformMatrix', {
       get: () => {
@@ -113,12 +115,14 @@ export default class Node {
   }
 
   [setDefault](attrs) {
+    Object.assign(this[_default], attrs);
     Object.assign(this[_attr], attrs);
   }
 
   [setAttribute](key, value) {
     const oldValue = this[_attr][key];
     const subject = this[_subject];
+    if(value == null) value = this[_default][key];
     if(!compareValue(oldValue, value)) {
       this[_attr][key] = value;
       if(this[_changedAttrs].has(key)) this[_changedAttrs].delete(key);

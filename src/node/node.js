@@ -214,6 +214,10 @@ export default class Node {
     return this.attributes[key];
   }
 
+  removeAttribute(key) {
+    this.setAttribute(key, null);
+  }
+
   attr(...args) {
     if(args.length > 1) {
       const [key, value] = args;

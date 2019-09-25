@@ -18,6 +18,7 @@ class Gradient {
 
 export function parseColor(color) {
   // if(Array.isArray(color)) return color;
+  if(color == null) return color;
   if(!color) color = 'transparent';
   if(color instanceof Gradient) return color;
   const ret = rgba(color);

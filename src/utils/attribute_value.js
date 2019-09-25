@@ -47,11 +47,12 @@ export function sizeToPixel(value, defaultWidth) { // eslint-disable-line comple
 }
 
 export function toString(value) {
-  if(value != null) return String(value);
-  return '';
+  if(value == null) return value;
+  return String(value);
 }
 
 export function toNumber(value) {
+  if(value == null) return value;
   if(typeof value === 'string') {
     value = sizeToPixel(value);
   }
