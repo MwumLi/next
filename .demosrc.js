@@ -13,7 +13,7 @@ export default {
   staticFolder: 'dist',
   demoList: '.demoList.json',
   name: 'SPRITEJS',
-  version: 'v1',
+  version: 'next',
   homePage: global.top == null || global.top === global ? 
     'http://next.spritejs.org' : location.top,
   logo: '',
