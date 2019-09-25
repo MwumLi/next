@@ -203,7 +203,7 @@ export default class Node {
   }
 
   forceUpdate() {
-    if(this.isVisible && this.parent) this.parent.forceUpdate();
+    if(this.parent) this.parent.forceUpdate();
   }
 
   setAttribute(key, value) {

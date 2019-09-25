@@ -1,0 +1,60 @@
+[
+  {
+    "label": "quick start",
+    "src": "quick_start"
+  }, {
+    "label": "basic sprites",
+    "src": "basic_sprites"
+  }, {
+    "label": "path & groups",
+    "src": "path_groups"
+  }, {
+    "label": "labels",
+    "src": "labels"
+  }, {
+    "label": "button",
+    "src": "button"
+  }, {
+    "label": "transforms",
+    "src": "transforms"
+  }, {
+    "label": "events",
+    "src": "events"
+  }, {
+    "label": "filters",
+    "src": "filters"
+  }, {
+    "label": "animations",
+    "src": "animations"
+  }, {
+    "label": "svg path",
+    "src": "svg_path"
+  }, {
+    "label": "offset api",
+    "src": "offset_api"
+  }, {
+    "label": "groups",
+    "src": "groups"
+  }, {
+    "label": "ray",
+    "src": "ray"
+  }, {
+    "label": "bar graph",
+    "src": "d3/bar"
+  }, {
+    "label": "hierarchy",
+    "src": "d3/hierarchy"
+  }, {
+    "label": "links",
+    "src": "d3/links"
+  }, {
+    "label": "map",
+    "src": "d3/map"
+  }, {
+    "label": "map centroid",
+    "src": "d3/map_centroid"
+  }, {
+    "label": "map search",
+    "src": "d3/map_search"
+  }
+]

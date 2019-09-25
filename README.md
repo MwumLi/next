@@ -1,3 +1,3 @@
-# Sprite Template
+# Sprite Next
 
-The standard project template.
+The next generation of spritejs.

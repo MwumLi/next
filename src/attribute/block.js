@@ -1,5 +1,5 @@
 import Node from './node';
-import {toNumber} from '../utils/attribute_value';
+import {toNumber, toArray} from '../utils/attribute_value';
 import {parseColor} from '../utils/color';
 
 const setAttribute = Symbol.for('spritejs_setAttribute');
@@ -68,6 +68,7 @@ export default class Block extends Node {
   }
 
   set anchor(value) {
+    value = toArray(value);
     if(!Array.isArray(value)) value = [value, value];
     this.anchorX = value[0];
     this.anchorY = value[1];
@@ -93,9 +94,11 @@ export default class Block extends Node {
     return [this.width, this.height];
   }
 
-  set size([width, height]) {
-    this.width = width;
-    this.height = height;
+  set size(value) {
+    value = toArray(value);
+    if(!Array.isArray(value)) value = [value, value];
+    this.width = value[0];
+    this.height = value[1];
   }
 
   get borderWidth() {
@@ -119,6 +122,7 @@ export default class Block extends Node {
   }
 
   set border(value) {
+    value = toArray(value);
     if(!Array.isArray(value)) value = [value];
     this.borderWidth = value[0];
     if(value[1] != null) this.borderColor = value[1];
@@ -146,6 +150,7 @@ export default class Block extends Node {
   }
 
   set borderTopLeftRadius(value) {
+    value = toArray(value);
     if(!Array.isArray(value)) value = [value, value];
     this[setAttribute]('borderTopLeftRadius', value.map(toNumber));
   }
@@ -155,6 +160,7 @@ export default class Block extends Node {
   }
 
   set borderTopRightRadius(value) {
+    value = toArray(value);
     if(!Array.isArray(value)) value = [value, value];
     this[setAttribute]('borderTopRightRadius', value.map(toNumber));
   }
@@ -164,6 +170,7 @@ export default class Block extends Node {
   }
 
   set borderBottomRightRadius(value) {
+    value = toArray(value);
     if(!Array.isArray(value)) value = [value, value];
     this[setAttribute]('borderBottomRightRadius', value.map(toNumber));
   }
@@ -173,6 +180,7 @@ export default class Block extends Node {
   }
 
   set borderBottomLeftRadius(value) {
+    value = toArray(value);
     if(!Array.isArray(value)) value = [value, value];
     this[setAttribute]('borderBottomLeftRadius', value.map(toNumber));
   }
@@ -183,6 +191,7 @@ export default class Block extends Node {
   }
 
   set borderRadius(value) {
+    value = toArray(value);
     if(!Array.isArray(value)) value = Array(8).fill(value);
     else if(value.length === 2) value = [value[0], value[1], value[0], value[1], value[0], value[1], value[0], value[1]];
     else if(value.length === 4) value = [value[0], value[1], value[2], value[3], value[0], value[1], value[2], value[3]];
@@ -239,6 +248,7 @@ export default class Block extends Node {
   }
 
   set padding(value) {
+    value = toArray(value);
     if(!Array.isArray(value)) {
       value = [value, value, value, value];
     } else if(value.length === 1) {

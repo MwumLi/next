@@ -12,7 +12,7 @@ export default {
   // themeFile: 'demos/theme.scss',
   staticFolder: 'dist',
   demoList: '.demoList.json',
-  name: 'MESHJS',
+  name: 'SPRITEJS',
   version: 'v1',
   homePage: global.top == null || global.top === global ? 
     'http://next.spritejs.org' : location.top,

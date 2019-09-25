@@ -1,6 +1,6 @@
 import {mat2d} from 'gl-matrix';
 import {Figure2D} from '@mesh.js/core';
-import {toString, toNumber, compareValue} from '../utils/attribute_value';
+import {toString, toNumber, toArray, compareValue} from '../utils/attribute_value';
 
 const setAttribute = Symbol.for('spritejs_setAttribute');
 const getAttribute = Symbol.for('spritejs_getAttribute');
@@ -97,7 +97,7 @@ export default class Node {
     });
 
     this[_changedAttrs] = new Set();
-    this[_offsetFigure] = new Figure2D();
+    this[_offsetFigure] = new Figure2D({scale: 5});
   }
 
   get [changedAttrs]() {
@@ -181,37 +181,43 @@ export default class Node {
     return [this.x, this.y];
   }
 
-  set pos([x, y]) {
-    this.x = x;
-    this.y = y;
+  set pos(value) {
+    value = toArray(value);
+    if(!Array.isArray(value)) value = [value, value];
+    this.x = value[0];
+    this.y = value[1];
   }
 
   get transform() {
-    return this[getAttribute]('matrix');
+    return this[getAttribute]('transform');
   }
 
   set transform(value) {
     if(this[setAttribute]('transform', value)) {
       const transformMap = this[_transforms];
-      if(transformMap.has('transform')) {
-        transformMap.delete('transform');
+      if(transformMap.has('matrix')) {
+        transformMap.delete('matrix');
       }
-      const transforms = value.match(/(matrix|translate|rotate|scale|skew)\([^()]+\)/g);
-      if(transforms) {
-        let m = mat2d(1, 0, 0, 1, 0, 0);
-        for(let i = 0; i < transforms.length; i++) {
-          const t = transforms[i];
-          const matched = t.match(/^(matrix|translate|rotate|scale|skew)\(([^()]+)\)/);
-          if(matched) {
-            let [, method, value] = matched;
-            if(method === 'rotate') value = Math.PI * parseFloat(value) / 180;
-            else value = value.trim().split(/\s+/).map(v => toNumber(v));
-            if(method === 'matrix') {
-              m *= mat2d(value);
-            } else {
-              mat2d[method](m, m, value);
+      if(Array.isArray(value)) {
+        transformMap.set('matrix', value);
+      } else if(value) {
+        const transforms = value.match(/(matrix|translate|rotate|scale|skew)\([^()]+\)/g);
+        if(transforms) {
+          let m = mat2d(1, 0, 0, 1, 0, 0);
+          for(let i = 0; i < transforms.length; i++) {
+            const t = transforms[i];
+            const matched = t.match(/^(matrix|translate|rotate|scale|skew)\(([^()]+)\)/);
+            if(matched) {
+              let [, method, value] = matched;
+              if(method === 'rotate') value = Math.PI * parseFloat(value) / 180;
+              else value = value.trim().split(/[\s,]+/).map(v => toNumber(v));
+              if(method === 'matrix') {
+                m *= mat2d(value);
+              } else {
+                mat2d[method](m, m, value);
+              }
+              transformMap.set('matrix', m);
             }
-            transformMap.set('matrix', m);
           }
         }
       }
@@ -237,7 +243,7 @@ export default class Node {
       if(transformMap.has('rotate')) {
         transformMap.delete('rotate');
       }
-      transformMap.set('rotate', Math.PI * value / 180);
+      if(value) transformMap.set('rotate', Math.PI * value / 180);
       this[_transformMatrix] = getMatrix(transformMap, this.transformOrigin);
     }
   }
@@ -252,7 +258,7 @@ export default class Node {
       if(transformMap.has('translate')) {
         transformMap.delete('translate');
       }
-      transformMap.set('translate', value);
+      if(value) transformMap.set('translate', value);
       this[_transformMatrix] = getMatrix(transformMap, this.transformOrigin);
     }
   }
@@ -262,13 +268,14 @@ export default class Node {
   }
 
   set scale(value) {
+    value = toArray(value);
     if(!Array.isArray(value)) value = [value, value];
     if(this[setAttribute]('scale', value)) {
       const transformMap = this[_transforms];
       if(transformMap.has('scale')) {
         transformMap.delete('scale');
       }
-      transformMap.set('scale', value);
+      if(value) transformMap.set('scale', value);
       this[_transformMatrix] = getMatrix(transformMap, this.transformOrigin);
     }
   }
@@ -283,7 +290,7 @@ export default class Node {
       if(transformMap.has('skew')) {
         transformMap.delete('skew');
       }
-      transformMap.set('skew', value);
+      if(value) transformMap.set('skew', value);
       this[_transformMatrix] = getMatrix(transformMap, this.transformOrigin);
     }
   }
@@ -293,7 +300,8 @@ export default class Node {
   }
 
   set opacity(value) {
-    this[setAttribute]('opacity', Number(value));
+    if(value != null) value = Number(value);
+    this[setAttribute]('opacity', value);
   }
 
   get zIndex() {
@@ -301,7 +309,8 @@ export default class Node {
   }
 
   set zIndex(value) {
-    this[setAttribute]('zIndex', Number(value));
+    if(value != null) value = Number(value);
+    this[setAttribute]('zIndex', value);
   }
 
   get offsetPath() {

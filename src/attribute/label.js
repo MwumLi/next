@@ -1,5 +1,5 @@
 import parseFont from '@mesh.js/core/src/utils/parse-font';
-import {toNumber} from '../utils/attribute_value';
+import {toNumber, toString} from '../utils/attribute_value';
 import {parseColor} from '../utils/color';
 import Block from './block';
 
@@ -40,7 +40,7 @@ export default class Label extends Block {
   }
 
   set text(value) {
-    this[setAttribute]('text', String(value));
+    this[setAttribute]('text', toString(value));
   }
 
   get fontSize() {
@@ -56,7 +56,7 @@ export default class Label extends Block {
   }
 
   set fontFamily(value) {
-    this[setAttribute]('fontFamily', String(value));
+    this[setAttribute]('fontFamily', toString(value));
   }
 
   get fontStyle() {
@@ -64,7 +64,7 @@ export default class Label extends Block {
   }
 
   set fontStyle(value) {
-    this[setAttribute]('fontStyle', String(value));
+    this[setAttribute]('fontStyle', toString(value));
   }
 
   get fontVariant() {
@@ -72,7 +72,7 @@ export default class Label extends Block {
   }
 
   set fontVariant(value) {
-    this[setAttribute]('fontVariant', String(value));
+    this[setAttribute]('fontVariant', toString(value));
   }
 
   get fontWeight() {
@@ -80,7 +80,7 @@ export default class Label extends Block {
   }
 
   set fontWeight(value) {
-    this[setAttribute]('fontWeight', String(value));
+    this[setAttribute]('fontWeight', toString(value));
   }
 
   get fontStretch() {
@@ -88,7 +88,7 @@ export default class Label extends Block {
   }
 
   set fontStretch(value) {
-    this[setAttribute]('fontStretch', String(value));
+    this[setAttribute]('fontStretch', toString(value));
   }
 
   get lineHeight() {
@@ -104,7 +104,7 @@ export default class Label extends Block {
   }
 
   set textAlign(value) {
-    this[setAttribute]('textAlign', String(value));
+    this[setAttribute]('textAlign', toString(value));
   }
 
   get strokeColor() {
@@ -112,7 +112,7 @@ export default class Label extends Block {
   }
 
   set verticalAlign(value) {
-    this[setAttribute]('verticalAlign', String(value));
+    this[setAttribute]('verticalAlign', toString(value));
   }
 
   get verticalAlign() {

@@ -1,6 +1,6 @@
 import Node from './node';
 import {parseColor} from '../utils/color';
-import {toNumber} from '../utils/attribute_value';
+import {toNumber, toString, toArray} from '../utils/attribute_value';
 
 const setDefault = Symbol.for('spritejs_setAttributeDefault');
 const setAttribute = Symbol.for('spritejs_setAttribute');
@@ -13,8 +13,8 @@ export default class Path extends Node {
     this[setDefault]({
       d: '',
       fillColor: undefined,
-      strokeColor: [0, 0, 0, 1],
-      lineWidth: 0,
+      strokeColor: undefined,
+      lineWidth: 1,
       lineJoin: 'miter', // 'miter' or 'bevel'
       lineCap: 'butt', // 'butt' or 'square'
       lineDash: null,
@@ -32,7 +32,7 @@ export default class Path extends Node {
   }
 
   set d(value) {
-    this[setAttribute]('d', String(value));
+    this[setAttribute]('d', toString(value));
   }
 
   get fillColor() {
@@ -82,6 +82,7 @@ export default class Path extends Node {
   }
 
   set lineDash(value) {
+    value = toArray(value);
     if(value != null && !Array.isArray(value)) value = [value];
     this[setAttribute]('lineDash', value.map(toNumber));
   }

@@ -97,8 +97,11 @@ export default class Path extends Node {
     }
     if(this[_mesh] && (key === 'strokeColor' || key === 'lineWidth' || key === 'lineCap' || key === 'lineJoin'
       || key === 'lineDash' || key === 'lineDashOffset')) {
-      const {lineCap, lineJoin, lineWidth, strokeColor, lineDash, lineDashOffset, miterLimit} = this.attributes;
-      setStrokeColor(this[_mesh], {color: strokeColor, lineCap, lineJoin, lineWidth, lineDash, lineDashOffset, miterLimit});
+      const {strokeColor, lineWidth} = this.attributes;
+      if(strokeColor && lineWidth > 0) {
+        const {lineCap, lineJoin, lineDash, lineDashOffset, miterLimit} = this.attributes;
+        setStrokeColor(this[_mesh], {color: strokeColor, lineCap, lineJoin, lineWidth, lineDash, lineDashOffset, miterLimit});
+      }
     }
     if(key === 'filter') {
       this[_filters] = parseFilterString(newValue);
@@ -124,8 +127,9 @@ export default class Path extends Node {
           setFillColor(mesh, {color: fillColor});
         }
         const lineWidth = this.attributes.lineWidth;
-        if(lineWidth > 0) {
-          const {strokeColor, lineCap, lineJoin, miterLimit} = this.attributes;
+        const strokeColor = this.attributes.strokeColor;
+        if(strokeColor && lineWidth > 0) {
+          const {lineCap, lineJoin, miterLimit} = this.attributes;
           setStrokeColor(mesh, {
             color: strokeColor,
             lineWidth,

@@ -60,6 +60,11 @@ export function toNumber(value) {
   return value;
 }
 
+export function toArray(value) {
+  if(typeof value === 'string') return value.split(/[\s,]+/g);
+  return value;
+}
+
 export function compareValue(oldValue, newValue) {
   if(Array.isArray(oldValue) && Array.isArray(newValue)) {
     if(oldValue.length !== newValue.length) return false;
