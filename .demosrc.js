@@ -15,7 +15,7 @@ export default {
   name: 'SPRITEJS',
   version: 'next',
   homePage: global.top == null || global.top === global ? 
-    'http://next.spritejs.org' : location.top,
+    'https://github.com/spritejs/next' : location.top,
   logo: '',
   // 可选主题: active4d, allHallowsEve, amy, blackboard, brillianceBlack,
   // brillianceDull, chromeDevtools, cloudsMidnight, clouds, cobalt,
