@@ -5,10 +5,10 @@ import ownerDocument from '../document';
 
 const defaultOptions = {
   antialias: true,
-  autoUpdate: true,
+  autoRender: true,
 };
 
-const _autoUpdate = Symbol('autoUpdate');
+const _autoRender = Symbol('autoRender');
 const _renderer = Symbol('renderer');
 const _timeline = Symbol('timeline');
 
@@ -17,8 +17,8 @@ export default class Layer extends Group {
     super();
     const canvas = options.canvas;
     const opts = Object.assign({}, defaultOptions, options);
-    this[_autoUpdate] = opts.autoUpdate;
-    delete options.autoUpdate;
+    this[_autoRender] = opts.autoRender;
+    delete options.autoRender;
     this[_renderer] = new Renderer(canvas, opts);
     this.setResolution(canvas);
     this.options = options;
@@ -39,6 +39,14 @@ export default class Layer extends Group {
     return this[_timeline];
   }
 
+  get renderOffset() {
+    if(this.parent && this.parent.options) {
+      const {left, top} = this.parent.options;
+      return [left, top];
+    }
+    return [0, 0];
+  }
+
   /* override */
   setResolution({width, height}) {
     if(this.canvas) {
@@ -55,6 +63,27 @@ export default class Layer extends Group {
     super.setResolution({width, height});
   }
 
+  toLocalPos(x, y) {
+    const {width, height} = this.getResolution();
+    const offset = this.renderOffset;
+    const viewport = [this.canvas.clientWidth, this.canvas.clientHeight];
+    x = x * width / viewport[0] - offset[0];
+    y = y * height / viewport[1] - offset[1];
+
+    return [x, y];
+  }
+
+  toGlobalPos(x, y) {
+    const {width, height} = this.getResolution();
+    const offset = this.renderOffset;
+    const viewport = [this.canvas.clientWidth, this.canvas.clientHeight];
+
+    x = x * viewport[0] / width + offset[0];
+    y = y * viewport[1] / height + offset[1];
+
+    return [x, y];
+  }
+
   render() {
     const meshes = this.draw();
     this[_renderer].clear();
@@ -65,7 +94,7 @@ export default class Layer extends Group {
 
   /* override */
   forceUpdate() {
-    if(!this.prepareRender) {
+    if(this[_autoRender] && !this.prepareRender) {
       this.prepareRender = new Promise((resolve) => {
         requestAnimationFrame(() => {
           delete this.prepareRender;
