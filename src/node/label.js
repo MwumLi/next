@@ -1,4 +1,4 @@
-import createText from '../utils/create_text';
+import createText from '@mesh.js/core/src/utils/create-text';
 import {createTexture} from '../utils/texture_loader';
 import Block from './block';
 import Attr from '../attribute/label';
@@ -21,10 +21,10 @@ export default class Label extends Block {
   updateText() {
     if(!this[_textImageTask]) {
       this[_textImageTask] = new Promise((resolve) => {
-        requestAnimationFrame(async () => {
+        requestAnimationFrame(() => {
           this[_textImageTask] = null;
           const {text, font, fillColor, strokeColor} = this.attributes;
-          this[_textImage] = await createText(text, {font, fillColor, strokeColor});
+          this[_textImage] = createText(text, {font, fillColor, strokeColor});
           this.updateContours();
           this.forceUpdate();
           resolve(this[_textImage]);
