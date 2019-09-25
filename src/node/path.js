@@ -60,6 +60,23 @@ export default class Path extends Node {
     return [0, 0, 0, 0];
   }
 
+  getPathLength() {
+    if(this.mesh) {
+      return this.mesh.getTotalLength();
+    }
+    return 0;
+  }
+
+  getPointAtLength(len) {
+    if(this.mesh) {
+      const point = this.mesh.getPointAtLength(len);
+      if(point) {
+        return [point.x, point.y];
+      }
+    }
+    return [0, 0];
+  }
+
   /* override */
   setResolution({width, height}) {
     super.setResolution({width, height});
