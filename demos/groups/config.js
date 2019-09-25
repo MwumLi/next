@@ -15,7 +15,6 @@ export default async () => {
     },
     packages: {
       js: [
-        '/spritejs.js',
         '//lib.baomitu.com/dat-gui/0.7.2/dat.gui.min.js',
       ],
     },

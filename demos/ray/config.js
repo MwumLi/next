@@ -15,7 +15,6 @@ export default async () => {
     },
     packages: {
       js: [
-        '/spritejs.js',
         '//s2.ssl.qhres.com/!87edaa34/animator-0.3.1.min.js',
       ],
     },

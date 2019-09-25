@@ -28,7 +28,7 @@ export default {
   // monoindustrial,
   boxTheme: 'monokai',
   globalPackages: {
-    js: [],
+    js: ['./spritejs.js'],
     css: [],
   },
   // tab waterfall

@@ -15,7 +15,6 @@ export default async () => {
     },
     packages: {
       js: [
-        '/spritejs.js',
         '//lib.baomitu.com/d3/4.10.2/d3.js',
       ],
     },

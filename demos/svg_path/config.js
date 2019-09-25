@@ -14,9 +14,7 @@ export default async () => {
       code: css,
     },
     packages: {
-      js: [
-        '/spritejs.js',
-      ],
+      js: [],
     },
   };
 };
