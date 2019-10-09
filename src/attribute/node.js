@@ -41,8 +41,9 @@ const _changedAttrs = Symbol('changedAttrs');
 const _offsetFigure = Symbol('offsetFigure');
 
 function updateOffset(attr) {
-  const distance = attr.offsetDistance;
-  const point = attr[_offsetFigure].getPointAtLength(distance);
+  const offsetFigure = attr[_offsetFigure];
+  const distance = attr.offsetDistance * offsetFigure.getTotalLength();
+  const point = offsetFigure.getPointAtLength(distance);
   if(point) {
     const transformMap = attr[_transforms];
     let rotateValue = attr.offsetRotate;
