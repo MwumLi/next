@@ -48,7 +48,7 @@
       vector: [0, 0, 100, 100],
       colors: [
         {offset: 0, color: 'red'},
-        {offset: 1, color: 'blue'},
+        {offset: 1, color: 'rgba(255, 0, 255, 0.1)'},
       ],
     });
 
@@ -61,7 +61,7 @@
       strokeColor: gradient,
       lineWidth: '3px',
       pos: [0, 0],
-      texture: textureURL,
+      // texture: textureURL,
     });
     
     const container = document.getElementById('container');
@@ -73,12 +73,12 @@
       mode: 'stickyHeight',
     });
 
-    scene.preload([
-      'https://p5.ssl.qhimg.com/t01f47a319aebf27174.png',
-      'https://s3.ssl.qhres.com/static/a6a7509c33a290a6.json',
-    ]).then((res) => {
-      path.attr({texture: 'guanguan1.png'});
-    });
+    // scene.preload([
+    //   'https://p5.ssl.qhimg.com/t01f47a319aebf27174.png',
+    //   'https://s3.ssl.qhres.com/static/a6a7509c33a290a6.json',
+    // ]).then((res) => {
+    //   path.attr({texture: 'guanguan1.png'});
+    // });
 
     // const bglayer = scene.layer('bglayer');
     const fglayer = scene.layer('fglayer');
@@ -104,7 +104,7 @@
 
     // group.appendChild(el);
     group.appendChild(el2);
-    // group.appendChild(path);
+    group.appendChild(path);
     group.appendChild(l);
 
     group.attr({
