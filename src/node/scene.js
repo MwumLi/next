@@ -1,4 +1,4 @@
-import {createCanvas} from '@mesh.js/core/src/utils/canvas';
+import {createCanvas} from '@mesh.js/core';
 import Layer from './layer';
 import Group from './group';
 import createPointerEvents from '../event/pointer-events';
@@ -94,25 +94,27 @@ function delegateEvents(scene) {
   });
 }
 
-function setSize(options, canvas) {
-  let {width, height, mode, container} = options;
-  const {clientWidth, clientHeight} = container;
+function setViewport(options, canvas) {
+  if(canvas.style) {
+    let {width, height, mode, container} = options;
+    const {clientWidth, clientHeight} = container;
 
-  width = width || clientWidth;
-  height = height || clientHeight;
+    width = width || clientWidth;
+    height = height || clientHeight;
 
-  if(mode === 'static') {
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
-    canvas.style.top = '50%';
-    canvas.style.left = '50%';
-    canvas.style.transform = 'translate(-50%, -50%)';
-    canvas.style.webkitTransform = 'translate(-50%, -50%)';
-  } else {
-    canvas.style.top = '0';
-    canvas.style.left = '0';
-    canvas.style.width = `${clientWidth}px`;
-    canvas.style.height = `${clientHeight}px`;
+    if(mode === 'static') {
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      canvas.style.top = '50%';
+      canvas.style.left = '50%';
+      canvas.style.transform = 'translate(-50%, -50%)';
+      canvas.style.webkitTransform = 'translate(-50%, -50%)';
+    } else {
+      canvas.style.top = '0';
+      canvas.style.left = '0';
+      canvas.style.width = `${clientWidth}px`;
+      canvas.style.height = `${clientHeight}px`;
+    }
   }
 }
 
@@ -181,7 +183,7 @@ export default class Scene extends Group {
   resize() {
     const options = this.options;
     this.children.forEach((layer) => {
-      setSize(options, layer.canvas);
+      setViewport(options, layer.canvas);
     });
     const {mode, width, height} = options;
     if(mode !== 'scale' && mode !== 'static' || mode === 'static' && (width == null || height == null)) {
@@ -228,16 +230,18 @@ export default class Scene extends Group {
       if(layers[i].id === id) return layers[i];
     }
 
-    const {width, height} = this.options;
+    const {width, height} = this.getResolution();
     const canvas = createCanvas(width, height, {offscreen: false});
-    canvas.style.position = 'absolute';
+    if(canvas.style) canvas.style.position = 'absolute';
 
-    setSize(this.options, canvas);
+    setViewport(this.options, canvas);
 
-    canvas.dataset.layerId = id;
+    if(canvas.dataset) canvas.dataset.layerId = id;
 
     this.container.appendChild(canvas);
-    if(!this.container.style.overflow) this.container.style.overflow = 'hidden';
+    if(this.container.style && !this.container.style.overflow) {
+      this.container.style.overflow = 'hidden';
+    }
 
     options.canvas = canvas;
 
@@ -245,6 +249,24 @@ export default class Scene extends Group {
     layer.id = id;
     this.appendChild(layer);
     return layer;
+  }
+
+  snapshot({offscreen = false} = {}) {
+    const {width, height} = this.getResolution();
+    this.snapshotCanvas = this.snapshotCanvas || createCanvas(width, height, {offscreen});
+    const context = this.snapshotCanvas.getContext('2d');
+    const layers = this.orderedChildren;
+
+    context.clearRect(0, 0, width, height);
+    for(let i = layers.length - 1; i >= 0; i--) {
+      const layer = layers[i];
+      layer.render();
+      const canvas = layer.canvas;
+      if(canvas) {
+        context.drawImage(canvas, 0, 0, width, height);
+      }
+    }
+    return this.snapshotCanvas;
   }
 }
 

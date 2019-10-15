@@ -1,4 +1,4 @@
-import createText from '@mesh.js/core/src/utils/create-text';
+import {createText} from '@mesh.js/core';
 import {createTexture} from '../utils/texture_loader';
 import Block from './block';
 import Attr from '../attribute/label';

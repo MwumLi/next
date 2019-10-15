@@ -11,7 +11,7 @@ import Scene from './node/scene';
 
 import {parseColor, Gradient} from './utils/color';
 
-export default {
+export {
   Renderer,
   Node,
   Block,

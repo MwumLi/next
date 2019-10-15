@@ -11,6 +11,18 @@ module.exports = function (env = {}) {
     babelConf.babelrc = false;
   }
 
+  const plugins = [];
+
+  if(env.mode === 'development') {
+    plugins.push(new webpack.HotModuleReplacementPlugin({
+      multiStep: true,
+    }));
+  }
+
+  plugins.push(new webpack.DefinePlugin({
+    __DEV__: env.mode === 'development',
+  }));
+
   return {
     mode: env.mode || 'none',
     entry: './src/index',
@@ -20,7 +32,7 @@ module.exports = function (env = {}) {
       publicPath: '/js/',
       library: ['spritejs'],
       libraryTarget: 'umd',
-      libraryExport: 'default',
+      // libraryExport: 'default',
       globalObject: 'this',
     },
     resolve: {
@@ -66,11 +78,7 @@ module.exports = function (env = {}) {
       // ...
     },
 
-    plugins: [
-      new webpack.HotModuleReplacementPlugin({
-        multiStep: true,
-      }),
-    ],
+    plugins,
     // list of additional plugins
 
     /* Advanced configuration (click to show) */

@@ -1,4 +1,4 @@
-import parseFont from '@mesh.js/core/src/utils/parse-font';
+import {parseFont} from '@mesh.js/core';
 import {toNumber, toString} from '../utils/attribute_value';
 import {parseColor} from '../utils/color';
 import Block from './block';

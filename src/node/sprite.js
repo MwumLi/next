@@ -17,9 +17,11 @@ export default class Sprite extends Block {
 
   async setTexture(url) {
     const textureImage = await loadTexture(url);
-    this[_textureImage] = textureImage;
-    this.updateContours();
-    this.forceUpdate();
+    if(url === this.attributes.texture) {
+      this[_textureImage] = textureImage;
+      this.updateContours();
+      this.forceUpdate();
+    }
     return textureImage;
   }
 

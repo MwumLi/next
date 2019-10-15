@@ -1,4 +1,4 @@
-import {createCanvas} from '@mesh.js/core/src/utils/canvas';
+import {createCanvas} from '@mesh.js/core';
 
 const loadedTextures = {};
 
