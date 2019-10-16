@@ -9,6 +9,7 @@ import {compareValue} from '../utils/attribute_value';
 import {parseFilterString, applyFilters} from '../utils/filter';
 import ownerDocument from '../document';
 import getBoundingBox from '../utils/bounding_box';
+import applyRenderEvent from '../utils/render_event';
 
 const _mesh = Symbol('mesh');
 const _textureImage = Symbol('textureImage');
@@ -228,6 +229,7 @@ export default class Path extends Node {
           this[_textureContext] = this.renderer;
         }
       }
+      if(mesh) applyRenderEvent(this, mesh);
       return [mesh];
     }
 

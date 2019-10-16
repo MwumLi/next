@@ -7,6 +7,7 @@ import {createRadiusBox} from '../utils/border_radius';
 import {parseFilterString, applyFilters} from '../utils/filter';
 import ownerDocument from '../document';
 import getBoundingBox from '../utils/bounding_box';
+import applyRenderEvent from '../utils/render_event';
 
 const _borderBoxMesh = Symbol('borderBoxMesh');
 const _clientBoxMesh = Symbol('clientBoxMesh');
@@ -259,6 +260,9 @@ export default class Block extends Node {
     if(clientBoxMesh) {
       ret.push(clientBoxMesh);
     }
+
+    if(borderBoxMesh) applyRenderEvent(this, borderBoxMesh);
+    else if(clientBoxMesh) applyRenderEvent(this, clientBoxMesh);
 
     return ret;
   }

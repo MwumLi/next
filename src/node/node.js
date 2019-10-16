@@ -94,6 +94,11 @@ export default class Node {
     return ret;
   }
 
+  getListeners(type, {capture = false} = {}) {
+    const eventListeners = capture ? _captureEventListeners : _eventListeners;
+    return [...(this[eventListeners][type] || [])];
+  }
+
   addEventListener(type, listener, options = {}) {
     if(typeof options === 'boolean') options = {capture: options};
     const {capture, once} = options;
