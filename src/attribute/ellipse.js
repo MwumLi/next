@@ -7,14 +7,14 @@ const setAttribute = Symbol.for('spritejs_setAttribute');
 const getAttribute = Symbol.for('spritejs_getAttribute');
 
 function getPath(attr) {
-  const {x, y, radiusX, radiusY, startAngle, endAngle, direction, close} = attr;
+  const {x, y, radiusX, radiusY, startAngle, endAngle, direction, closeType} = attr;
   const anticlockwise = direction === 'anitclockwise';
   const f = new Figure2D();
-  if(close === 'sector') {
+  if(closeType === 'sector') {
     f.moveTo(x, y);
   }
   f.ellipse(x, y, radiusX, radiusY, Math.PI * startAngle / 180, Math.PI * endAngle / 180, anticlockwise);
-  if(close !== 'none') {
+  if(closeType !== 'none') {
     f.closePath();
   }
   const path = f.path;
@@ -37,7 +37,7 @@ export default class Ellipse extends Path {
       startAngle: 0,
       endAngle: 0,
       direction: 'clockwise', // clockwise | anticlockwise
-      close: 'none', // none | sector | normal
+      closeType: 'none', // none | sector | normal
     });
   }
 
@@ -103,13 +103,13 @@ export default class Ellipse extends Path {
     }
   }
 
-  get close() {
-    return this[getAttribute]('close');
+  get closeType() {
+    return this[getAttribute]('closeType');
   }
 
-  set close(value) {
-    if(value !== 'none' && value !== 'sector' && value !== 'normal') throw new TypeError('Invalid close type.');
-    if(this[setAttribute]('close', value)) {
+  set closeType(value) {
+    if(value !== 'none' && value !== 'sector' && value !== 'normal') throw new TypeError('Invalid closeType type.');
+    if(this[setAttribute]('closeType', value)) {
       const d = getPath(this);
       this[setAttribute]('d', d);
     }

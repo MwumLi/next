@@ -110,12 +110,22 @@
       pointerEvents: 'visibleFill',
     });
 
+    const p = new spritejs.Polyline();
+
+    p.attr({
+      lineWidth: 2,
+      strokeColor: 'cyan',
+      points: [50, 50, 90, 90, 120, 70, 145, 88, 56, 172],
+      smooth: true,
+    });
+
     const group = new spritejs.Group();
 
     // group.appendChild(el);
     group.appendChild(el2);
     group.appendChild(path);
     group.appendChild(l);
+    group.appendChild(p);
 
     group.attr({
       transformOrigin: [256, 256],

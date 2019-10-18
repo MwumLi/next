@@ -6,6 +6,7 @@ import Sprite from './node/sprite';
 import Path from './node/path';
 import Rect from './node/rect';
 import Ellipse from './node/ellipse';
+import Polyline from './node/polyline';
 import Label from './node/label';
 import Group from './node/group';
 import Layer from './node/layer';
@@ -21,6 +22,7 @@ export {
   Path,
   Rect,
   Ellipse,
+  Polyline,
   Label,
   Group,
   Layer,
