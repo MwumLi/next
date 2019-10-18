@@ -20,6 +20,7 @@ const {createCanvas, Image} = require('canvas');
 
 global.createCanvas = createCanvas;
 global.Image = Image;
+global.Worker = Object;
 
 export class Container extends EventEmitter {
   constructor(width = 800, height = 600) {

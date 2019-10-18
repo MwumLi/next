@@ -2,6 +2,7 @@ module.exports = {
   globals: {
     spritejs: true,
     global: true,
+    importScripts: true,
   },
   extends:  "eslint-config-sprite",
   plugins: ['html'],
@@ -9,5 +10,6 @@ module.exports = {
     "complexity": ["warn", 25],
     'import/prefer-default-export': 'off',
     "no-unused-vars": 'warn',
+    'no-restricted-globals': 'off',
   },
 }

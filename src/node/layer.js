@@ -20,8 +20,8 @@ export default class Layer extends Group {
     this[_autoRender] = opts.autoRender;
     delete options.autoRender;
     this[_renderer] = new Renderer(canvas, opts);
-    this.setResolution(canvas);
     this.options = options;
+    this.setResolution(canvas);
     this.canvas = canvas;
     this[_timeline] = new Timeline();
   }
@@ -44,7 +44,7 @@ export default class Layer extends Group {
       const {left, top} = this.parent.options;
       return [left, top];
     }
-    return [0, 0];
+    return [this.options.left | 0, this.options.top | 0];
   }
 
   /* override */
@@ -56,10 +56,8 @@ export default class Layer extends Group {
     if(this.renderer.glRenderer) {
       this.renderer.glRenderer.gl.viewport(0, 0, width, height);
     }
-    if(this.parent && this.parent.options) {
-      const {left, top} = this.parent.options;
-      this.renderer.setGlobalTransform(1, 0, 0, 1, left, top);
-    }
+    const [left, top] = this.renderOffset;
+    this.renderer.setGlobalTransform(1, 0, 0, 1, left, top);
     super.setResolution({width, height});
   }
 

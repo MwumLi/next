@@ -25,10 +25,13 @@ module.exports = function (env = {}) {
 
   return {
     mode: env.mode || 'none',
-    entry: './src/index',
+    entry: {
+      spritejs: './src/index',
+      'spritejs.worker': './src/index.worker',
+    },
     output: {
       path: path.resolve(__dirname, 'dist'),
-      filename: 'spritejs.js',
+      filename: '[name].js',
       publicPath: '/js/',
       library: ['spritejs'],
       libraryTarget: 'umd',

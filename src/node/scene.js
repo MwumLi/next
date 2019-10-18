@@ -1,5 +1,6 @@
 import {createCanvas} from '@mesh.js/core';
 import Layer from './layer';
+import LayerWorker from './layer-worker';
 import Group from './group';
 import createPointerEvents from '../event/pointer-events';
 import Event from '../event/event';
@@ -242,11 +243,18 @@ export default class Scene extends Group {
     if(this.container.style && !this.container.style.overflow) {
       this.container.style.overflow = 'hidden';
     }
-
     options.canvas = canvas;
 
-    const layer = new Layer(options);
-    layer.id = id;
+    const worker = options.worker;
+    let layer;
+
+    if(worker) {
+      layer = new LayerWorker(id, options);
+    } else {
+      layer = new Layer(options);
+      layer.id = id;
+    }
+
     this.appendChild(layer);
     return layer;
   }
