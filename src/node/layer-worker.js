@@ -1,6 +1,9 @@
 export default class LayerWorker extends Worker {
   constructor(id, options) {
-    super(`./${id}.worker.js`);
+    if(options.worker === true) {
+      options.worker = `./${id}.worker.js`;
+    }
+    super(options.worker);
     this.id = id;
     this.options = options;
 
