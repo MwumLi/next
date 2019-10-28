@@ -1,6 +1,6 @@
 import {Figure2D} from '@mesh.js/core';
 import Path from './path';
-import {toNumber, toString} from '../utils/attribute_value';
+import {toNumber, toString, toArray} from '../utils/attribute_value';
 
 const setDefault = Symbol.for('spritejs_setAttributeDefault');
 const setAttribute = Symbol.for('spritejs_setAttribute');
@@ -34,8 +34,9 @@ export default class Ellipse extends Path {
     this[setDefault]({
       radiusX: 0,
       radiusY: 0,
+      /* radius */
       startAngle: 0,
-      endAngle: 0,
+      endAngle: 360,
       direction: 'clockwise', // clockwise | anticlockwise
       closeType: 'none', // none | sector | normal
     });
@@ -68,6 +69,17 @@ export default class Ellipse extends Path {
       const d = getPath(this);
       this[setAttribute]('d', d);
     }
+  }
+
+  get radius() {
+    return [this.radiusX, this.radiusY];
+  }
+
+  set radius(value) {
+    value = toArray(value);
+    if(!Array.isArray(value)) value = [value, value];
+    this.radiusX = value[0];
+    this.radiusY = value[1];
   }
 
   get direction() {

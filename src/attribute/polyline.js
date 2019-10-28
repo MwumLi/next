@@ -14,6 +14,9 @@ function getPath(attr) {
   }
   let d = '';
   if(smooth) {
+    if(close) {
+      p.push([...p[0]]);
+    }
     d = makeSmoothCurveLine(p);
   } else if(p.length) {
     d = `M${p.map(v => v.join(' ')).join('L')}`;
