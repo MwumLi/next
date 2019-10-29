@@ -11,6 +11,7 @@ import Regular from './node/regular';
 import Star from './node/star';
 import Ellipse from './node/ellipse';
 import Arc from './node/arc';
+import Ring from './node/ring';
 import Polyline from './node/polyline';
 import Label from './node/label';
 import Group from './node/group';
@@ -32,6 +33,7 @@ export {
   Star,
   Ellipse,
   Arc,
+  Ring,
   Polyline,
   Label,
   Group,

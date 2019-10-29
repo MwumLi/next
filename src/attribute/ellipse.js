@@ -7,13 +7,13 @@ const setAttribute = Symbol.for('spritejs_setAttribute');
 const getAttribute = Symbol.for('spritejs_getAttribute');
 
 function getPath(attr) {
-  const {x, y, radiusX, radiusY, startAngle, endAngle, direction, closeType} = attr;
+  const {radiusX, radiusY, startAngle, endAngle, direction, closeType} = attr;
   const anticlockwise = direction === 'anitclockwise';
   const f = new Figure2D();
   if(closeType === 'sector') {
-    f.moveTo(x, y);
+    f.moveTo(0, 0);
   }
-  f.ellipse(x, y, radiusX, radiusY, Math.PI * startAngle / 180, Math.PI * endAngle / 180, anticlockwise);
+  f.ellipse(0, 0, radiusX, radiusY, 0, Math.PI * startAngle / 180, Math.PI * endAngle / 180, anticlockwise);
   if(closeType !== 'none') {
     f.closePath();
   }
@@ -37,6 +37,7 @@ export default class Ellipse extends Path {
       /* radius */
       startAngle: 0,
       endAngle: 360,
+      /* angle */
       direction: 'clockwise', // clockwise | anticlockwise
       closeType: 'none', // none | sector | normal
     });
@@ -80,6 +81,17 @@ export default class Ellipse extends Path {
     if(!Array.isArray(value)) value = [value, value];
     this.radiusX = value[0];
     this.radiusY = value[1];
+  }
+
+  get angle() {
+    return [this.startAngle, this.endAngle];
+  }
+
+  set angle(value) {
+    value = toArray(value);
+    if(!Array.isArray(value)) value = [value, value];
+    this.startAngle = value[0];
+    this.endAngle = value[1];
   }
 
   get direction() {

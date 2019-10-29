@@ -31,11 +31,11 @@
 
     const arc = new spritejs.Arc();
     arc.attr({
-      pos: [100, 100],
-      radius: 50,
+      pos: [200, 200],
+      radius: 30,
       fillColor: 'blue',
-      // startAngle: 0,
-      // endAngle: 160,
+      startAngle: 0,
+      endAngle: 160,
     });
 
     fglayer.append(arc);
@@ -85,6 +85,18 @@
       outerRadius: 70,
     });
     fglayer.append(star);
+
+    const ring = new spritejs.Ring();
+    ring.attr({
+      pos: [100, 100],
+      radius: [90, 80],
+      // fillColor: 'red',
+      strokeColor: 'red',
+      lineWidth: 5,
+      startAngle: 0,
+      endAngle: 120,
+    });
+    fglayer.append(ring);
   </script>
 </body>
 </html>
