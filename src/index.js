@@ -17,8 +17,12 @@ import Label from './node/label';
 import Group from './node/group';
 import Layer from './node/layer';
 import Scene from './node/scene';
+import ownerDocument from './document';
 
 import {parseColor, Gradient} from './utils/color';
+
+const createElement = ownerDocument.createElement;
+const isSpriteNode = ownerDocument.isSpriteNode;
 
 export {
   Renderer,
@@ -41,4 +45,6 @@ export {
   Scene,
   Gradient,
   parseColor,
+  createElement,
+  isSpriteNode,
 };

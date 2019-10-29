@@ -1,6 +1,7 @@
 const nodeMap = new Map();
 
 function createElement(nodeName, attrs = {}, children = []) {
+  nodeName = nodeName.toLowerCase();
   const Element = nodeMap.get(nodeName);
   if(!Element) throw new TypeError(`Invalid node: ${nodeName}`);
   const elem = new Element(attrs);
@@ -12,6 +13,7 @@ function createElement(nodeName, attrs = {}, children = []) {
 
 const ownerDocument = {
   registerNode(Node, nodeName, nodeType = 100) {
+    nodeName = nodeName.toLowerCase();
     if(nodeMap.has(nodeName)) throw new TypeError(`Cannot registerNode, ${nodeName} has been taken.`);
     nodeMap.set(nodeName, Node);
     Object.defineProperties(Node.prototype, {
@@ -22,7 +24,7 @@ const ownerDocument = {
         value: nodeName.toUpperCase(),
       },
       nodeName: {
-        value: nodeName.toLowerCase(),
+        value: nodeName,
       },
       ownerDocument: {
         value: ownerDocument,
@@ -37,7 +39,7 @@ const ownerDocument = {
     return createElement(name);
   },
   isSpriteNode(nodeName) {
-    return nodeMap.has(nodeName);
+    return nodeMap.has(nodeName.toLowerCase());
   },
 };
 

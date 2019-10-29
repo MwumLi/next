@@ -1,4 +1,4 @@
-import {Renderer} from '@mesh.js/core';
+import {Renderer, createCanvas} from '@mesh.js/core';
 import {Timeline} from 'sprite-animator';
 import Group from './group';
 import ownerDocument from '../document';
@@ -15,13 +15,21 @@ const _timeline = Symbol('timeline');
 export default class Layer extends Group {
   constructor(options = {}) {
     super();
+    if(!options.canvas) {
+      const {width, height} = this.getResolution();
+      const canvas = createCanvas(width, height, {offscreen: false});
+      if(canvas.style) canvas.style.position = 'absolute';
+      if(canvas.dataset) canvas.dataset.layerId = options.id;
+      options.canvas = canvas;
+    }
     const canvas = options.canvas;
     const opts = Object.assign({}, defaultOptions, options);
     this[_autoRender] = opts.autoRender;
     delete options.autoRender;
     this[_renderer] = new Renderer(canvas, opts);
     this.options = options;
-    this.setResolution(canvas);
+    this.id = options.id;
+    // this.setResolution(canvas);
     this.canvas = canvas;
     this[_timeline] = new Timeline();
   }

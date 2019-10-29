@@ -128,6 +128,10 @@ export default class Scene extends Group {
   constructor(options = {}) {
     super();
     this.container = options.container;
+    if(this.container.style && !this.container.style.overflow) {
+      this.container.style.overflow = 'hidden';
+    }
+
     this.options = options;
     options.displayRatio = options.displayRatio || 1.0;
     options.mode = options.mode || 'scale';
@@ -224,26 +228,54 @@ export default class Scene extends Group {
     return ret;
   }
 
+  appendChild(layer) {
+    const ret = super.appendChild(layer);
+    const canvas = layer.canvas;
+    this.container.appendChild(canvas);
+    setViewport(this.options, canvas);
+    layer.setResolution(this.getResolution());
+    return ret;
+  }
+
+  insertBefore(layer, ref) {
+    const ret = super.insertBefore(layer, ref);
+    const canvas = layer.canvas;
+    this.container.appendChild(canvas);
+    setViewport(this.options, canvas);
+    layer.setResolution(this.getResolution());
+    return ret;
+  }
+
+  replaceChild(layer, ref) {
+    const ret = super.replaceChild(layer, ref);
+    const canvas = layer.canvas;
+    this.container.appendChild(canvas);
+    setViewport(this.options, canvas);
+    layer.setResolution(this.getResolution());
+    return ret;
+  }
+
+  removeChild(layer) {
+    const ret = super.removeChild(layer);
+    const canvas = layer.canvas;
+    canvas.remove();
+    return ret;
+  }
+
   layer(id = 'default', options = {}) {
     options = Object.assign({}, this.options, options);
+    options.id = id;
     const layers = this.orderedChildren;
     for(let i = 0; i < layers.length; i++) {
       if(layers[i].id === id) return layers[i];
     }
 
-    const {width, height} = this.getResolution();
-    const canvas = createCanvas(width, height, {offscreen: false});
-    if(canvas.style) canvas.style.position = 'absolute';
-
-    setViewport(this.options, canvas);
-
-    if(canvas.dataset) canvas.dataset.layerId = id;
-
-    this.container.appendChild(canvas);
-    if(this.container.style && !this.container.style.overflow) {
-      this.container.style.overflow = 'hidden';
-    }
-    options.canvas = canvas;
+    // const {width, height} = this.getResolution();
+    // const canvas = createCanvas(width, height, {offscreen: false});
+    // if(canvas.style) canvas.style.position = 'absolute';
+    // if(canvas.dataset) canvas.dataset.layerId = id;
+    // this.container.appendChild(canvas);
+    // options.canvas = canvas;
 
     const worker = options.worker;
     let layer;
@@ -252,7 +284,7 @@ export default class Scene extends Group {
       layer = new LayerWorker(id, options);
     } else {
       layer = new Layer(options);
-      layer.id = id;
+      // layer.id = id;
     }
 
     this.appendChild(layer);

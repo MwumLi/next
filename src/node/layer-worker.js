@@ -1,3 +1,5 @@
+import {createCanvas} from '@mesh.js/core';
+
 export default class LayerWorker extends Worker {
   constructor(id, options) {
     if(options.worker === true) {
@@ -6,6 +8,23 @@ export default class LayerWorker extends Worker {
     super(options.worker);
     this.id = id;
     this.options = options;
+
+    if(!options.canvas) {
+      const {width, height} = this.getResolution();
+      const canvas = createCanvas(width, height, {offscreen: false});
+      if(canvas.style) canvas.style.position = 'absolute';
+      if(canvas.dataset) canvas.dataset.layerId = options.id;
+      options.canvas = canvas;
+    }
+
+    this.canvas = options.canvas;
+  }
+
+  setResolution({width, height}) {
+    this.canvas.width = width;
+    this.canvas.height = height;
+
+    const options = this.options;
 
     const offscreenCanvas = options.canvas.transferControlToOffscreen();
     const opts = {...options};
@@ -16,6 +35,14 @@ export default class LayerWorker extends Worker {
       type: 'create',
       options: opts,
     }, [offscreenCanvas]);
+  }
+
+  getResolution() {
+    if(this.canvas) {
+      const {width, height} = this.canvas;
+      return {width, height};
+    }
+    return {width: 300, height: 150};
   }
 
   remove() {
