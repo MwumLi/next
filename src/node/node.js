@@ -224,6 +224,9 @@ export default class Node {
   }
 
   attr(...args) {
+    if(args[0] === 'attrs') {
+      if(args[1]) return this.attr(args[1]);
+    }
     if(args.length > 1) {
       const [key, value] = args;
       this.setAttribute(key, value);
