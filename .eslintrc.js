@@ -3,6 +3,7 @@ module.exports = {
     spritejs: true,
     global: true,
     importScripts: true,
+    __DEV__: true,
   },
   extends:  "eslint-config-sprite",
   plugins: ['html'],

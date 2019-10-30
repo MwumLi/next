@@ -1,4 +1,5 @@
 import {createCanvas} from '@mesh.js/core';
+import Node from './node';
 import Layer from './layer';
 import LayerWorker from './layer-worker';
 import Group from './group';
@@ -69,7 +70,7 @@ function delegateEvents(scene) {
 
               if(ancestors) {
                 ancestors.forEach((ancestor) => {
-                  if(!enteredTargets.has(ancestor)) {
+                  if(ancestor instanceof Node && !enteredTargets.has(ancestor)) {
                     enteredTargets.add(ancestor);
                     ancestor.dispatchEvent(enterEvent);
                   }

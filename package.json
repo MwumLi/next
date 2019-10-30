@@ -8,6 +8,7 @@
     "test": "nyc ava --serial && rm -rf ./coverage && mkdir ./coverage && nyc report --reporter=text-lcov > ./coverage/lcov.info",
     "start": "webpack-dev-server --env.server=examples --watch-poll",
     "compile": "rm -rf lib/* && babel src -d lib",
+    "build:debug": "webpack --env.mode=none",
     "build": "webpack --env.mode=production",
     "demo:dev": "demosify --serve",
     "demo:prod": "demosify --prod",

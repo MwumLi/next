@@ -21,9 +21,9 @@ export default class Node {
     this.attributes = new this.constructor.Attr(this);
     this[_resolution] = {width: 300, height: 150};
     Object.assign(this.attributes, attrs);
-    if(Object.seal) {
-      Object.seal(this.attributes);
-    }
+    // if(Object.seal) {
+    //   Object.seal(this.attributes);
+    // }
     this[_animations] = new Set();
     this[_eventListeners] = {};
     this[_captureEventListeners] = {};
@@ -161,7 +161,7 @@ export default class Node {
     // capture phase
     for(let i = elements.length - 1; i >= 0; i--) {
       const element = elements[i];
-      const listeners = element[_captureEventListeners][type];
+      const listeners = element[_captureEventListeners] && element[_captureEventListeners][type];
       if(listeners && listeners.length) {
         listeners.forEach(({listener, once}) => {
           listener.call(this, event);
@@ -174,7 +174,7 @@ export default class Node {
     if(!event.cancelBubble) {
       for(let i = 0; i < elements.length; i++) {
         const element = elements[i];
-        const listeners = element[_eventListeners][type];
+        const listeners = element[_eventListeners] && element[_eventListeners][type];
         if(listeners && listeners.length) {
           listeners.forEach(({listener, once}) => {
             listener.call(this, event);
