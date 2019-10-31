@@ -29,7 +29,7 @@ export default class Layer extends Group {
     this[_renderer] = new Renderer(canvas, opts);
     this.options = options;
     this.id = options.id;
-    // this.setResolution(canvas);
+    this.setResolution(canvas);
     this.canvas = canvas;
     this[_timeline] = new Timeline();
   }
