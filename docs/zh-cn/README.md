@@ -1,0 +1,2 @@
+# SpriteJS <sup>Next</sup>
+
