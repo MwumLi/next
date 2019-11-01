@@ -118,5 +118,4 @@ robot.animate([
 layer.append(robot);
 ```
 
-<!-- <iframe src="http://localhost:9090/#/doc/basic" height="400"></iframe> -->
-
+[在线运行](http://next.spritejs.org/demo/#/doc/basic)

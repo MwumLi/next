@@ -1,5 +1,3 @@
-import {Renderer} from '@mesh.js/core';
-
 import Node from './node/node';
 import Block from './node/block';
 import Sprite from './node/sprite';
@@ -16,6 +14,7 @@ import Polyline from './node/polyline';
 import Label from './node/label';
 import Group from './node/group';
 import Layer from './node/layer';
+import LayerWorker from './node/layer-worker';
 import Scene from './node/scene';
 import ownerDocument from './document';
 
@@ -26,27 +25,27 @@ const isSpriteNode = ownerDocument.isSpriteNode;
 const registerNode = ownerDocument.registerNode;
 
 export {
-  Renderer,
-  Node,
-  Block,
-  Sprite,
-  Path,
-  Rect,
-  Triangle,
-  Parallel,
-  Regular,
-  Star,
-  Ellipse,
   Arc,
-  Ring,
-  Polyline,
-  Label,
-  Group,
-  Layer,
-  Scene,
+  Block,
+  Ellipse,
   Gradient,
-  parseColor,
+  Group,
+  Label,
+  Layer,
+  LayerWorker,
+  Node,
+  Parallel,
+  Path,
+  Polyline,
+  Rect,
+  Regular,
+  Ring,
+  Scene,
+  Sprite,
+  Star,
+  Triangle,
   createElement,
   isSpriteNode,
+  parseColor,
   registerNode,
 };
