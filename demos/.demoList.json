@@ -56,5 +56,8 @@
   }, {
     "label": "map search",
     "src": "d3/map_search"
+  }, {
+    "label": "basic",
+    "src": "doc/basic"
   }
 ]

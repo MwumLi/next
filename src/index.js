@@ -23,6 +23,7 @@ import {parseColor, Gradient} from './utils/color';
 
 const createElement = ownerDocument.createElement;
 const isSpriteNode = ownerDocument.isSpriteNode;
+const registerNode = ownerDocument.registerNode;
 
 export {
   Renderer,
@@ -47,4 +48,5 @@ export {
   parseColor,
   createElement,
   isSpriteNode,
+  registerNode,
 };

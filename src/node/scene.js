@@ -124,7 +124,7 @@ export default class Scene extends Group {
   /**
     width
     height
-    mode: 'static', 'scale', 'stickyWidth', 'stickyHeight, 'stickyTop', 'stickyBottom', 'stickyLeft', 'stickyRight'
+    mode: 'static', 'scale', 'stickyWidth', 'stickyHeight', 'stickyTop', 'stickyBottom', 'stickyLeft', 'stickyRight'
    */
   constructor(options = {}) {
     super();

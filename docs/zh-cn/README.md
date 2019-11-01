@@ -1,2 +1,1 @@
-# SpriteJS <sup>Next</sup>
-
+[index](/zh-cn/index.md ':include')
