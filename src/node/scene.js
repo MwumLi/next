@@ -116,6 +116,8 @@ function setViewport(options, canvas) {
       canvas.style.left = '0';
       canvas.style.width = `${clientWidth}px`;
       canvas.style.height = `${clientHeight}px`;
+      canvas.style.transform = '';
+      canvas.style.webkitTransform = '';
     }
   }
 }
@@ -129,8 +131,13 @@ export default class Scene extends Group {
   constructor(options = {}) {
     super();
     this.container = options.container;
-    if(this.container.style && !this.container.style.overflow) {
-      this.container.style.overflow = 'hidden';
+    if(this.container.style) {
+      if(!this.container.style.overflow) {
+        this.container.style.overflow = 'hidden';
+      }
+      if(!this.container.style.position) {
+        this.container.style.position = 'relative';
+      }
     }
 
     this.options = options;
@@ -175,13 +182,18 @@ export default class Scene extends Group {
     if(mode === 'stickyHeight' || mode === 'stickyLeft' || mode === 'stickyRight') {
       const w = width;
       width = clientWidth * height / clientHeight;
+      this.options.left = 0;
       if(mode === 'stickyHeight') this.options.left = 0.5 * (width - w);
       if(mode === 'stickyRight') this.options.left = width - w;
     } else if(mode === 'stickyWidth' || mode === 'stickyTop' || mode === 'stickyBottom') {
       const h = height;
       height = clientHeight * width / clientWidth;
+      this.options.top = 0;
       if(mode === 'stickyWidth') this.options.top = 0.5 * (height - h);
       if(mode === 'stickyBottom') this.options.top = height - h;
+    } else {
+      this.options.left = 0;
+      this.options.top = 0;
     }
     super.setResolution({width, height});
   }
@@ -191,10 +203,7 @@ export default class Scene extends Group {
     this.children.forEach((layer) => {
       setViewport(options, layer.canvas);
     });
-    const {mode, width, height} = options;
-    if(mode !== 'scale' && mode !== 'static' || mode === 'static' && (width == null || height == null)) {
-      this.setResolution({width, height});
-    }
+    this.setResolution(options);
   }
 
   async preload(...resources) {

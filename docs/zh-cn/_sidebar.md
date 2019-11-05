@@ -9,7 +9,7 @@
 
 * 基础用法
   * 坐标
-    * [绘图尺寸](/zh-cn/layer#绘图尺寸)
+    * [绘图尺寸](/zh-cn/resolution#绘图尺寸)
   * 元素
     * [块元素](/zh-cn/block)
       * [精灵 Sprite](/zh-cn/block#精灵-Sprite)
