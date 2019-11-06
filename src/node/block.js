@@ -101,7 +101,9 @@ export default class Block extends Node {
         this[_borderBoxMesh] = borderBoxMesh;
 
         const {borderColor, borderWidth, borderDash, borderDashOffset, opacity} = this.attributes;
-        setStrokeColor(borderBoxMesh, {color: borderColor, lineWidth: borderWidth, lineDash: borderDash, lineDashOffset: borderDashOffset});
+        setStrokeColor(borderBoxMesh,
+          {color: borderColor, lineWidth: borderWidth, lineDash: borderDash, lineDashOffset: borderDashOffset},
+          this.borderBox.boundingBox[0]);
         borderBoxMesh.uniforms.u_opacity = opacity;
         if(this[_filters]) {
           applyFilters(borderBoxMesh, this[_filters]);
@@ -133,7 +135,7 @@ export default class Block extends Node {
         const {bgcolor, opacity} = this.attributes;
 
         if(this.hasBackground) {
-          setFillColor(clientBoxMesh, {color: bgcolor});
+          setFillColor(clientBoxMesh, {color: bgcolor}, this.clientBox.boundingBox[0]);
         }
         clientBoxMesh.uniforms.u_opacity = opacity;
         if(this[_filters]) {
@@ -188,8 +190,25 @@ export default class Block extends Node {
       if(this[_clientBoxMesh]) this[_clientBoxMesh].uniforms.u_opacity = newValue;
       if(this[_borderBoxMesh]) this[_borderBoxMesh].uniforms.u_opacity = newValue;
     }
+    if(key === 'anchorX' || key === 'anchorY') {
+      if(this[_clientBoxMesh]) {
+        const bgcolor = this.attributes.bgcolor;
+        if(bgcolor && bgcolor.vector) {
+          setFillColor(this[_clientBoxMesh], {color: bgcolor}, this.clientBox.boundingBox[0]);
+        }
+      }
+      if(this[_borderBoxMesh]) {
+        const borderColor = this.attributes.borderColor;
+        if(borderColor && borderColor.vector) {
+          const {borderWidth, borderDash, borderDashOffset} = this.attributes;
+          setStrokeColor(this[_borderBoxMesh],
+            {color: borderColor, lineWidth: borderWidth, lineDash: borderDash, lineDashOffset: borderDashOffset},
+            this.borderBox.boundingBox[0]);
+        }
+      }
+    }
     if(this[_clientBoxMesh] && key === 'bgcolor') {
-      setFillColor(this[_clientBoxMesh], {color: newValue});
+      setFillColor(this[_clientBoxMesh], {color: newValue}, this.clientBox.boundingBox[0]);
     }
     if(this[_borderBoxMesh]
       && (key === 'borderColor'
@@ -197,7 +216,9 @@ export default class Block extends Node {
       || key === 'borderDash'
       || key === 'borderDashOffset')) {
       const {borderColor, borderWidth, borderDash, borderDashOffset} = this.attributes;
-      setStrokeColor(this[_borderBoxMesh], {color: borderColor, lineWidth: borderWidth, lineDash: borderDash, lineDashOffset: borderDashOffset});
+      setStrokeColor(this[_borderBoxMesh],
+        {color: borderColor, lineWidth: borderWidth, lineDash: borderDash, lineDashOffset: borderDashOffset},
+        this.borderBox.boundingBox[0]);
     }
     if(key === 'zIndex' && this.parent) {
       this.parent.reorder();
@@ -225,10 +246,11 @@ export default class Block extends Node {
 
     this.borderBox = new Figure2D();
     createRadiusBox(this.borderBox, [left, top, width, height], borderRadius);
-    const clientRect = [left + bw - 1,
-      top + bw - 1,
-      width - borderWidth + 2,
-      height - borderWidth + 2];
+    const clientRect = [left + bw,
+      top + bw,
+      width - borderWidth,
+      height - borderWidth];
+
     this.clientBox = new Figure2D();
     createRadiusBox(this.clientBox, clientRect, borderRadius);
   }

@@ -28,13 +28,20 @@ export function parseColor(color) {
 
 export {Gradient};
 
-export function setFillColor(mesh, {color: fillColor}) {
+export function setFillColor(mesh, {color: fillColor}, vectorOffset = [0, 0]) {
   if(fillColor.vector) {
     // gradient
-    const {vector, colors} = fillColor;
+    let {vector, colors} = fillColor;
     if(vector.length === 4) {
+      vector = [vector[0] + vectorOffset[0], vector[1] + vectorOffset[1], vector[2] + vectorOffset[0], vector[3] + vectorOffset[1]];
       mesh.setLinearGradient({vector, colors, type: 'fill'});
     } else {
+      vector = [vector[0] + vectorOffset[0],
+        vector[1] + vectorOffset[1],
+        vector[2],
+        vector[3] + vectorOffset[0],
+        vector[4] + vectorOffset[1],
+        vector[5]];
       mesh.setRadialGradient({vector, colors, type: 'fill'});
     }
   } else {
@@ -46,13 +53,22 @@ export function setFillColor(mesh, {color: fillColor}) {
   return mesh;
 }
 
-export function setStrokeColor(mesh, {color: strokeColor, lineWidth, lineCap, lineJoin, lineDash, lineDashOffset, miterLimit}) {
+export function setStrokeColor(mesh,
+  {color: strokeColor, lineWidth, lineCap, lineJoin, lineDash, lineDashOffset, miterLimit},
+  vectorOffset = [0, 0]) {
   if(strokeColor.vector) {
     // gradient
-    const {vector, colors} = strokeColor;
+    let {vector, colors} = strokeColor;
     if(vector.length === 4) {
+      vector = [vector[0] + vectorOffset[0], vector[1] + vectorOffset[1], vector[2] + vectorOffset[0], vector[3] + vectorOffset[1]];
       mesh.setLinearGradient({vector, colors, type: 'stroke'});
     } else {
+      vector = [vector[0] + vectorOffset[0],
+        vector[1] + vectorOffset[1],
+        vector[2],
+        vector[3] + vectorOffset[0],
+        vector[4] + vectorOffset[1],
+        vector[5]];
       mesh.setRadialGradient({vector, colors, type: 'stroke'});
     }
     strokeColor = [0, 0, 0, 1];

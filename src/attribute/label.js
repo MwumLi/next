@@ -23,7 +23,7 @@ export default class Label extends Block {
       /* font */
       textAlign: 'left',
       strokeColor: undefined,
-      fillColor: [0, 0, 0, 1],
+      fillColor: 'rgba(0,0,0,1)',
       verticalAlign: 'middle',
     });
   }

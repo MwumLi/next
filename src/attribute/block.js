@@ -19,7 +19,7 @@ export default class Block extends Node {
       height: undefined,
       /* size */
       borderWidth: 0,
-      borderColor: [0, 0, 0, 1],
+      borderColor: 'rgba(0,0,0,1)',
       /* border */
       borderDash: undefined,
       borderDashOffset: 0,
