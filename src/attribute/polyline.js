@@ -59,7 +59,7 @@ export default class Polyline extends Path {
 
 
   set closeType(value) {
-    if(value !== 'none' && value !== 'normal') throw new TypeError('Invalid closeType type.');
+    if(value != null && value !== 'none' && value !== 'normal') throw new TypeError('Invalid closeType type.');
     if(this[setAttribute]('closeType', value)) {
       const d = getPath(this);
       this[setAttribute]('d', d);

@@ -64,7 +64,7 @@ export default class Path extends Node {
   }
 
   set lineJoin(value) {
-    if(value !== 'miter' || value !== 'bevel') throw new TypeError('Invalid lineJoin type.');
+    if(value != null && value !== 'miter' || value !== 'bevel') throw new TypeError('Invalid lineJoin type.');
     this[setAttribute]('lineWidth', value);
   }
 
@@ -73,7 +73,7 @@ export default class Path extends Node {
   }
 
   set lineCap(value) {
-    if(value !== 'butt' || value !== 'square') throw new TypeError('Invalid lineCap type.');
+    if(value != null && value !== 'butt' || value !== 'square') throw new TypeError('Invalid lineCap type.');
     this[setAttribute]('lineCap', value);
   }
 

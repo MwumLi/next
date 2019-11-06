@@ -350,7 +350,7 @@ export default class Node {
   }
 
   set pointerEvents(value) {
-    if(value !== 'none' && value !== 'visible' && value !== 'visibleFill' && value !== 'visibleStroke' && value !== 'all') {
+    if(value != null && value !== 'none' && value !== 'visible' && value !== 'visibleFill' && value !== 'visibleStroke' && value !== 'all') {
       throw new TypeError('Invalid pointerEvents type.');
     }
     this[setAttribute]('pointerEvents', value);

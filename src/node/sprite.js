@@ -26,23 +26,20 @@ export default class Sprite extends Block {
   }
 
   get contentSize() {
-    let {width, height} = this.attributes;
+    let [w, h] = super.contentSize;
+    const {width, height} = this.attributes;
     if(width == null || height == null) {
       const img = this[_textureImage];
       const textureRect = this.attributes.textureRect;
-      let w = 0;
-      let h = 0;
       if(textureRect) {
-        w = textureRect[0] + textureRect[2];
-        h = textureRect[1] + textureRect[3];
+        if(width == null) w = textureRect[0] + textureRect[2];
+        if(height == null) h = textureRect[1] + textureRect[3];
       } else if(img) {
-        w = img.width;
-        h = img.height;
+        if(width == null) w = img.width;
+        if(height == null) h = img.height;
       }
-      width = width == null ? w : width;
-      height = height == null ? h : height;
     }
-    return [width, height];
+    return [w, h];
   }
 
   draw() {

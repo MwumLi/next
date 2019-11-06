@@ -34,6 +34,7 @@ export default class Block extends Node {
       paddingBottom: 0,
       paddingLeft: 0,
       /* padding */
+      boxSizing: 'content-box',
     });
   }
 
@@ -262,5 +263,16 @@ export default class Block extends Node {
     this.paddingRight = value[1];
     this.paddingBottom = value[2];
     this.paddingLeft = value[3];
+  }
+
+  get boxSizing() {
+    return this[getAttribute]('boxSizing');
+  }
+
+  set boxSizing(value) {
+    if(value != null && value !== 'border-box' && value !== 'content-box') {
+      throw new TypeError('Invalid boxSizing type.');
+    }
+    this[setAttribute]('boxSizing', value);
   }
 }

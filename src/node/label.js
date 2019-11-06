@@ -50,19 +50,16 @@ export default class Label extends Block {
 
   /* override */
   get contentSize() {
-    let {width, height} = this.attributes;
+    let [w, h] = super.contentSize;
+    const {width, height} = this.attributes;
     if(width == null || height == null) {
       const img = this[_textImage];
-      let w = 0;
-      let h = 0;
       if(img) {
-        w = img.width;
-        h = img.height;
+        if(width == null) w = img.width;
+        if(height == null) h = img.height;
       }
-      width = width == null ? w : width;
-      height = height == null ? h : height;
     }
-    return [width, height];
+    return [w, h];
   }
 
   get text() {

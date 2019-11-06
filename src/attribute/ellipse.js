@@ -99,7 +99,7 @@ export default class Ellipse extends Path {
   }
 
   set direction(value) {
-    if(value !== 'clockwise' && value !== 'anticlockwise') throw new TypeError('Invalid direction type.');
+    if(value != null && value !== 'clockwise' && value !== 'anticlockwise') throw new TypeError('Invalid direction type.');
     this[setAttribute]('direction', toString(value));
   }
 
@@ -132,7 +132,7 @@ export default class Ellipse extends Path {
   }
 
   set closeType(value) {
-    if(value !== 'none' && value !== 'sector' && value !== 'normal') throw new TypeError('Invalid closeType type.');
+    if(value != null && value !== 'none' && value !== 'sector' && value !== 'normal') throw new TypeError('Invalid closeType type.');
     if(this[setAttribute]('closeType', value)) {
       const d = getPath(this);
       this[setAttribute]('d', d);

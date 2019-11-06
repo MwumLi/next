@@ -12,6 +12,9 @@
     * [绘图尺寸](/zh-cn/resolution#绘图尺寸)
   * 元素
     * [块元素](/zh-cn/block)
+      * [锚点](/zh-cn/block#锚点-anchor)
+      * [边框](/zh-cn/block#边框-border)
+      * [内边距](/zh-cn/block#内边距-padding)
       * [精灵 Sprite](/zh-cn/block#精灵-Sprite)
       * [文字 Label](/zh-cn/block#文字-Label)
       * [分组 Group](/zh-cn/block#分组-Group)

@@ -21,8 +21,17 @@ export default class Block extends Node {
   }
 
   get contentSize() {
-    const {width, height} = this.attributes;
-    return [width || 0, height || 0];
+    let {width, height, boxSizing} = this.attributes;
+    width = width || 0;
+    height = height || 0;
+    if(boxSizing === 'border-box') {
+      const bw = 2 * this.attributes.borderWidth;
+      width -= bw;
+      height -= bw;
+      width = Math.max(0, width);
+      height = Math.max(0, height);
+    }
+    return [width, height];
   }
 
   // content + padding
@@ -181,7 +190,7 @@ export default class Block extends Node {
 
   onPropertyChange(key, newValue, oldValue) { // eslint-disable-line complexity
     super.onPropertyChange(key, newValue, oldValue);
-    if(key === 'anchorX' || key === 'anchorY' || key === 'width' || key === 'height' || key === 'borderWidth'
+    if(key === 'anchorX' || key === 'anchorY' || key === 'boxSizing' || key === 'width' || key === 'height' || key === 'borderWidth'
       || key === 'paddingLeft' || key === 'paddingRight' || key === 'paddingTop' || key === 'paddingBottom'
       || /^border(TopLeft|TopRight|BottomRight|BottomLeft)Radius$/.test(key)) {
       this.updateContours();
@@ -190,7 +199,7 @@ export default class Block extends Node {
       if(this[_clientBoxMesh]) this[_clientBoxMesh].uniforms.u_opacity = newValue;
       if(this[_borderBoxMesh]) this[_borderBoxMesh].uniforms.u_opacity = newValue;
     }
-    if(key === 'anchorX' || key === 'anchorY') {
+    if(key === 'anchorX' || key === 'anchorY' || key === 'boxSizing') {
       if(this[_clientBoxMesh]) {
         const bgcolor = this.attributes.bgcolor;
         if(bgcolor && bgcolor.vector) {
