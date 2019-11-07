@@ -23,7 +23,8 @@ export default class Label extends Block {
       /* font */
       textAlign: 'left',
       strokeColor: undefined,
-      fillColor: 'rgba(0,0,0,1)',
+      strokeWidth: 1,
+      fillColor: undefined,
       verticalAlign: 'middle',
     });
   }
@@ -109,6 +110,14 @@ export default class Label extends Block {
 
   get strokeColor() {
     return this[getAttribute]('strokeColor');
+  }
+
+  set strokeWidth(value) {
+    this[setAttribute]('strokeWidth', toNumber(value));
+  }
+
+  get strokeWidth() {
+    return this[getAttribute]('strokeWidth');
   }
 
   set verticalAlign(value) {

@@ -15,7 +15,7 @@
       * [锚点](/zh-cn/block#锚点-anchor)
       * [边框](/zh-cn/block#边框-border)
       * [内边距](/zh-cn/block#内边距-padding)
-      * [盒子](/zh-cn/block#b盒子-boxsizing)
+      * [盒子](/zh-cn/block#盒子-boxSizing)
       * [精灵 Sprite](/zh-cn/block#精灵-Sprite)
       * [文字 Label](/zh-cn/block#文字-Label)
       * [分组 Group](/zh-cn/block#分组-Group)

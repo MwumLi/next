@@ -23,8 +23,8 @@ export default class Label extends Block {
       this[_textImageTask] = new Promise((resolve) => {
         requestAnimationFrame(() => {
           this[_textImageTask] = null;
-          const {text, font, fillColor, strokeColor} = this.attributes;
-          this[_textImage] = createText(text, {font, fillColor, strokeColor});
+          const {text, font, fillColor, strokeColor, strokeWidth} = this.attributes;
+          this[_textImage] = createText(text, {font, fillColor, strokeColor, strokeWidth});
           this.updateContours();
           this.forceUpdate();
           resolve(this[_textImage]);
