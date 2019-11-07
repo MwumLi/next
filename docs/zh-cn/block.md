@@ -15,7 +15,6 @@ const scene = new Scene({
   container,
   width: 600,
   height: 360,
-  contextType: '2d',
 });
 const layer = scene.layer();
 
@@ -54,7 +53,7 @@ box.animate([
 
 ## 边框 border
 
-与HTML元素类似，Block元素可以设置边框，相关属性包括：
+与HTML元素类似，块元素可以设置边框，相关属性包括：
 
 - borderWidth 设置边框的宽度
 - borderColor 设置边框的颜色
@@ -62,4 +61,37 @@ box.animate([
 - borderDashOffset  设置虚线框偏移量
 - borderRadius  设置圆角
 
+```js
+const {Scene, Sprite} = spritejs;
+const container = document.getElementById('adaptive');
+const scene = new Scene({
+  container,
+  width: 600,
+  height: 360,
+});
+const layer = scene.layer();
+
+const box = new Sprite({
+  anchor: [0.5, 0.5],
+  size: [150, 150],
+  pos: [300, 180],
+  bgcolor: 'white',
+  borderWidth: 1,
+  borderRadius: 20,
+});
+layer.append(box);
+```
+
 ## 内边距 padding
+
+与HTML元素类似，块元素可以设置内边距：
+
+- paddingTop
+- paddingRight
+- paddingBottom
+- paddingLeft
+
+## 盒子 box-sizing
+
+与HTML元素类似，通过修改box-sizing来设置元素宽高的计算方式
+

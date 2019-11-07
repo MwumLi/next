@@ -40,12 +40,18 @@ export default class Label extends Block {
       || key === 'fontStretch' || key === 'lineHeight'
       || key === 'strokeColor' || key === 'fillColor') {
       this.updateText();
-    } if(key === 'textAlign' || key === 'verticalAlign') {
-      this[_updateTextureRect] = true;
-      super.onPropertyChange(key, newValue, oldValue);
     } else {
+      if(key === 'textAlign' || key === 'verticalAlign') {
+        this[_updateTextureRect] = true;
+      }
       super.onPropertyChange(key, newValue, oldValue);
     }
+  }
+
+  /* override */
+  updateContours() {
+    super.updateContours();
+    this[_updateTextureRect] = true;
   }
 
   /* override */
@@ -76,13 +82,18 @@ export default class Label extends Block {
       const clientBoxMesh = this.clientBoxMesh;
       const textImage = this[_textImage];
       if(textImage) {
-        const texture = clientBoxMesh.texture;
+        let texture = clientBoxMesh.texture;
 
         if(!texture
           || this[_textureContext] && this[_textureContext] !== this.renderer
-          || texture.image !== textImage
-          || this[_updateTextureRect]) {
-          const newTexture = createTexture(textImage, this.renderer);
+          || texture.image !== textImage) {
+          texture = createTexture(textImage, this.renderer);
+          this[_updateTextureRect] = true;
+        } else {
+          texture = clientBoxMesh.uniforms.u_texSampler;
+        }
+
+        if(this[_updateTextureRect]) {
           const {width, height} = textImage;
           const [w, h] = this.contentSize;
           const textAlign = this.attributes.textAlign;
@@ -113,7 +124,7 @@ export default class Label extends Block {
           x -= this.clientSize[0] * anchorX;
           y -= this.clientSize[1] * anchorY;
 
-          clientBoxMesh.setTexture(newTexture, {
+          clientBoxMesh.setTexture(texture, {
             rect: [x, y, width, height],
           });
           this[_updateTextureRect] = false;

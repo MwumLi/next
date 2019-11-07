@@ -45,7 +45,12 @@ export function setFillColor(mesh, {color: fillColor}, vectorOffset = [0, 0]) {
       mesh.setRadialGradient({vector, colors, type: 'fill'});
     }
   } else {
-    if(mesh.gradient) delete mesh.gradient.fill;
+    if(mesh.gradient) {
+      if(mesh.gradient.fill) {
+        delete mesh.gradient.fill;
+        delete mesh.uniforms.u_radialGradientVector;
+      }
+    }
     mesh.setFill({
       color: fillColor,
     });
@@ -73,7 +78,10 @@ export function setStrokeColor(mesh,
     }
     strokeColor = [0, 0, 0, 1];
   } else if(mesh.gradient) {
-    delete mesh.gradient.stroke;
+    if(mesh.gradient.stroke) {
+      delete mesh.gradient.stroke;
+      delete mesh.uniforms.u_radialGradientVector;
+    }
   }
   mesh.setStroke({
     color: strokeColor,

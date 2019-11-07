@@ -18,58 +18,47 @@
 <body>
   <div id="adaptive"></div>
   <script>
-    const {Scene, Sprite, Gradient, Path} = spritejs;
+    const {Scene, Label} = spritejs;
     const container = document.getElementById('adaptive');
     const scene = new Scene({
       container,
       width: 600,
       height: 360,
+      // contextType: '2d',
     });
     const layer = scene.layer();
 
-    const gradient = new Gradient({
-      vector: [0, 0, 150, 150],
-      colors: [
-        {offset: 0, color: 'red'},
-        {offset: 1, color: 'green'},
-      ],
-    });
-
-    const box = new Sprite({
+    const box = new Label({
+      text: 'SpriteJS',
+      fontSize: '2rem',
       anchor: [0.5, 0.5],
-      size: [150, 150],
       pos: [300, 180],
-      bgcolor: gradient,
+      bgcolor: 'white',
+      borderWidth: 1,
+      padding: 25,
     });
     layer.append(box);
-
-    const cross = new Path('M-5 0L5 0M0 5L0 -5');
-    cross.attr({
-      pos: [300, 180],
-      lineWidth: 2,
-      strokeColor: 'blue',
-    });
-    layer.append(cross);
-
-    box.animate([
-      {rotate: 0},
-      {rotate: 360},
-    ], {
-      iterations: Infinity,
-      duration: 3000,
-    });
 
     /* globals dat */
     const gui = new dat.GUI();
     const config = {
-      anchorX: box.attributes.anchorX,
-      anchorY: box.attributes.anchorY,
+      paddingLeft: box.attributes.paddingLeft,
+      paddingRight: box.attributes.paddingRight,
+      paddingTop: box.attributes.paddingTop,
+      paddingBottom: box.attributes.paddingBottom,
     };
-    gui.add(config, 'anchorX', 0, 1).onChange((val) => {
-      box.attributes.anchorX = val;
+    gui.add(config, 'paddingLeft', 0, 50).onChange((val) => {
+      box.attributes.paddingLeft = val;
     });
-    gui.add(config, 'anchorY', 0, 1).onChange((val) => {
-      box.attributes.anchorY = val;
+    gui.add(config, 'paddingRight', 0, 50).onChange((val) => {
+      box.attributes.paddingRight = val;
+    });
+
+    gui.add(config, 'paddingTop', 0, 50).onChange((val) => {
+      box.attributes.paddingTop = val;
+    });
+    gui.add(config, 'paddingBottom', 0, 50).onChange((val) => {
+      box.attributes.paddingBottom = val;
     });
   </script>
 </body>
