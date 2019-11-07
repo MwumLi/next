@@ -25,15 +25,19 @@ export default class Sprite extends Block {
     return textureImage;
   }
 
+  get textureImage() {
+    return this[_textureImage];
+  }
+
   get contentSize() {
     let [w, h] = super.contentSize;
     const {width, height} = this.attributes;
     if(width == null || height == null) {
       const img = this[_textureImage];
-      const textureRect = this.attributes.textureRect;
-      if(textureRect) {
-        if(width == null) w = textureRect[0] + textureRect[2];
-        if(height == null) h = textureRect[1] + textureRect[3];
+      const sourceRect = this.attributes.sourceRect;
+      if(sourceRect) {
+        if(width == null) w = sourceRect[2];
+        if(height == null) h = sourceRect[3];
       } else if(img) {
         if(width == null) w = img.width;
         if(height == null) h = img.height;
