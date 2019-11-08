@@ -14,9 +14,9 @@ function getPath(attr) {
   }
   let d = '';
   if(smooth) {
-    if(close) {
-      p.push([...p[0]]);
-    }
+    // if(close) {
+    //   p.push([...p[0]]);
+    // }
     d = makeSmoothCurveLine(p);
   } else if(p.length) {
     d = `M${p.map(v => v.join(' ')).join('L')}`;
@@ -43,6 +43,8 @@ export default class Polyline extends Path {
   get d() {
     return this[getAttribute]('d');
   }
+
+  set d(value) { } // eslint-disable-line no-empty-function
 
   get close() {
     return this.closeType !== 'none';

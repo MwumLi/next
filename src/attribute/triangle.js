@@ -31,6 +31,8 @@ export default class Triangle extends Polyline {
     return super.points;
   }
 
+  set points(value) { } // eslint-disable-line no-empty-function
+
   get sides() {
     return this[getAttribute]('sides');
   }

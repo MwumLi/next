@@ -25,7 +25,7 @@
       * [三角形和平行四边形](/zh-cn/path#三角形和平行四边形)
       * [折线和多边形](/zh-cn/path#折线和多边形)
       * [正多边形和星形](/zh-cn/path#正多边形和星形)
-      * [圆弧和椭圆](/zh-cn/path#圆和椭圆)
+      * [圆弧和椭圆弧](/zh-cn/path#圆弧和椭圆弧)
       * [圆环](/zh-cn/path#圆环)
   * 效果
     * [过渡 transition](/zh-cn/effect#动画-transition)

@@ -39,6 +39,8 @@ export default class Star extends Polyline {
     return super.points;
   }
 
+  set points(value) { } // eslint-disable-line no-empty-function
+
   get angles() {
     return this[getAttribute]('angles');
   }

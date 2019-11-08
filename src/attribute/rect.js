@@ -27,6 +27,8 @@ export default class Rect extends Path {
     return this[getAttribute]('d');
   }
 
+  set d(value) { } // eslint-disable-line no-empty-function
+
   get width() {
     return this[getAttribute]('width');
   }

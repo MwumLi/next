@@ -9,7 +9,7 @@ export function makeSmoothCurveLine(points) {
    * @param {*} a
    * @param {*} b
    */
-  function getCtrlPoint(i, a = 0.1, b = 0.1) {
+  function getCtrlPoint(i, a = 0.168, b = 0.168) {
     let x0;
     let y0;
     let x1;

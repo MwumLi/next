@@ -55,6 +55,8 @@ export default class Ring extends Path {
     return this[getAttribute]('d');
   }
 
+  set d(value) { } // eslint-disable-line no-empty-function
+
   get innerRadius() {
     return this[getAttribute]('innerRadius');
   }

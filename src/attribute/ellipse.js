@@ -48,6 +48,8 @@ export default class Ellipse extends Path {
     return this[getAttribute]('d');
   }
 
+  set d(value) { } // eslint-disable-line no-empty-function
+
   get radiusX() {
     return this[getAttribute]('radiusX');
   }
