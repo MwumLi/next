@@ -12,6 +12,7 @@ export default class Path extends Node {
     super(subject);
     this[setDefault]({
       d: '',
+      normalize: false,
       fillColor: undefined,
       strokeColor: undefined,
       lineWidth: 1,
@@ -33,6 +34,14 @@ export default class Path extends Node {
 
   set d(value) {
     this[setAttribute]('d', toString(value));
+  }
+
+  get normalize() {
+    return this[getAttribute]('normalize');
+  }
+
+  set normalize(value) {
+    this[setAttribute]('normalize', !!value);
   }
 
   get fillColor() {

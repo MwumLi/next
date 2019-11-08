@@ -61,6 +61,21 @@ export default class Path extends Node {
     return [0, 0, 0, 0];
   }
 
+  get originalClientRect() {
+    if(this.mesh) {
+      const boundingBox = this.mesh.boundingBox;
+      return [boundingBox[0][0], boundingBox[0][1], boundingBox[1][0] - boundingBox[0][0], boundingBox[1][1] - boundingBox[0][1]];
+    }
+    return [0, 0, 0, 0];
+  }
+
+  get originalClientCenter() {
+    if(this.mesh) {
+      return this.mesh.boundingCenter;
+    }
+    return [0, 0];
+  }
+
   getPathLength() {
     if(this.mesh) {
       return this.mesh.getTotalLength();
@@ -87,7 +102,7 @@ export default class Path extends Node {
   /* override */
   onPropertyChange(key, newValue, oldValue) {
     super.onPropertyChange(key, newValue, oldValue);
-    if(key === 'd') {
+    if(key === 'd' || key === 'normalize') {
       this.updateContours();
     }
     if(key === 'opacity') {
@@ -180,6 +195,9 @@ export default class Path extends Node {
   updateContours() {
     this.path = new Figure2D();
     this.path.addPath(this.attributes.d);
+    if(this.attributes.normalize) {
+      this.path.normalize(...this.path.boundingCenter);
+    }
   }
 
   /* override */
