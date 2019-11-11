@@ -72,7 +72,6 @@ const scene = new Scene({
   container,
   width: 1200,
   height: 600,
-  // contextType: '2d',
 });
 const layer = scene.layer();
 
