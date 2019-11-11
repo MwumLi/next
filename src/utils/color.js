@@ -28,9 +28,10 @@ export function parseColor(color) {
 
 export {Gradient};
 
-export function setFillColor(mesh, {color: fillColor}, vectorOffset = [0, 0]) {
+export function setFillColor(mesh, {color: fillColor}) {
   if(fillColor.vector) {
     // gradient
+    const vectorOffset = mesh.boundingBox[0];
     let {vector, colors} = fillColor;
     if(vector.length === 4) {
       vector = [vector[0] + vectorOffset[0], vector[1] + vectorOffset[1], vector[2] + vectorOffset[0], vector[3] + vectorOffset[1]];
@@ -59,10 +60,10 @@ export function setFillColor(mesh, {color: fillColor}, vectorOffset = [0, 0]) {
 }
 
 export function setStrokeColor(mesh,
-  {color: strokeColor, lineWidth, lineCap, lineJoin, lineDash, lineDashOffset, miterLimit},
-  vectorOffset = [0, 0]) {
+  {color: strokeColor, lineWidth, lineCap, lineJoin, lineDash, lineDashOffset, miterLimit}) {
   if(strokeColor.vector) {
     // gradient
+    const vectorOffset = mesh.boundingBox[0];
     let {vector, colors} = strokeColor;
     if(vector.length === 4) {
       vector = [vector[0] + vectorOffset[0], vector[1] + vectorOffset[1], vector[2] + vectorOffset[0], vector[3] + vectorOffset[1]];
