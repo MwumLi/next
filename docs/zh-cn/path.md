@@ -131,7 +131,6 @@ const scene = new Scene({
   container,
   width: 1200,
   height: 600,
-  // contextType: '2d',
 });
 const layer = scene.layer();
 
@@ -199,6 +198,144 @@ layer.append(polygon);
 
 ## 正多边形和星形
 
+Regular类和Star类可分别绘制正多边形和多角星。
+
+对于多边形，属性：
+
+- edges 表示边数
+- radius 表示半径
+- offsetAngle 表示旋转角度
+
+对于多角星，属性：
+
+- angles 表示角数
+- innerRadius 表示内半径
+- outerRadius 表示外半径
+- offsetAngle 表示旋转角度
+
+```js
+const {Scene, Regular, Star} = spritejs;
+const container = document.getElementById('adaptive');
+const scene = new Scene({
+  container,
+  width: 1200,
+  height: 600,
+});
+const layer = scene.layer();
+
+const shape = new Regular({
+  pos: [300, 300],
+  edges: 7,
+  radius: 100,
+  fillColor: 'blue',
+});
+layer.append(shape);
+
+const star = new Star({
+  pos: [700, 300],
+  angles: 5,
+  innerRadius: 50,
+  outerRadius: 100,
+  fillColor: 'red',
+});
+layer.append(star);
+```
+
 ## 圆弧和椭圆弧
 
+Arc类和Ellipse类可以绘制圆和椭圆弧。
+
+对于圆弧，属性：
+
+- radius 半径
+- startAngle 起始角
+- endAngle 结束角
+- direction 方向，'clockwise' 默认值，表示顺时针，'anticlockwise' 逆时针
+- closeType 闭合方式，'none' 默认值，表示stroke不闭合，'normal' stroke延直线闭合，'sector' stroke延扇形闭合
+
+对于椭圆弧，属性：
+
+- radiusX x轴半径
+- radiusY y轴半径
+- startAngle 起始角
+- endAngle 结束角
+- direction 方向，'clockwise' 默认值，表示顺时针，'anticlockwise' 逆时针
+- closeType 闭合方式，'none' 默认值，表示stroke不闭合，'normal' stroke延直线闭合，'sector' stroke延扇形闭合
+
+```js
+const {Scene, Arc, Ellipse} = spritejs;
+const container = document.getElementById('adaptive');
+const scene = new Scene({
+  container,
+  width: 1200,
+  height: 600,
+});
+const layer = scene.layer();
+
+const fan = new Arc({
+  pos: [300, 300],
+  radius: 100,
+  startAngle: 0,
+  endAngle: 120,
+  fillColor: 'blue',
+});
+layer.append(fan);
+
+const fan2 = fan.cloneNode();
+fan2.attr({
+  pos: [300, 150],
+  closeType: 'sector',
+});
+
+layer.append(fan2);
+
+const ellipse = new Ellipse({
+  pos: [700, 300],
+  radiusX: 150,
+  radiusY: 100,
+  startAngle: 0,
+  endAngle: 240,
+  lineWidth: 6,
+  strokeColor: 'red',
+  fillColor: 'green',
+  closeType: 'sector',
+});
+layer.append(ellipse);
+```
+
 ## 圆环
+
+Ring类绘制圆环，属性：
+
+- innerRadius 内圆半径
+- outerRadius 外圆半径
+- startAngle 起始角
+- endAngle 结束角
+
+```js
+const {Scene, Ring} = spritejs;
+const container = document.getElementById('adaptive');
+const scene = new Scene({
+  container,
+  width: 1200,
+  height: 600,
+});
+const layer = scene.layer();
+
+const ring = new Ring({
+  pos: [300, 300],
+  innerRadius: 50,
+  outerRadius: 100,
+  fillColor: 'blue',
+});
+layer.append(ring);
+
+const ring2 = ring.cloneNode();
+ring2.attr({
+  pos: [700, 300],
+  startAngle: 0,
+  endAngle: 180,
+  fillColor: 'red',
+});
+layer.append(ring2);
+```

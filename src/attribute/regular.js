@@ -37,7 +37,7 @@ export default class Regular extends Polyline {
     return super.points;
   }
 
-  set d(value) { } // eslint-disable-line no-empty-function
+  set points(value) { } // eslint-disable-line no-empty-function
 
   get edges() {
     return this[getAttribute]('edges');

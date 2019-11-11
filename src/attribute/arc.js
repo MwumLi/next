@@ -2,14 +2,6 @@ import Ellipse from './ellipse';
 import {toNumber} from '../utils/attribute_value';
 
 export default class Arc extends Ellipse {
-  get radiusX() {
-    return super.radiusX;
-  }
-
-  get radiusY() {
-    return super.radiusY;
-  }
-
   get radius() {
     return super.radiusX;
   }
