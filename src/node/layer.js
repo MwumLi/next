@@ -55,6 +55,10 @@ export default class Layer extends Group {
     return [this.options.left | 0, this.options.top | 0];
   }
 
+  // isPointCollision(x, y) {
+  //   return true;
+  // }
+
   /* override */
   setResolution({width, height}) {
     if(this.canvas) {
@@ -67,6 +71,7 @@ export default class Layer extends Group {
     const [left, top] = this.renderOffset;
     this.renderer.setGlobalTransform(1, 0, 0, 1, left, top);
     super.setResolution({width, height});
+    this.attributes.size = [width, height];
   }
 
   toLocalPos(x, y) {

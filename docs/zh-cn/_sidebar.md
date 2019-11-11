@@ -33,7 +33,7 @@
     * [滤镜 filter](/zh-cn/effect#滤镜-filter)
     * [渐变 gradient](/zh-cn/effect#渐变-gradient)
   * 行为
-    * [事件 event](/zh-cn/behavior#响应-dom-事件)
+    * [事件 event](/zh-cn/event#事件)
 
 * 高级用法
   * [屏幕适配](/zh-cn/guide/resolution)

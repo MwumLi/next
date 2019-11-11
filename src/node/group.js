@@ -36,9 +36,9 @@ export default class Group extends Block {
   }
 
   /* override */
-  get isVisible() {
-    return this.attributes.opacity > 0 && this.children.length > 0;
-  }
+  // get isVisible() {
+  //   return this.attributes.opacity > 0 && this.children.length > 0;
+  // }
 
   /* override */
   // get hasBackground() {

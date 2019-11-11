@@ -40,7 +40,7 @@ function delegateEvents(scene) {
           const layer = layers[i];
           if(layer.options.handleEvent !== false) {
             const ret = layer.dispatchPointerEvent(evt);
-            if(ret) break;
+            if(ret && evt.target !== layer) break;
           }
         }
         if(evt.type === 'mousemove') {

@@ -94,6 +94,13 @@ export default class Node {
     return ret;
   }
 
+  getOffsetPosition(x, y) {
+    const m = mat2d.invert(this.renderMatrix);
+    const offsetX = x * m[0] + y * m[2] + m[4];
+    const offsetY = x * m[1] + y * m[3] + m[5];
+    return [offsetX, offsetY];
+  }
+
   getListeners(type, {capture = false} = {}) {
     const eventListeners = capture ? _captureEventListeners : _eventListeners;
     return [...(this[eventListeners][type] || [])];
