@@ -119,3 +119,5 @@ layer.append(robot);
 ```
 
 [在线运行](http://next.spritejs.org/demo/#/doc/basic)
+
+<iframe src="/demo/#/doc/basic" height="300"></iframe>

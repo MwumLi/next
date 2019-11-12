@@ -64,6 +64,8 @@ p3.attr({
 layer.appendChild(p3);
 ```
 
+<iframe src="/demo/#/doc/path" height="450"></iframe>
+
 对于Path也可以设置texture，这样就可以实现类似于旧版Group的clipPath效果。
 
 需要注意的是，对于Path元素，textureRect的起始点（0，0）默认位于Path的originalContentRect（即矢量图形的外框）左上角。
@@ -95,6 +97,8 @@ const path = new Path({
 layer.append(path);
 ```
 
+<iframe src="/demo/#/doc/path_texture" height="450"></iframe>
+
 ## 矩形
 
 矩形可以用Path绘制，也可以直接用块元素，而更简单的是用Rect元素。
@@ -119,6 +123,8 @@ const rect = new Rect({
 });
 layer.append(rect);
 ```
+
+<iframe src="/demo/#/doc/rect" height="450"></iframe>
 
 ## 三角形和平行四边形
 
@@ -152,6 +158,8 @@ const parallel = new Parallel({
 });
 layer.append(parallel);
 ```
+
+<iframe src="/demo/#/doc/triangle_parallel" height="450"></iframe>
 
 ## 折线和多边形
 
@@ -195,6 +203,8 @@ const polygon = new Polyline({
 });
 layer.append(polygon);
 ```
+
+<iframe src="/demo/#/doc/polyline" height="450"></iframe>
 
 ## 正多边形和星形
 
@@ -240,6 +250,8 @@ const star = new Star({
 });
 layer.append(star);
 ```
+
+<iframe src="/demo/#/doc/regular_star" height="450"></iframe>
 
 ## 圆弧和椭圆弧
 
@@ -303,6 +315,8 @@ const ellipse = new Ellipse({
 layer.append(ellipse);
 ```
 
+<iframe src="/demo/#/doc/arc_ellipse" height="450"></iframe>
+
 ## 圆环
 
 Ring类绘制圆环，属性：
@@ -339,3 +353,5 @@ ring2.attr({
 });
 layer.append(ring2);
 ```
+
+<iframe src="/demo/#/doc/ring" height="450"></iframe>

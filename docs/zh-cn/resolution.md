@@ -46,6 +46,8 @@ path.attr({
 layer.append(path);
 ```
 
+<iframe src="/demo/#/doc/resolution" height="400"></iframe>
+
 默认情况下，画布总是根据视口宽高缩放，当屏幕比例与`width/height`不符时，可能会出现拉伸变形的情况：
 
 ```css
@@ -82,3 +84,5 @@ for(let i = 0; i < 8; i++) {
 ```
 
 要避免被拉伸变形，可以根据情况将scene的mode设置为`stickyWidth、stickyHeight、stickyLeft、stickyRight、stickyTop或stickyBottom`中的一种。具体使用方式详见[高级用法：屏幕适配](/zh-cn/guide/resolution)。
+
+<iframe src="/demo/#/doc/resolution_scale" height="400"></iframe>

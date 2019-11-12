@@ -59,5 +59,53 @@
   }, {
     "label": "basic",
     "src": "doc/basic"
+  }, {
+    "label": "resolution",
+    "src": "doc/resolution"
+  }, {
+    "label": "resolution_scale",
+    "src": "doc/resolution_scale"
+  }, {
+    "label": "anchor",
+    "src": "doc/anchor"
+  }, {
+    "label": "border",
+    "src": "doc/border"
+  }, {
+    "label": "padding",
+    "src": "doc/padding"
+  }, {
+    "label": "sprite",
+    "src": "doc/sprite"
+  }, {
+    "label": "label",
+    "src": "doc/label"
+  }, {
+    "label": "group",
+    "src": "doc/group"
+  }, {
+    "label": "path",
+    "src": "doc/path"
+  }, {
+    "label": "path_texture",
+    "src": "doc/path_texture"
+  }, {
+    "label": "rect",
+    "src": "doc/rect"
+  }, {
+    "label": "triangle_parallel",
+    "src": "doc/triangle_parallel"
+  }, {
+    "label": "polyline",
+    "src": "doc/polyline"
+  }, {
+    "label": "regular_star",
+    "src": "doc/regular_star"
+  }, {
+    "label": "arc_ellipse",
+    "src": "doc/arc_ellipse"
+  }, {
+    "label": "ring",
+    "src": "doc/ring"
   }
 ]

@@ -8,7 +8,9 @@ The next generation of spritejs.
 
 与旧版的 spritejs 相比修改了一些 api，但基础 api 改动不是很大。
 
-先放出测试版，文档正在编写中，已经迁移了大部分例子，在：
+先放出测试版，文档正在编写中 [http://next.spritejs.org](http://next.spritejs.org)
+
+已经迁移了大部分例子，在：
 
 [http://next.spritejs.org/demo](http://next.spritejs.org/demo)
 

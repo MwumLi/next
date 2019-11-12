@@ -15,7 +15,7 @@ export default async () => {
     },
     packages: {
       js: [
-        '//lib.baomitu.com/d3/4.10.2/d3.js',
+
       ],
     },
   };

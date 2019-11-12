@@ -51,6 +51,10 @@ box.animate([
 });
 ```
 
+[在线运行](/demo/#/doc/anchor)
+
+<iframe src="/demo/#/doc/anchor" height="500"></iframe>
+
 ## 边框 border
 
 与HTML元素类似，块元素可以设置边框，相关属性包括：
@@ -81,6 +85,8 @@ const box = new Sprite({
 });
 layer.append(box);
 ```
+
+<iframe src="/demo/#/doc/border" height="500"></iframe>
 
 ## 内边距 padding
 
@@ -113,6 +119,8 @@ const box = new Label({
 });
 layer.append(box);
 ```
+
+<iframe src="/demo/#/doc/padding" height="500"></iframe>
 
 ## 盒子 boxSizing
 
@@ -205,6 +213,8 @@ const s2 = new Sprite({
 layer.append(s2);
 ```
 
+<iframe src="/demo/#/doc/sprite" height="450"></iframe>
+
 ## 文字 Label
 
 基于性能考虑，SpriteJS <sup>Next</sup> 的 Label 元素比旧版本的SpriteJS的Label元素要弱化了不少。
@@ -275,6 +285,8 @@ function createClockTexts(text, x, y) {
 createClockTexts('Sprite.js JavaScript Canvas...', 700, 360);
 ```
 
+<iframe src="/demo/#/doc/label" height="450"></iframe>
+
 ## 分组 Group
 
 SpriteJS <sup>Next</sup> 的Group比旧版简单一些，性能好很多，但功能上也不再有的clip和剪裁区域的功能。
@@ -321,3 +333,5 @@ group.animate([
   iterations: Infinity,
 });
 ```
+
+<iframe src="/demo/#/doc/group" height="450"></iframe>
