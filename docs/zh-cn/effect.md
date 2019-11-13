@@ -40,6 +40,8 @@ setInterval(() => {
 }, 50);
 ```
 
+<iframe src="/demo/#/doc/transition" height="450"></iframe>
+
 `sprite.transition(...)` 返回一个特殊对象（并不是原来的sprite对象），当我们调用`.attr`方法对它进行属性设置时，它创建一个属性动画。当我们再次对它进行属性设置时，它会结束上一次的动画进入下一段动画，这样我们就可以平滑地进行状态切换。此外我们可以通过调用`.reverse`方法来让当前transition状态回滚。
 
 ```js
@@ -105,6 +107,8 @@ right.addEventListener('mouseleave', (evt) => {
   rightTrans.reverse();
 });
 ```
+
+<iframe src="/demo/#/doc/transition_reverse" height="450"></iframe>
 
 ### 动画 Animate
 
@@ -197,6 +201,8 @@ const birdsRes = 'https://p.ssl.qhimg.com/d/inn/c886d09f/birds.png';
   });
 }());
 ```
+
+<iframe src="/demo/#/doc/animation" height="450"></iframe>
 
 比起使用原生timer或者第三方库，直接使用spritejs提供的animate动画有一个额外的好处，就是它默认基于layer的timeline。也就是说我们可以通过控制layer的timeline来控制动画播放的速度，方便地加速、减速、暂停甚至回放动画。
 
@@ -292,6 +298,8 @@ const birdsRes = 'https://p.ssl.qhimg.com/d/inn/c886d09f/birds.png';
 }());
 ```
 
+<iframe src="/demo/#/doc/animation_timeline" height="450"></iframe>
+
 layer的timeline是TimeLine类的一个对象，TimeLine类定义于[sprite-timeline](https://github.com/spritejs/sprite-timeline)，这是一个独立的库，也可以单独作于其他方式的动画。
 
 spritejs动画功能非常丰富，关于动画的其他内容，可参考[高级用法：动画](/zh-cn/guide/animations)。
@@ -350,6 +358,8 @@ const images = [
   ], 300, 0.6);
 }());
 ```
+
+<iframe src="/demo/#/doc/filter" height="450"></iframe>
 
 ## 渐变 Gradient
 
@@ -431,3 +441,5 @@ path.attr({
 
 layer.append(path);
 ```
+
+<iframe src="/demo/#/doc/gradient" height="450"></iframe>

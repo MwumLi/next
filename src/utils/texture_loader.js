@@ -30,7 +30,7 @@ export function loadTexture(src, alias) {
       });
     }
   }
-  return Promise.resolve(loadedTextures[src]);
+  return loadedTextures[src];
 }
 
 const _textureMap = Symbol('textureMap');

@@ -36,8 +36,8 @@
     * [事件 event](/zh-cn/event#事件)
 
 * 高级用法
+  * [引擎和内存](/zh-cn/guide/engine_memory)
   * [屏幕适配](/zh-cn/guide/resolution)
-  * [盒模型](/zh-cn/guide/boxmodel)
   * [预加载与雪碧图](/zh-cn/guide/resource)
   * [高级动画](/zh-cn/guide/animations)
   * [外部时钟](/zh-cn/guide/ticker)

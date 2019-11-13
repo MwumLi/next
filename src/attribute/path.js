@@ -117,6 +117,7 @@ export default class Path extends Node {
   }
 
   set texture(value) {
+    if(value.src) value = value.src;
     if(this[setAttribute]('texture', value)) {
       const subject = this[_subject];
       subject.setTexture(value);

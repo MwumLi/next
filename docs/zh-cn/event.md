@@ -57,6 +57,8 @@ s1.addEventListener('mousemove', (evt) => {
 });
 ```
 
+<iframe src="/demo/#/doc/event" height="450"></iframe>
+
 SpriteJS <sup>Next</sup> 采用标准的DOM事件模型，支持事件冒泡、捕获机制。
 
 在同一个Layer的元素，上层可见元素会遮挡下层元素的事件，但是可以设置属性`pointerEvents: none`来阻止上层的遮盖。
@@ -125,3 +127,5 @@ layer.addEventListener('mousemove', (evt) => {
   label.text = `鼠标位置：\n相对于 Layer: ${[Math.round(x), Math.round(y)]}`;
 });
 ```
+
+<iframe src="/demo/#/doc/event_bubbling" height="450"></iframe>
