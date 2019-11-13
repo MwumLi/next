@@ -215,3 +215,93 @@ layer.append(sprite);
 
 sprite所属的layer上有一个timeline属性，这是一个[Timeline](https://github.com/spritejs/sprite-timeline)对象，所有layer上运行的动画使用这个timeline对象来获得时间线，这样当我们改变layer的时间线的时候，我们就能影响到所有元素的动画时间。
 
+```js
+const {Scene, Sprite} = spritejs;
+const container = document.getElementById('adaptive');
+const scene = new Scene({
+  container,
+  width: 1200,
+  height: 600,
+  // contextType: '2d',
+});
+const layer = scene.layer();
+
+(async function () {
+  await scene.preload({id: 'snow', src: 'https://p5.ssl.qhimg.com/t01bfde08606e87f1fe.png'});
+
+  const [speed1, speed2, speed4, halfSpeed, pause, reversePlay]
+    = document.querySelectorAll('#speed1, #speed2, #speed4, #halfSpeed, #pause, #reversePlay');
+
+  const timeline = layer.timeline;
+
+  speed1.addEventListener('click', (evt) => {
+    timeline.playbackRate = 1.0;
+  });
+
+  speed2.addEventListener('click', (evt) => {
+    timeline.playbackRate = 2.0;
+  });
+
+  speed4.addEventListener('click', (evt) => {
+    timeline.playbackRate = 4.0;
+  });
+
+  halfSpeed.addEventListener('click', (evt) => {
+    timeline.playbackRate = 0.5;
+  });
+
+  pause.addEventListener('click', (evt) => {
+    timeline.playbackRate = 0;
+  });
+
+  reversePlay.addEventListener('click', (evt) => {
+    timeline.playbackRate = -1.0;
+  });
+
+
+  function addRandomSnow() {
+    const snow = new Sprite('snow');
+    const x0 = 20 + Math.random() * 1100,
+      y0 = -100;
+
+    snow.attr({
+      anchor: [0.5, 0.5],
+      pos: [x0, y0],
+      size: [50, 50],
+    });
+
+    snow.animate([
+      {x: x0 - 10},
+      {x: x0 + 10},
+    ], {
+      duration: 1000,
+      fill: 'forwards',
+      direction: 'alternate',
+      iterations: Infinity,
+      easing: 'ease-in-out',
+    });
+
+    const dropAnim = snow.animate([
+      {y: -100, rotate: 0},
+      {y: 700, rotate: 360},
+    ], {
+      duration: 10000,
+      fill: 'forwards',
+    });
+
+    dropAnim.finished.then(() => {
+      snow.remove();
+    });
+
+    layer.append(snow);
+  }
+
+  setInterval(addRandomSnow, 200);
+}());
+```
+
+回放playbackRate < 0的时候，动画回复到初始状态然后结束，因此旧的雪花往上飘，而新的雪花动画一开始就结束了，所以看不到新雪花从上方飘落。
+
+## 使用第三方动画库
+
+如果不喜欢Web Animation API这种动画形势的话，spritejs的Timeline还能够很方便地与第三方库一同使用。这里以[TweenJS](https://github.com/tweenjs/tween.js)为例：
