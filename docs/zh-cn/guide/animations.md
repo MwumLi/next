@@ -210,3 +210,8 @@ sprite.animate([
 
 layer.append(sprite);
 ```
+
+## 动画的 Timeline
+
+sprite所属的layer上有一个timeline属性，这是一个[Timeline](https://github.com/spritejs/sprite-timeline)对象，所有layer上运行的动画使用这个timeline对象来获得时间线，这样当我们改变layer的时间线的时候，我们就能影响到所有元素的动画时间。
+
