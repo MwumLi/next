@@ -107,5 +107,29 @@
   }, {
     "label": "ring",
     "src": "doc/ring"
+  }, {
+    "label": "transition",
+    "src": "doc/transition"
+  }, {
+    "label": "transition_reverse",
+    "src": "doc/transition_reverse"
+  }, {
+    "label": "animation",
+    "src": "doc/animation"
+  }, {
+    "label": "animation_timeline",
+    "src": "doc/animation_timeline"
+  }, {
+    "label": "filter",
+    "src": "doc/filter"
+  }, {
+    "label": "gradient",
+    "src": "doc/gradient"
+  }, {
+    "label": "event",
+    "src": "doc/event"
+  }, {
+    "label": "event_bubbling",
+    "src": "doc/event_bubbling"
   }
 ]
