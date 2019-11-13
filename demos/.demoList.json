@@ -131,5 +131,8 @@
   }, {
     "label": "event_bubbling",
     "src": "doc/event_bubbling"
+  }, {
+    "label": "worker",
+    "src": "doc/worker"
   }
 ]

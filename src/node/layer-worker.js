@@ -1,5 +1,6 @@
 import {createCanvas} from '@mesh.js/core';
 
+const _inited = Symbol('inited');
 export default class LayerWorker extends Worker {
   constructor(id, options) {
     if(options.worker === true) {
@@ -21,20 +22,26 @@ export default class LayerWorker extends Worker {
   }
 
   setResolution({width, height}) {
-    this.canvas.width = width;
-    this.canvas.height = height;
+    if(!this[_inited]) {
+      this.canvas.width = width;
+      this.canvas.height = height;
 
-    const options = this.options;
+      const options = this.options;
 
-    const offscreenCanvas = options.canvas.transferControlToOffscreen();
-    const opts = {...options};
-    delete opts.container;
-    opts.canvas = offscreenCanvas;
+      const offscreenCanvas = options.canvas.transferControlToOffscreen();
+      const opts = {...options};
+      delete opts.container;
+      opts.canvas = offscreenCanvas;
 
-    this.postMessage({
-      type: 'create',
-      options: opts,
-    }, [offscreenCanvas]);
+      this.postMessage({
+        type: 'create',
+        options: opts,
+      }, [offscreenCanvas]);
+
+      this[_inited] = true;
+    } else {
+      throw new Error('Cannot change resolution of layer-worker.');
+    }
   }
 
   getResolution() {

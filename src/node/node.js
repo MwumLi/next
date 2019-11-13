@@ -235,7 +235,10 @@ export default class Node {
       if(args[1]) return this.attr(args[1]);
     }
     if(args.length > 1) {
-      const [key, value] = args;
+      let [key, value] = args;
+      if(typeof value === 'function') {
+        value = value(this.attr(key));
+      }
       this.setAttribute(key, value);
       return this;
     }
@@ -247,9 +250,14 @@ export default class Node {
   }
 
   setResolution({width, height}) {
-    this[_resolution] = {width, height};
-    this.updateContours();
-    this.forceUpdate();
+    const {width: w, height: h} = this[_resolution];
+    if(w !== width || h !== height) {
+      this[_resolution] = {width, height};
+      this.updateContours();
+      this.forceUpdate();
+      return true;
+    }
+    return false;
   }
 
   getResolution() {

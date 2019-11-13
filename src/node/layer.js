@@ -61,17 +61,20 @@ export default class Layer extends Group {
 
   /* override */
   setResolution({width, height}) {
-    if(this.canvas) {
-      this.canvas.width = width;
-      this.canvas.height = height;
+    if(super.setResolution({width, height})) {
+      if(this.canvas) {
+        this.canvas.width = width;
+        this.canvas.height = height;
+      }
+      if(this.renderer.glRenderer) {
+        this.renderer.glRenderer.gl.viewport(0, 0, width, height);
+      }
+      const [left, top] = this.renderOffset;
+      this.renderer.setGlobalTransform(1, 0, 0, 1, left, top);
+      this.attributes.size = [width, height];
+      return true;
     }
-    if(this.renderer.glRenderer) {
-      this.renderer.glRenderer.gl.viewport(0, 0, width, height);
-    }
-    const [left, top] = this.renderOffset;
-    this.renderer.setGlobalTransform(1, 0, 0, 1, left, top);
-    super.setResolution({width, height});
-    this.attributes.size = [width, height];
+    return false;
   }
 
   toLocalPos(x, y) {
