@@ -70,6 +70,8 @@ function tick() {
 tick();
 ```
 
+<iframe src="/demo/#/doc/curvejs" height="450"></iframe>
+
 **值得注意的是，不一定 webgl2/webgl 引擎就优于 canvas2d，在内存限制的情况下，某些特定场景使用 canvas2d 渲染因为节省内存，可能反而效率要更高。**
 
 canvas2d下，有些功能不能完全支持，比如 textureRepeat 属性，在 canvas2d 下不能支持。

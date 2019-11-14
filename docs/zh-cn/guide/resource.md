@@ -32,6 +32,8 @@ label.attr({
 layer.append(label);
 ```
 
+<iframe src="/demo/#/doc/resource" height="450"></iframe>
+
 获取图片大小之所以为0，是因为当我们把label添加到layer上的时候，图片还没有完成加载，因此此时的sprite里没有内容来撑开宽高，所以得到的大小就是0。
 
 scene提供了`preload`方法来预加载和保存图片资源。这个方法可以接受一个或多个图片数据，返回一个promise对象。
@@ -70,6 +72,8 @@ const layer = scene.layer();
   layer.append(label);
 }());
 ```
+
+<iframe src="/demo/#/doc/resource_preload" height="450"></iframe>
 
 我们通过preload事先预加载并缓存了图片，所以我们使用id:'robot'来创建sprite时，就可以立即显示出来，并得到contentSize。
 
@@ -126,6 +130,8 @@ const layer = scene.layer();
   });
 }());
 ```
+
+<iframe src="/demo/#/doc/resource_sprites" height="450"></iframe>
 
 使用雪碧图可以有效减少HTTP请求，从而提高响应速度。
 
@@ -221,3 +227,5 @@ button.addEventListener('mouseup', (evt) => {
   loadRes();
 });
 ```
+
+<iframe src="/demo/#/doc/resource_progress" height="450"></iframe>

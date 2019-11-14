@@ -47,6 +47,8 @@ const layer = scene.layer();
 }());
 ```
 
+<iframe src="/demo/#/doc/transition_basic" height="450"></iframe>
+
 `sprite.transition(sec)` 本身返回一个Transition对象，它也可以多次设置`attr()`，每次设置的时候会自动将上一次的transition结束，这样实现类似下面这样的hover效果会很方便：
 
 ```js
@@ -149,6 +151,8 @@ const layer = scene.layer();
 }());
 ```
 
+<iframe src="/demo/#/doc/transition_hover" height="450"></iframe>
+
 ## Web Animations API
 
 spritejs动画支持的是几乎标准的[Web Animations API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API)。
@@ -210,6 +214,8 @@ sprite.animate([
 
 layer.append(sprite);
 ```
+
+<iframe src="/demo/#/doc/web_animation_api" height="450"></iframe>
 
 ## 动画的 Timeline
 
@@ -300,8 +306,87 @@ const layer = scene.layer();
 }());
 ```
 
+<iframe src="/demo/#/doc/web_animation_timeline" height="500"></iframe>
+
 回放playbackRate < 0的时候，动画回复到初始状态然后结束，因此旧的雪花往上飘，而新的雪花动画一开始就结束了，所以看不到新雪花从上方飘落。
 
 ## 使用第三方动画库
 
 如果不喜欢Web Animation API这种动画形势的话，spritejs的Timeline还能够很方便地与第三方库一同使用。这里以[TweenJS](https://github.com/tweenjs/tween.js)为例：
+
+```js
+const {Scene, Sprite} = spritejs;
+const container = document.getElementById('adaptive');
+const scene = new Scene({
+  container,
+  width: 1200,
+  height: 600,
+  // contextType: '2d',
+});
+const layer = scene.layer();
+
+const sprite = new Sprite();
+sprite.attr({
+  anchor: [0.5, 0.5],
+  pos: [600, 300],
+  bgcolor: 'rgb(128, 0, 255)',
+  size: [100, 100],
+});
+layer.append(sprite);
+
+const coords = {rotate: 0};
+
+/* globals TWEEN */
+new TWEEN.Tween(coords)
+  .to({rotate: 360}, 5000)
+  .easing(TWEEN.Easing.Quadratic.Out)
+  .onUpdate(() => {
+    const rotate = coords.rotate,
+      radian = Math.PI * rotate / 180,
+      red = 128 + Math.round(127 * Math.sin(radian)),
+      green = Math.round(rotate) % 128,
+      blue = 128 + Math.round(127 * Math.cos(radian));
+
+    const bgcolor = `rgb(${red}, ${green}, ${blue})`;
+    sprite.attr({rotate, bgcolor});
+  })
+  .repeat(Infinity)
+  .start();
+
+function animate() {
+  requestAnimationFrame(animate);
+  TWEEN.update(layer.timeline.currentTime);
+}
+requestAnimationFrame(animate);
+
+const [speed1, speed2, speed4, halfSpeed, pause, reversePlay]
+  = document.querySelectorAll('#tweenjs-speed1, #tweenjs-speed2, #tweenjs-speed4, #tweenjs-halfSpeed, #tweenjs-pause, #tweenjs-reversePlay');
+
+const timeline = layer.timeline;
+
+speed1.addEventListener('click', (evt) => {
+  timeline.playbackRate = 1.0;
+});
+
+speed2.addEventListener('click', (evt) => {
+  timeline.playbackRate = 2.0;
+});
+
+speed4.addEventListener('click', (evt) => {
+  timeline.playbackRate = 4.0;
+});
+
+halfSpeed.addEventListener('click', (evt) => {
+  timeline.playbackRate = 0.5;
+});
+
+pause.addEventListener('click', (evt) => {
+  timeline.playbackRate = 0;
+});
+
+reversePlay.addEventListener('click', (evt) => {
+  timeline.playbackRate = -1;
+});
+```
+
+<iframe src="/demo/#/doc/web_animation_tweenjs" height="500"></iframe>

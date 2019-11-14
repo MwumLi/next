@@ -132,6 +132,39 @@
     "label": "event_bubbling",
     "src": "doc/event_bubbling"
   }, {
+    "label": "curvejs",
+    "src": "doc/curvejs"
+  }, {
+    "label": "sticky",
+    "src": "doc/sticky"
+  }, {
+    "label": "resource",
+    "src": "doc/resource"
+  }, {
+    "label": "resource_preload",
+    "src": "doc/resource_preload"
+  }, {
+    "label": "resource_sprites",
+    "src": "doc/resource_sprites"
+  }, {
+    "label": "resource_progress",
+    "src": "doc/resource_progress"
+  }, {
+    "label": "transition_basic",
+    "src": "doc/transition_basic"
+  }, {
+    "label": "transition_hover",
+    "src": "doc/transition_hover"
+  }, {
+    "label": "web_animation_api",
+    "src": "doc/web_animation_api"
+  }, {
+    "label": "web_animation_timeline",
+    "src": "doc/web_animation_timeline"
+  }, {
+    "label": "web_animation_tweenjs",
+    "src": "doc/web_animation_tweenjs"
+  }, {
     "label": "worker",
     "src": "doc/worker"
   }

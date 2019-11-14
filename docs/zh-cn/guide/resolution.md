@@ -86,3 +86,5 @@ const layer = scene.layer();
   setInterval(addRandomSnow, 200);
 }());
 ```
+
+<iframe src="/demo/#/doc/sticky" height="450"></iframe>
