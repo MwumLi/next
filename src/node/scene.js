@@ -168,37 +168,34 @@ export default class Scene extends Group {
 
   /* override */
   setResolution({width, height} = {}) {
-    if(super.setResolution({width, height})) {
-      const container = this.container;
-      const {clientWidth, clientHeight} = container;
-      if(width == null || height == null) {
-        width = width == null ? clientWidth : width;
-        height = height == null ? clientHeight : height;
-      }
-
-      const {mode, displayRatio} = this.options;
-      width *= displayRatio;
-      height *= displayRatio;
-
-      if(mode === 'stickyHeight' || mode === 'stickyLeft' || mode === 'stickyRight') {
-        const w = width;
-        width = clientWidth * height / clientHeight;
-        this.options.left = 0;
-        if(mode === 'stickyHeight') this.options.left = 0.5 * (width - w);
-        if(mode === 'stickyRight') this.options.left = width - w;
-      } else if(mode === 'stickyWidth' || mode === 'stickyTop' || mode === 'stickyBottom') {
-        const h = height;
-        height = clientHeight * width / clientWidth;
-        this.options.top = 0;
-        if(mode === 'stickyWidth') this.options.top = 0.5 * (height - h);
-        if(mode === 'stickyBottom') this.options.top = height - h;
-      } else {
-        this.options.left = 0;
-        this.options.top = 0;
-      }
-      return true;
+    const container = this.container;
+    const {clientWidth, clientHeight} = container;
+    if(width == null || height == null) {
+      width = width == null ? clientWidth : width;
+      height = height == null ? clientHeight : height;
     }
-    return false;
+
+    const {mode, displayRatio} = this.options;
+    width *= displayRatio;
+    height *= displayRatio;
+
+    if(mode === 'stickyHeight' || mode === 'stickyLeft' || mode === 'stickyRight') {
+      const w = width;
+      width = clientWidth * height / clientHeight;
+      this.options.left = 0;
+      if(mode === 'stickyHeight') this.options.left = 0.5 * (width - w);
+      if(mode === 'stickyRight') this.options.left = width - w;
+    } else if(mode === 'stickyWidth' || mode === 'stickyTop' || mode === 'stickyBottom') {
+      const h = height;
+      height = clientHeight * width / clientWidth;
+      this.options.top = 0;
+      if(mode === 'stickyWidth') this.options.top = 0.5 * (height - h);
+      if(mode === 'stickyBottom') this.options.top = height - h;
+    } else {
+      this.options.left = 0;
+      this.options.top = 0;
+    }
+    return super.setResolution({width, height});
   }
 
   resize() {
