@@ -296,8 +296,15 @@ export default class Block extends Node {
       ret.push(clientBoxMesh);
     }
 
-    if(borderBoxMesh) applyRenderEvent(this, borderBoxMesh);
-    else if(clientBoxMesh) applyRenderEvent(this, clientBoxMesh);
+    if(borderBoxMesh) {
+      applyRenderEvent(this, borderBoxMesh);
+      if(clientBoxMesh) {
+        clientBoxMesh.beforeRender = null;
+        clientBoxMesh.afterRender = null;
+      }
+    } else if(clientBoxMesh) {
+      applyRenderEvent(this, clientBoxMesh);
+    }
 
     return ret;
   }

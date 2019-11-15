@@ -302,9 +302,10 @@ export default class Scene extends Group {
   }
 
   snapshot({offscreen = false} = {}) {
+    const _canvas = offscreen ? 'snapshotOffScreenCanvas' : 'snapshotCanvas';
     const {width, height} = this.getResolution();
-    this.snapshotCanvas = this.snapshotCanvas || createCanvas(width, height, {offscreen});
-    const context = this.snapshotCanvas.getContext('2d');
+    this[_canvas] = this[_canvas] || createCanvas(width, height, {offscreen});
+    const context = this[_canvas].getContext('2d');
     const layers = this.orderedChildren;
 
     context.clearRect(0, 0, width, height);
@@ -316,7 +317,7 @@ export default class Scene extends Group {
         context.drawImage(canvas, 0, 0, width, height);
       }
     }
-    return this.snapshotCanvas;
+    return this[_canvas];
   }
 }
 

@@ -44,8 +44,8 @@
   * [事件](/zh-cn/guide/events)
   * [创建新的精灵类型](/zh-cn/guide/nodes)
   * [快照](/zh-cn/guide/snapshot)
-  * [与d3一同使用](/zh-cn/guide/d3)
   * [多线程](/zh-cn/guide/worker)
+  * [与d3一同使用](/zh-cn/guide/d3)
   * [跨平台](/zh-cn/guide/platforms)
 
 * API速查
