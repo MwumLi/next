@@ -53,6 +53,8 @@ s2.addEventListener('afterrender', ({detail}) => {
 layer.append(s1, s2);
 ```
 
+<iframe src="/demo/#/doc/event_render" height="450"></iframe>
+
 ## 自定义事件
 
 SpriteJS <sup>Next</sup> 的 Scene 默认代理了点击事件（Pointer Events）包括鼠标和触屏事件，要响应其他事件比如键盘事件或者与页面上的其他元素交互，我们可以通过元素的`dispatchEvent`方法将事件派发给对应元素。
@@ -109,6 +111,8 @@ document.addEventListener('keyup', (event) => {
   });
 });
 ```
+
+<iframe src="/demo/#/doc/keyboard" height="450"></iframe>
 
 ## 事件穿透
 

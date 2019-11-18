@@ -165,6 +165,21 @@
     "label": "web_animation_tweenjs",
     "src": "doc/web_animation_tweenjs"
   }, {
+    "label": "ticker_threejs",
+    "src": "doc/ticker_threejs"
+  }, {
+    "label": "event_render",
+    "src": "doc/event_render"
+  }, {
+    "label": "keyboard",
+    "src": "doc/keyboard"
+  }, {
+    "label": "button",
+    "src": "doc/button"
+  }, {
+    "label": "snapshot",
+    "src": "doc/snapshot"
+  }, {
     "label": "worker",
     "src": "doc/worker"
   }

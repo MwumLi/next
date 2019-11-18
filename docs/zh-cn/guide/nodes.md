@@ -62,6 +62,8 @@ button.addEventListener('click', () => {
 });
 ```
 
+<iframe src="/demo/#/doc/button" height="450"></iframe>
+
 ## 注册元素类型
 
 创建了精灵类型后，尽管我们已经可以直接使用这些新的元素，但我们可以最好`spritejs.registerNodeType`方法将它们注册到框架中，这样就可以通过`spritejs.createElment`来创建该类型的元素，d3和vue等第三方框架也需要用`spritejs.createElement`来创建对应的元素。

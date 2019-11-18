@@ -83,5 +83,8 @@ const fglayer = scene.layer('fglayer');
 }());
 ```
 
+<iframe src="/demo/#/doc/snapshot" height="500"></iframe>
+
 ## 离屏快照
 
+调用Scene的snapshot方法时，如果传参`{offscreen: true}`，那么快照将返回一个`OffscreenCanvas`。

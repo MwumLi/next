@@ -51,3 +51,5 @@ function update() {
 }
 update();
 ```
+
+<iframe src="/demo/#/doc/ticker_threejs" height="450"></iframe>
