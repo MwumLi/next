@@ -309,7 +309,7 @@ export default class Scene extends Group {
     const layers = this.orderedChildren;
 
     context.clearRect(0, 0, width, height);
-    for(let i = layers.length - 1; i >= 0; i--) {
+    for(let i = 0; i < layers.length; i++) {
       const layer = layers[i];
       layer.render();
       const canvas = layer.canvas;

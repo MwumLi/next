@@ -151,7 +151,7 @@ export default class Label extends Block {
     this.fontVariant = fontInfo.variant;
     this.fontWeight = fontInfo.weight;
     this.fontStretch = fontInfo.stretch;
-    this.fontSize = fontInfo.size;
+    this.fontSize = toNumber(`${fontInfo.size}${fontInfo.unit}`);
     if(fontInfo.lineHeight) {
       this.lineHeight = fontInfo.pxLineHeight;
     }

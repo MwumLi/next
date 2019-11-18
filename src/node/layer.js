@@ -118,6 +118,14 @@ export default class Layer extends Group {
       });
     }
   }
+
+  /* override */
+  onPropertyChange(key, newValue, oldValue) {
+    super.onPropertyChange(key, newValue, oldValue);
+    if(key === 'zIndex') {
+      this.canvas.style.zIndex = newValue;
+    }
+  }
 }
 
 ownerDocument.registerNode(Layer, 'layer');
