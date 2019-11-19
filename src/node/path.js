@@ -135,6 +135,7 @@ export default class Path extends Node {
     }
   }
 
+  /* override */
   get isVisible() {
     return this.attributes.opacity > 0 && !!this.d;
   }
@@ -183,6 +184,7 @@ export default class Path extends Node {
     return null;
   }
 
+  /* override */
   isPointCollision(x, y) {
     const pointerEvents = this.attributes.pointerEvents;
     if(pointerEvents === 'none') return false;
@@ -215,6 +217,7 @@ export default class Path extends Node {
     this.forceUpdate();
   }
 
+  /* override */
   disconnect() {
     const parent = this.parent;
     super.disconnect();

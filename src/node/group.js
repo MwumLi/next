@@ -6,13 +6,14 @@ import {querySelector, querySelectorAll} from '../selector';
 const _zOrder = Symbol('zOrder');
 
 const _ordered = Symbol('ordered');
+const _children = Symbol('children');
 
 export default class Group extends Block {
   static Attr = Attr;
 
   constructor(attrs = {}) {
     super(attrs);
-    this.children = [];
+    this[_children] = [];
     this[_ordered] = null;
     this[_zOrder] = 0;
   }
@@ -21,13 +22,17 @@ export default class Group extends Block {
     this[_ordered] = null;
   }
 
+  get children() {
+    return this[_children];
+  }
+
   get childNodes() {
-    return this.children;
+    return this[_children];
   }
 
   get orderedChildren() {
     if(!this[_ordered]) {
-      this[_ordered] = [...this.children];
+      this[_ordered] = [...this[_children]];
       this[_ordered].sort((a, b) => {
         return a.zIndex - b.zIndex || a.zOrder - b.zOrder;
       });
@@ -37,19 +42,19 @@ export default class Group extends Block {
 
   /* override */
   // get isVisible() {
-  //   return this.attributes.opacity > 0 && this.children.length > 0;
+  //   return this.attributes.opacity > 0 && this[_children].length > 0;
   // }
 
   /* override */
   // get hasBackground() {
-  //   return this.children.length > 0;
+  //   return this[_children].length > 0;
   // }
 
   /* override */
   cloneNode(deep = false) {
     const node = super.cloneNode();
     if(deep) {
-      this.children.forEach((child) => {
+      this[_children].forEach((child) => {
         const childNode = child.cloneNode(deep);
         node.appendChild(childNode);
       });
@@ -60,7 +65,7 @@ export default class Group extends Block {
   /* override */
   setResolution({width, height}) {
     if(super.setResolution({width, height})) {
-      this.children.forEach((child) => {
+      this[_children].forEach((child) => {
         child.setResolution({width, height});
       });
       return true;
@@ -70,7 +75,7 @@ export default class Group extends Block {
 
   appendChild(el) {
     el.remove();
-    this.children.push(el);
+    this[_children].push(el);
     el.connect(this, this[_zOrder]++);
     if(this[_ordered]) {
       if(this[_ordered].length && el.zIndex < this[_ordered][this[_ordered].length - 1].zIndex) {
@@ -90,11 +95,11 @@ export default class Group extends Block {
 
   replaceChild(el, ref) {
     el.remove();
-    const refIdx = this.children.indexOf(ref);
+    const refIdx = this[_children].indexOf(ref);
     if(refIdx < 0) {
       throw new Error('Invalid reference node.');
     }
-    this.children[refIdx] = el;
+    this[_children][refIdx] = el;
     el.connect(this, ref.zOrder);
     if(this[_ordered]) {
       if(el.zIndex !== ref.zIndex) {
@@ -109,16 +114,16 @@ export default class Group extends Block {
   }
 
   removeAllChildren() {
-    const children = this.children;
+    const children = this[_children];
     for(let i = children.length - 1; i >= 0; i--) {
       children[i].remove();
     }
   }
 
   removeChild(el) {
-    const idx = this.children.indexOf(el);
+    const idx = this[_children].indexOf(el);
     if(idx >= 0) {
-      this.children.splice(idx, 1);
+      this[_children].splice(idx, 1);
       if(this[_ordered]) {
         const _idx = this[_ordered].indexOf(el);
         this[_ordered].splice(_idx, 1);
@@ -132,14 +137,14 @@ export default class Group extends Block {
   insertBefore(el, ref) {
     if(ref == null) return this.appendChild(el);
     el.remove();
-    const refIdx = this.children.indexOf(ref);
+    const refIdx = this[_children].indexOf(ref);
     if(refIdx < 0) {
       throw new Error('Invalid reference node.');
     }
     const zOrder = ref.zOrder;
-    for(let i = refIdx; i < this.children.length; i++) {
-      const order = this.children[i].zOrder;
-      const child = this.children[i];
+    for(let i = refIdx; i < this[_children].length; i++) {
+      const order = this[_children][i].zOrder;
+      const child = this[_children][i];
       delete child.zOrder;
       Object.defineProperty(child, 'zOrder', {
         value: order + 1,
@@ -147,7 +152,7 @@ export default class Group extends Block {
         configurable: true,
       });
     }
-    this.children.splice(refIdx, 0, el);
+    this[_children].splice(refIdx, 0, el);
     el.connect(this, zOrder);
     if(this[_ordered]) {
       if(el.zIndex !== ref.zIndex) {
@@ -170,6 +175,7 @@ export default class Group extends Block {
     return super.dispatchPointerEvent(event);
   }
 
+  /* override */
   draw() {
     const meshes = [...super.draw()];
     this.orderedChildren.forEach((child) => {

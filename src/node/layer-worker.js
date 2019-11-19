@@ -2,12 +2,11 @@ import {createCanvas} from '@mesh.js/core';
 
 const _inited = Symbol('inited');
 export default class LayerWorker extends Worker {
-  constructor(id, options) {
+  constructor(options) {
     if(options.worker === true) {
-      options.worker = `./${id}.worker.js`;
+      options.worker = `./${options.id}.worker.js`;
     }
     super(options.worker);
-    this.id = id;
     this.options = options;
 
     if(!options.canvas) {
@@ -19,6 +18,10 @@ export default class LayerWorker extends Worker {
     }
 
     this.canvas = options.canvas;
+  }
+
+  get id() {
+    return this.options.id;
   }
 
   setResolution({width, height}) {

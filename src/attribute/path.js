@@ -18,7 +18,7 @@ export default class Path extends Node {
       lineWidth: 1,
       lineJoin: 'miter', // 'miter' or 'bevel'
       lineCap: 'butt', // 'butt' or 'square'
-      lineDash: null,
+      lineDash: undefined,
       lineDashOffset: 0,
       miterLimit: 10,
       texture: undefined,

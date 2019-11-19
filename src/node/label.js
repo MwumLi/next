@@ -76,6 +76,7 @@ export default class Label extends Block {
     this.attributes.text = value;
   }
 
+  /* override */
   draw() {
     const meshes = super.draw();
     if(meshes && meshes.length) {

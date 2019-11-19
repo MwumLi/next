@@ -39,6 +39,7 @@ export default class Layer extends Group {
     return this[_renderer];
   }
 
+  /* override */
   get layer() {
     return this;
   }

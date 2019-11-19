@@ -162,6 +162,14 @@ export default class Node {
     return this[getAttribute]('className');
   }
 
+  set class(value) {
+    this.className = value;
+  }
+
+  get class() {
+    return this.className;
+  }
+
   get x() {
     return this[getAttribute]('x');
   }

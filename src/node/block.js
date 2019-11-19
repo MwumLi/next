@@ -58,6 +58,7 @@ export default class Block extends Node {
       paddingTop + height + paddingBottom + bw2];
   }
 
+  /* override */
   get isVisible() {
     const [width, height] = this.contentSize;
 
@@ -180,6 +181,7 @@ export default class Block extends Node {
   //   return [newX, newY];
   // }
 
+  /* override */
   isPointCollision(x, y) {
     const pointerEvents = this.attributes.pointerEvents;
     if(pointerEvents === 'none') return false;
@@ -190,6 +192,7 @@ export default class Block extends Node {
     return pointerEvents !== 'visibleFill' && this.hasBorder && this.borderBoxMesh.isPointCollision(x, y, 'stroke');
   }
 
+  /* override */
   onPropertyChange(key, newValue, oldValue) { // eslint-disable-line complexity
     super.onPropertyChange(key, newValue, oldValue);
     if(key === 'anchorX' || key === 'anchorY' || key === 'boxSizing' || key === 'width' || key === 'height' || key === 'borderWidth'
@@ -243,6 +246,7 @@ export default class Block extends Node {
     }
   }
 
+  /* override */
   updateContours() {
     const {anchorX, anchorY, borderWidth, borderRadius} = this.attributes;
     const [width, height] = this.borderSize;
@@ -275,12 +279,14 @@ export default class Block extends Node {
     this.forceUpdate();
   }
 
+  /* override */
   disconnect() {
     const parent = this.parent;
     super.disconnect();
     if(parent) parent.forceUpdate();
   }
 
+  /* override */
   draw() {
     if(!this.isVisible) return [];
 

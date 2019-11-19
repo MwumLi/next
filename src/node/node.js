@@ -71,6 +71,10 @@ export default class Node {
     return this.attributes.zIndex;
   }
 
+  set zIndex(value) {
+    this.attributes.zIndex = value;
+  }
+
   get renderMatrix() {
     let m = this.transformMatrix;
     const {x, y} = this.attributes;
@@ -139,6 +143,10 @@ export default class Node {
   }
 
   isPointCollision(x, y) {
+    return false;
+  }
+
+  isVisible() {
     return false;
   }
 
@@ -264,6 +272,10 @@ export default class Node {
     return {...this[_resolution]};
   }
 
+  updateContours() {
+    // override
+  }
+
   connect(parent, zOrder) {
     Object.defineProperty(this, 'parent', {
       value: parent,
@@ -386,6 +398,10 @@ export default class Node {
         return this[_animation].finished;
       },
     };
+  }
+
+  draw() {
+    return [];
   }
 }
 

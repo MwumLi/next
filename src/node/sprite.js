@@ -32,6 +32,7 @@ export default class Sprite extends Block {
     return this[_textureImage];
   }
 
+  /* override */
   get contentSize() {
     let [w, h] = super.contentSize;
     const {width, height} = this.attributes;
@@ -49,6 +50,7 @@ export default class Sprite extends Block {
     return [w, h];
   }
 
+  /* override */
   draw() {
     const meshes = super.draw();
     if(meshes && meshes.length) {

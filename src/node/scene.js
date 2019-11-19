@@ -238,6 +238,7 @@ export default class Scene extends Group {
     return ret;
   }
 
+  /* override */
   appendChild(layer) {
     const ret = super.appendChild(layer);
     const canvas = layer.canvas;
@@ -247,6 +248,7 @@ export default class Scene extends Group {
     return ret;
   }
 
+  /* override */
   insertBefore(layer, ref) {
     const ret = super.insertBefore(layer, ref);
     const canvas = layer.canvas;
@@ -256,6 +258,7 @@ export default class Scene extends Group {
     return ret;
   }
 
+  /* override */
   replaceChild(layer, ref) {
     const ret = super.replaceChild(layer, ref);
     const canvas = layer.canvas;
@@ -265,6 +268,7 @@ export default class Scene extends Group {
     return ret;
   }
 
+  /* override */
   removeChild(layer) {
     const ret = super.removeChild(layer);
     const canvas = layer.canvas;
@@ -291,7 +295,7 @@ export default class Scene extends Group {
     let layer;
 
     if(worker) {
-      layer = new LayerWorker(id, options);
+      layer = new LayerWorker(options);
     } else {
       layer = new Layer(options);
       // layer.id = id;
