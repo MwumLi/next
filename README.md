@@ -1,3 +1,5 @@
+[![npm status](https://img.shields.io/npm/v/@spritejs/next.svg)](https://www.npmjs.com/package/@spritejs/next)
+
 ## 简介
 
 SpriteJS 是跨平台的高性能图形系统，它能够支持web、node、桌面应用和小程序的图形绘制和实现各种动画效果。
@@ -54,7 +56,7 @@ npm install canvas@next
 
 SpriteJS <sup>Next</sup> 提供若干类基础精灵元素，可以像操作DOM元素一样在图层上操作它们。
 
-![架构图](../assets/image/sprites.svg)
+![架构图](https://s4.ssl.qhres.com/static/26567dd3bf3be8a9.svg)
 
 ## 与旧版本主要差异
 
