@@ -168,6 +168,9 @@
     "label": "ticker_threejs",
     "src": "doc/ticker_threejs"
   }, {
+    "label": "ticker_claygl",
+    "src": "doc/ticker_claygl"
+  }, {
     "label": "event_render",
     "src": "doc/event_render"
   }, {
