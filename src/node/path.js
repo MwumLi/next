@@ -100,11 +100,8 @@ export default class Path extends Node {
 
   /* override */
   setResolution({width, height}) {
-    if(super.setResolution({width, height})) {
-      if(this.mesh) this.mesh.setResolution({width, height});
-      return true;
-    }
-    return false;
+    super.setResolution({width, height});
+    if(this.mesh) this.mesh.setResolution({width, height});
   }
 
   /* override */

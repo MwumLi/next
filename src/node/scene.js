@@ -195,7 +195,7 @@ export default class Scene extends Group {
       this.options.left = 0;
       this.options.top = 0;
     }
-    return super.setResolution({width, height});
+    super.setResolution({width, height});
   }
 
   resize() {

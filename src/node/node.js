@@ -263,9 +263,7 @@ export default class Node {
       this[_resolution] = {width, height};
       this.updateContours();
       this.forceUpdate();
-      return true;
     }
-    return false;
   }
 
   getResolution() {

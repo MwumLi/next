@@ -166,12 +166,9 @@ export default class Block extends Node {
 
   /* override */
   setResolution({width, height}) {
-    if(super.setResolution({width, height})) {
-      if(this.clientBoxMesh) this.clientBoxMesh.setResolution({width, height});
-      if(this.borderBoxMesh) this.borderBoxMesh.setResolution({width, height});
-      return true;
-    }
-    return false;
+    super.setResolution({width, height});
+    if(this.clientBoxMesh) this.clientBoxMesh.setResolution({width, height});
+    if(this.borderBoxMesh) this.borderBoxMesh.setResolution({width, height});
   }
 
   // transformPoint(x, y) {

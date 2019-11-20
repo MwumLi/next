@@ -64,13 +64,10 @@ export default class Group extends Block {
 
   /* override */
   setResolution({width, height}) {
-    if(super.setResolution({width, height})) {
-      this[_children].forEach((child) => {
-        child.setResolution({width, height});
-      });
-      return true;
-    }
-    return false;
+    super.setResolution({width, height});
+    this[_children].forEach((child) => {
+      child.setResolution({width, height});
+    });
   }
 
   appendChild(el) {
