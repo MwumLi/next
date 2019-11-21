@@ -16,7 +16,7 @@ function delegateEvents(scene) {
     'click', 'dblclick'];
 
   const container = scene.container;
-  const {left, top} = scene.options;
+  const {left, top, displayRatio} = scene.options;
 
   container.addEventListener('mouseleave', (event) => {
     const enteredTargets = scene[_enteredTargets];
@@ -33,7 +33,7 @@ function delegateEvents(scene) {
   events.forEach((eventType) => {
     container.addEventListener(eventType, (event) => {
       const layers = scene.orderedChildren;
-      const pointerEvents = createPointerEvents(event, {offsetLeft: left, offsetTop: top});
+      const pointerEvents = createPointerEvents(event, {offsetLeft: left, offsetTop: top, displayRatio});
       pointerEvents.forEach((evt) => {
         // evt.scene = scene;
         for(let i = 0; i < layers.length; i++) {

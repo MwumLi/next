@@ -286,12 +286,15 @@ export default class Node {
       configurable: true,
     });
     if(parent.timeline) this.activateAnimations();
+    this.dispatchEvent({type: 'append', parent, zOrder});
   }
 
   disconnect() {
+    const {parent, zOrder} = this;
     delete this.parent;
     delete this.zOrder;
     this.deactivateAnimations();
+    this.dispatchEvent({type: 'remove', parent, zOrder});
   }
 
   activateAnimations() {

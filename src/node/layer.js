@@ -56,6 +56,13 @@ export default class Layer extends Group {
     return [this.options.left | 0, this.options.top | 0];
   }
 
+  get displayRatio() {
+    if(this.parent && this.parent.options) {
+      return this.parent.options.displayRatio;
+    }
+    return 1.0;
+  }
+
   // isPointCollision(x, y) {
   //   return true;
   // }
@@ -66,6 +73,7 @@ export default class Layer extends Group {
     const m = renderer.globalTransformMatrix;
     const offsetLeft = m[4];
     const offsetTop = m[5];
+    const previousDisplayRatio = m[0];
     const {width: w, height: h} = this.getResolution();
     if(w !== width || h !== height) {
       super.setResolution({width, height});
@@ -79,8 +87,10 @@ export default class Layer extends Group {
       this.attributes.size = [width, height];
     }
     const [left, top] = this.renderOffset;
-    if(offsetLeft !== left || offsetTop !== top) {
-      renderer.setGlobalTransform(1, 0, 0, 1, left, top);
+    const displayRatio = this.displayRatio;
+    if(offsetLeft !== left || offsetTop !== top || previousDisplayRatio !== displayRatio) {
+      // console.log(displayRatio, this.parent);
+      renderer.setGlobalTransform(displayRatio, 0, 0, displayRatio, left, top);
       this.forceUpdate();
     }
   }
@@ -92,7 +102,9 @@ export default class Layer extends Group {
     x = x * width / viewport[0] - offset[0];
     y = y * height / viewport[1] - offset[1];
 
-    return [x, y];
+    const displayRatio = this.displayRatio;
+
+    return [x / displayRatio, y / displayRatio];
   }
 
   toGlobalPos(x, y) {
@@ -103,7 +115,9 @@ export default class Layer extends Group {
     x = x * viewport[0] / width + offset[0];
     y = y * viewport[1] / height + offset[1];
 
-    return [x, y];
+    const displayRatio = this.displayRatio;
+
+    return [x * displayRatio, y * displayRatio];
   }
 
   render({clear = true} = {}) {

@@ -1,6 +1,6 @@
 import Event from './event';
 
-export default function createPointerEvents(originalEvent, {offsetTop = 0, offsetLeft = 0} = {}) {
+export default function createPointerEvents(originalEvent, {offsetTop = 0, offsetLeft = 0, displayRatio = 1} = {}) {
   let x,
     y;
   const originalCoordinates = [];
@@ -27,8 +27,8 @@ export default function createPointerEvents(originalEvent, {offsetTop = 0, offse
   const ret = [];
   originalCoordinates.forEach((originalCoordinate) => {
     if(originalCoordinate.x != null && originalCoordinate.y != null) {
-      x = originalCoordinate.x * resolutionWidth / viewportWidth - offsetLeft;
-      y = originalCoordinate.y * resolutionHeight / viewportHeight - offsetTop;
+      x = (originalCoordinate.x * resolutionWidth / viewportWidth - offsetLeft) / displayRatio;
+      y = (originalCoordinate.y * resolutionHeight / viewportHeight - offsetTop) / displayRatio;
     }
     const event = new Event(originalEvent);
 
