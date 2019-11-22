@@ -1,12 +1,12 @@
 ## 更新日志
 
-#### 【2019-11-22】 v1.0.4
+#### 【2019-11-22】 v0.1.4
 
 - 修复了修改分辨率的bug
 - 增加了scene.mode、scene.displayRatio、scene.width、scene.height属性
 - 支持了setMouseCapture、releaseMouseCapture
 
-#### 【2019-11-21】 v1.0.3
+#### 【2019-11-21】 v0.1.3
 
 - 修改了displayRatio策略
 - 添加了元素的append和remove事件
