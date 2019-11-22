@@ -32,6 +32,7 @@ export default class Layer extends Group {
     this.setResolution(canvas);
     this.canvas = canvas;
     this[_timeline] = new Timeline();
+    this.__mouseCapturedTarget = null;
   }
 
   /* override */
@@ -66,6 +67,22 @@ export default class Layer extends Group {
   // isPointCollision(x, y) {
   //   return true;
   // }
+
+  /* override */
+  dispatchPointerEvent(event) {
+    const type = event.type;
+    if(type === 'mousedown' || type === 'mouseup' || type === 'mousemove') {
+      const capturedTarget = this.__mouseCapturedTarget;
+      if(capturedTarget) {
+        if(capturedTarget.layer === this) {
+          capturedTarget.dispatchEvent(event);
+          return true;
+        }
+        this.__mouseCapturedTarget = null;
+      }
+    }
+    return super.dispatchPointerEvent(event);
+  }
 
   /* override */
   setResolution({width, height}) {

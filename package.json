@@ -1,6 +1,6 @@
 {
   "name": "@spritejs/next",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "The next generation of spritejs.",
   "main": "dist/spritejs.js",
   "module": "lib/index.js",

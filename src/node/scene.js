@@ -166,6 +166,54 @@ export default class Scene extends Group {
     delegateEvents(this);
   }
 
+  set displayRatio(value) {
+    const oldValue = this.options.displayRatio;
+    if(oldValue !== value) {
+      this.options.displayRatio = value;
+      this.resize();
+    }
+  }
+
+  get displayRatio() {
+    return this.options.displayRatio;
+  }
+
+  set mode(value) {
+    const oldValue = this.options.mode;
+    if(oldValue !== value) {
+      this.options.mode = value;
+      this.resize();
+    }
+  }
+
+  get mode() {
+    return this.options.mode;
+  }
+
+  set width(value) {
+    const oldValue = this.options.width;
+    if(oldValue !== value) {
+      this.options.width = value;
+      this.resize();
+    }
+  }
+
+  get width() {
+    return this.options.width;
+  }
+
+  set height(value) {
+    const oldValue = this.options.height;
+    if(oldValue !== value) {
+      this.options.height = value;
+      this.resize();
+    }
+  }
+
+  get height() {
+    return this.options.height;
+  }
+
   /* override */
   setResolution({width, height} = {}) {
     const container = this.container;
@@ -179,21 +227,19 @@ export default class Scene extends Group {
     width *= displayRatio;
     height *= displayRatio;
 
+    this.options.left = 0;
+    this.options.top = 0;
+
     if(mode === 'stickyHeight' || mode === 'stickyLeft' || mode === 'stickyRight') {
       const w = width;
       width = clientWidth * height / clientHeight;
-      this.options.left = 0;
       if(mode === 'stickyHeight') this.options.left = 0.5 * (width - w);
       if(mode === 'stickyRight') this.options.left = width - w;
     } else if(mode === 'stickyWidth' || mode === 'stickyTop' || mode === 'stickyBottom') {
       const h = height;
       height = clientHeight * width / clientWidth;
-      this.options.top = 0;
       if(mode === 'stickyWidth') this.options.top = 0.5 * (height - h);
       if(mode === 'stickyBottom') this.options.top = height - h;
-    } else {
-      this.options.left = 0;
-      this.options.top = 0;
     }
     super.setResolution({width, height});
   }

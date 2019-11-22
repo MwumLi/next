@@ -150,6 +150,18 @@ export default class Node {
     return false;
   }
 
+  setMouseCapture() {
+    if(this.layer) {
+      this.layer.__mouseCapturedTarget = this;
+    }
+  }
+
+  releaseMouseCapture() {
+    if(this.layer && this.layer.__mouseCapturedTarget === this) {
+      this.layer.__mouseCapturedTarget = null;
+    }
+  }
+
   dispatchPointerEvent(event) {
     const {x, y} = event;
     if(this.isPointCollision(x, y)) {
