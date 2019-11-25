@@ -1,4 +1,7 @@
 module.exports = {
+  env: {
+    jest: true
+  },
   globals: {
     spritejs: true,
     global: true,

@@ -5,7 +5,8 @@
   "main": "dist/spritejs.js",
   "module": "lib/index.js",
   "scripts": {
-    "test": "nyc ava --serial && rm -rf ./coverage && mkdir ./coverage && nyc report --reporter=text-lcov > ./coverage/lcov.info",
+    "test": "jest --coverage",
+    "test:coveralls": "jest --coverage --coverageReporters=text-lcov | coveralls",
     "start": "webpack-dev-server --env.server=examples --watch-poll",
     "compile": "rm -rf lib/* && babel src -d lib",
     "doc": "docsify serve ./docs",
@@ -26,21 +27,17 @@
     "@babel/preset-env": "^7.4.5",
     "@babel/register": "^7.6.2",
     "@demosify/core": "^0.5.5",
-    "ava": "^2.4.0",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.6",
     "babel-plugin-transform-gl-matrix": "^0.6.0",
     "canvas": "^2.6.0",
     "colors": "^1.4.0",
-    "coveralls": "^3.0.7",
+    "coveralls": "^3.0.8",
     "docsify": "^4.9.4",
     "eslint": "^5.16.0",
     "eslint-config-sprite": "^1.0.6",
     "eslint-plugin-html": "^5.0.5",
-    "hamming-distance": "^1.0.0",
-    "imghash": "0.0.3",
-    "nyc": "^14.1.1",
-    "pixelmatch": "^5.1.0",
+    "jest": "^24.9.0",
     "raw-loader": "^3.1.0",
     "webpack": "^4.33.0",
     "webpack-cli": "^3.3.4",
@@ -55,26 +52,7 @@
     "pasition": "^1.0.2",
     "sprite-animator": "^1.11.4"
   },
-  "ava": {
-    "require": [
-      "@babel/register"
-    ],
-    "sources": [
-      "./src/**/*.js"
-    ],
-    "files": [
-      "./test/case/**/*.js"
-    ],
-    "babel": {
-      "testOptions": {
-        "babelrc": true
-      }
-    }
-  },
-  "nyc": {
-    "include": [
-      "src/**/*.js"
-    ],
-    "exclude": []
+  "jest": {
+    "testRegex": "/test/.*.test.js"
   }
 }
