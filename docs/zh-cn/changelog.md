@@ -1,5 +1,9 @@
 ## 更新日志
 
+#### 【2019-11-26】 v0.1.6
+
+- 修复了renderMatrix在多级group下的bug
+
 #### 【2019-11-26】 v0.1.5
 
 - 修复了removeEventListener的第三个参数缺省报错的bug

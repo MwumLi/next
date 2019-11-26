@@ -16,7 +16,7 @@ global.cancelAnimationFrame = (id) => {
   return clearTimeout(id);
 };
 
-const {createCanvas, Image} = require('canvas');
+const {createCanvas, Image} = require('node-canvas-webgl');
 
 global.createCanvas = createCanvas;
 global.Image = Image;

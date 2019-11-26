@@ -80,10 +80,9 @@ export default class Node {
     const {x, y} = this.attributes;
     m[4] += x;
     m[5] += y;
-    let parent = this.parent;
-    while(parent && parent.renderMatrix) {
+    const parent = this.parent;
+    if(parent && parent.renderMatrix) {
       m = mat2d(parent.renderMatrix) * mat2d(m);
-      parent = parent.parent;
     }
     return m;
   }
