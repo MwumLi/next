@@ -1,7 +1,4 @@
-import NodeAttr from '../src/attribute/node';
-
-// window.HTMLCanvasElement = Canvas;
-// console.log(document.createElement('canvas').getContext('2d'));
+import {Scene, Sprite} from '../src';
 
 function sum(x, y) {
   return x + y;
@@ -33,9 +30,23 @@ test('canvas 2d', () => {
 });
 
 
-// test('canvas 3d', () => {
-//   const canvas = document.createElement('canvas');
-//   const ctx = canvas.getContext('webgl');
+test('scene', () => {
+  const container = document.getElementById('stage');
+  const scene = new Scene({
+    container,
+    width: 512,
+    height: 512,
+    displayRatio: 2,
+  });
 
-//   expect(typeof ctx).toBe('object');
-// });
+  const sprite = new Sprite({
+    size: [100, 100],
+    pos: [256, 256],
+    anchor: 0.5,
+    bgcolor: 'red',
+  });
+
+  scene.layer().append(sprite);
+
+  expect(typeof scene).toBe('object');
+});

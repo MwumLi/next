@@ -57,7 +57,8 @@
     "testRegex": "/test/.*.test.js$",
     "moduleNameMapper": {},
     "setupFiles": [
-      "./src/polyfill/node-canvas"
+      "./src/polyfill/node-canvas",
+      "./src/polyfill/jest-jsdom"
     ]
   }
 }
