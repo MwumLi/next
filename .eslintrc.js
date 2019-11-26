@@ -5,6 +5,8 @@ module.exports = {
   globals: {
     spritejs: true,
     global: true,
+    Canvas: true,
+    Container: true,
     importScripts: true,
     __DEV__: true,
   },

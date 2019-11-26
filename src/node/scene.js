@@ -11,7 +11,7 @@ import ownerDocument from '../document';
 const _enteredTargets = Symbol('enteredTargets');
 
 function delegateEvents(scene) {
-  const events = ['mousedown', 'mouseup', 'mousemove',
+  const events = ['mousedown', 'mouseup', 'mousemove', 'mousewheel',
     'touchstart', 'touchend', 'touchmove', 'touchcancel',
     'click', 'dblclick'];
 

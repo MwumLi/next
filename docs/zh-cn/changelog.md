@@ -1,5 +1,10 @@
 ## 更新日志
 
+#### 【2019-11-26】 v0.1.7
+
+- 增加对mousewheel事件的代理
+- 完善node-canvas及单元测试环境
+
 #### 【2019-11-26】 v0.1.6
 
 - 修复了renderMatrix在多级group下的bug

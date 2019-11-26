@@ -1,5 +1,8 @@
 import NodeAttr from '../src/attribute/node';
 
+// window.HTMLCanvasElement = Canvas;
+// console.log(document.createElement('canvas').getContext('2d'));
+
 function sum(x, y) {
   return x + y;
 }
@@ -18,18 +21,21 @@ test('canvas 2d', () => {
   ctx.rect(6, 7, 8, 9);
   ctx.closePath();
 
+  ctx.fillStyle = 'red';
+  ctx.fill();
+
   /**
   * Any method that modifies the current path (and subpath) will be pushed to an event array. When
   * using the `__getPath` method, that array will sliced and usable for snapshots.
   */
-  const path = ctx.__getPath();
+  const path = ctx.canvas.toDataURL();
   expect(path).toMatchSnapshot();
 });
 
 
-test('canvas 3d', () => {
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('webgl');
+// test('canvas 3d', () => {
+//   const canvas = document.createElement('canvas');
+//   const ctx = canvas.getContext('webgl');
 
-  expect(typeof ctx).toBe('object');
-});
+//   expect(typeof ctx).toBe('object');
+// });

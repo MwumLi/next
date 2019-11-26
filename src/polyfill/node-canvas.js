@@ -1,5 +1,6 @@
 // polyfill for node-canvas
 import EventEmitter from 'events';
+import {createCanvas, Image, Canvas} from 'node-canvas-webgl';
 
 function nowtime() {
   const [s, ns] = process.hrtime();
@@ -16,10 +17,9 @@ global.cancelAnimationFrame = (id) => {
   return clearTimeout(id);
 };
 
-const {createCanvas, Image} = require('node-canvas-webgl');
-
 global.createCanvas = createCanvas;
 global.Image = Image;
+global.Canvas = Canvas;
 global.Worker = Object;
 
 export class Container extends EventEmitter {
@@ -64,4 +64,14 @@ export class Container extends EventEmitter {
     }
     return this.removeAllListeners(type);
   }
+}
+
+global.Container = Container;
+
+if(typeof document !== 'undefined' && document.createElement) {
+  const _createElement = document.createElement;
+  document.createElement = function (tagName, ...args) {
+    if(tagName.toLowerCase() === 'canvas') return new Canvas(300, 150);
+    return _createElement.call(tagName, ...args);
+  };
 }
