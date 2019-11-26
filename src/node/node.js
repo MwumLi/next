@@ -120,7 +120,7 @@ export default class Node {
     return this;
   }
 
-  removeEventListener(type, listener, options) {
+  removeEventListener(type, listener, options = {}) {
     if(typeof options === 'boolean') options = {capture: options};
     const capture = options.capture;
 

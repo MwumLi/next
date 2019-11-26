@@ -1,4 +1,5 @@
 [![npm status](https://img.shields.io/npm/v/@spritejs/next.svg)](https://www.npmjs.com/package/@spritejs/next)
+[![build status](https://api.travis-ci.org/spritejs/next.svg?branch=master)](https://travis-ci.org/spritejs/next)
 
 ## 简介
 
