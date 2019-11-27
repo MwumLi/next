@@ -2,14 +2,13 @@ import {mat2d} from 'gl-matrix';
 import {Figure2D} from '@mesh.js/core';
 import {toString, toNumber, toArray, compareValue} from '../utils/attribute_value';
 
+const setDefault = Symbol.for('spritejs_setAttributeDefault');
 const setAttribute = Symbol.for('spritejs_setAttribute');
 const getAttribute = Symbol.for('spritejs_getAttribute');
-const setDefault = Symbol.for('spritejs_setAttributeDefault');
-
 const attributes = Symbol.for('spritejs_attributes');
 const changedAttrs = Symbol.for('spritejs_changedAttrs');
-
 const _subject = Symbol.for('spritejs_subject');
+
 const _attr = Symbol('attr');
 const _default = Symbol('default');
 
