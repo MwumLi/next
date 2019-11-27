@@ -1,7 +1,10 @@
 import {createCanvas} from '@mesh.js/core';
 
 const _inited = Symbol('inited');
-export default class LayerWorker extends Worker {
+
+const _Worker = typeof Worker === 'function' ? Worker : Object;
+
+export default class LayerWorker extends _Worker {
   constructor(options) {
     if(options.worker === true) {
       options.worker = `./${options.id}.worker.js`;

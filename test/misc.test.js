@@ -25,8 +25,8 @@ test('canvas 2d', () => {
   * Any method that modifies the current path (and subpath) will be pushed to an event array. When
   * using the `__getPath` method, that array will sliced and usable for snapshots.
   */
-  const path = ctx.canvas.toDataURL();
-  expect(path).toMatchSnapshot();
+  const data = ctx.canvas.toDataURL();
+  expect(data).toMatchSnapshot();
 });
 
 
@@ -34,19 +34,20 @@ test('scene', () => {
   const container = document.getElementById('stage');
   const scene = new Scene({
     container,
-    width: 512,
-    height: 512,
+    width: 256,
+    height: 256,
     displayRatio: 2,
   });
 
   const sprite = new Sprite({
     size: [100, 100],
-    pos: [256, 256],
+    pos: [128, 128],
     anchor: 0.5,
     bgcolor: 'red',
   });
 
   scene.layer().append(sprite);
 
-  expect(typeof scene).toBe('object');
+  const data = scene.snapshot().toDataURL();
+  expect(data).toMatchSnapshot();
 });
