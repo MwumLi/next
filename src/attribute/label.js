@@ -6,7 +6,7 @@ import Block from './block';
 const setDefault = Symbol.for('spritejs_setAttributeDefault');
 const setAttribute = Symbol.for('spritejs_setAttribute');
 const getAttribute = Symbol.for('spritejs_getAttribute');
-const attributes = Symbol.for('spritejs_attributes');
+const declareAlias = Symbol.for('spritejs_declareAlias');
 
 export default class Label extends Block {
   constructor(subject) {
@@ -27,13 +27,7 @@ export default class Label extends Block {
       fillColor: undefined,
       verticalAlign: 'middle',
     });
-  }
-
-  get [attributes]() {
-    const ret = super[attributes];
-    return Object.assign(ret, {
-      font: this.font,
-    });
+    this[declareAlias]('font');
   }
 
   get text() {

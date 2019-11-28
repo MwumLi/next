@@ -3,6 +3,7 @@ import {Figure2D} from '@mesh.js/core';
 import {toString, toNumber, toArray, compareValue} from '../utils/attribute_value';
 
 const setDefault = Symbol.for('spritejs_setAttributeDefault');
+const declareAlias = Symbol.for('spritejs_declareAlias');
 const setAttribute = Symbol.for('spritejs_setAttribute');
 const getAttribute = Symbol.for('spritejs_getAttribute');
 const attributes = Symbol.for('spritejs_attributes');
@@ -11,6 +12,7 @@ const _subject = Symbol.for('spritejs_subject');
 
 const _attr = Symbol('attr');
 const _default = Symbol('default');
+const _alias = Symbol('alias');
 
 function getMatrix(transformMap, [ox, oy]) {
   let m = mat2d(1, 0, 0, 1, 0, 0);
@@ -61,12 +63,41 @@ function updateOffset(attr) {
 
 // 规范：属性只能是原始类型或元素是原始类型的数组
 export default class Node {
+  static setDefault(attr, ...args) {
+    return attr[setDefault](...args);
+  }
+
+  static declareAlias(attr, ...args) {
+    return attr[declareAlias](...args);
+  }
+
+  static setAttribute(attr, ...args) {
+    return attr[setAttribute](...args);
+  }
+
+  static getAttribute(attr, ...args) {
+    return attr[getAttribute](...args);
+  }
+
+  static getAttributes(attr) {
+    return attr[attributes];
+  }
+
+  static getChangedAttributes(attr) {
+    return attr[changedAttrs];
+  }
+
+  static getSubject(attr) {
+    return attr[_subject];
+  }
+
   constructor(subject) {
     this[_subject] = subject;
     this[_attr] = {};
     this[_transformMatrix] = mat2d(1, 0, 0, 1, 0, 0);
     this[_transforms] = new Map();
     this[_default] = {};
+    this[_alias] = [];
 
     Object.defineProperty(subject, 'transformMatrix', {
       get: () => {
@@ -78,6 +109,7 @@ export default class Node {
       id: '',
       name: '',
       className: '',
+      /* class */
       x: 0,
       y: 0,
       /* pos */
@@ -96,6 +128,7 @@ export default class Node {
       filter: 'none',
     });
 
+    this[declareAlias]('class', 'pos');
     this[_changedAttrs] = new Set();
     this[_offsetFigure] = new Figure2D({scale: 5});
   }
@@ -109,14 +142,21 @@ export default class Node {
   }
 
   get [attributes]() {
-    return Object.assign({}, this[_attr], {
-      pos: this.pos,
-    });
+    const ret = Object.assign({}, this[_attr]);
+    for(let i = 0; i < this[_alias].length; i++) {
+      const key = this[_alias][i];
+      ret[key] = this[key];
+    }
+    return ret;
   }
 
   [setDefault](attrs) {
     Object.assign(this[_default], attrs);
     Object.assign(this[_attr], attrs);
+  }
+
+  [declareAlias](...alias) {
+    this[_alias].push(...alias);
   }
 
   [setAttribute](key, value) {

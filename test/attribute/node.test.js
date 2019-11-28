@@ -7,5 +7,14 @@ test('attribute object', () => {
     },
   });
 
+  attr.id = 'test';
+
   expect(typeof attr).toBe('object');
+  expect(attr.id).toBe('test');
+
+  const {getAttribute, setDefault} = NodeAttr;
+  expect(getAttribute(attr, 'id')).toBe('test');
+
+  setDefault(attr, {className: 'foo'});
+  expect(getAttribute(attr, 'className')).toBe('foo');
 });

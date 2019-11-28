@@ -5,6 +5,7 @@ import ownerDocument from '../document';
 import SpriteEvent from '../event/event';
 
 const changedAttrs = Symbol.for('spritejs_changedAttrs');
+const attributes = Symbol.for('spritejs_attributes');
 
 const _resolution = Symbol('resolution');
 const _animations = Symbol('animations');
@@ -250,6 +251,7 @@ export default class Node {
   }
 
   attr(...args) {
+    if(args.length === 0) return this.attributes[attributes];
     if(args[0] === 'attrs') {
       if(args[1]) return this.attr(args[1]);
     }

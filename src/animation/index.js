@@ -1,8 +1,6 @@
 import {Animator, Effects} from 'sprite-animator';
 import rgba from 'color-rgba';
 
-const attributes = Symbol.for('spritejs_attributes');
-
 Effects.default = function (from, to, p, s, e) {
   if(typeof from === 'string' && from.indexOf('rgba') === 0) {
     from = rgba(from);
@@ -30,7 +28,7 @@ Effects.default = function (from, to, p, s, e) {
 
 export default class Animation extends Animator {
   constructor(sprite, frames, timing) {
-    const initAttrs = sprite.attributes[attributes];
+    const initAttrs = sprite.attr();
     frames = frames.map(({...frame}) => {
       const ret = {};
       const node = sprite.cloneNode();

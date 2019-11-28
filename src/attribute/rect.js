@@ -4,7 +4,8 @@ import {toNumber, toArray} from '../utils/attribute_value';
 const setDefault = Symbol.for('spritejs_setAttributeDefault');
 const setAttribute = Symbol.for('spritejs_setAttribute');
 const getAttribute = Symbol.for('spritejs_getAttribute');
-// const _subject = Symbol.for('spritejs_subject');
+const declareAlias = Symbol.for('spritejs_declareAlias');
+
 
 function getPath(attr) {
   const {x, y, width, height} = attr;
@@ -20,6 +21,7 @@ export default class Rect extends Path {
       height: 0,
       /* size */
     });
+    this[declareAlias]('size');
   }
 
   // readonly

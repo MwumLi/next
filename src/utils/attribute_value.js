@@ -19,22 +19,28 @@ export function sizeToPixel(value, defaultWidth) { // eslint-disable-line comple
   } else if(unit === 'em' || unit === 'rem' || unit === 'ex') {
     if(!defaultWidth && typeof getComputedStyle === 'function' && typeof document !== 'undefined') {
       const root = getComputedStyle(document.documentElement).fontSize;
-      defaultWidth = sizeToPixel(root, 16);
+      if(!root) defaultWidth = 16;
+      else defaultWidth = sizeToPixel(root, 16);
     }
     size *= defaultWidth;
     if(unit === 'ex') size /= 2;
   } else if(unit === 'q') {
     size *= 96.0 / 25.4 / 4;
   } else if(unit === 'vw' || unit === 'vh') {
+    /* istanbul ignore else */
     if(typeof document !== 'undefined') {
-      const val = unit === 'vw' ? document.documentElement.clientWidth
-        : document.documentElement.clientHeight;
+      /* istanbul ignore next */
+      const val = unit === 'vw' ? window.innerWidth || document.documentElement.clientWidth
+        : window.innerHeight || document.documentElement.clientHeight;
       size *= val / 100;
     }
   } else if(unit === 'vmax' || unit === 'vmin') {
+    /* istanbul ignore else */
     if(typeof document !== 'undefined') {
-      const width = document.documentElement.clientWidth;
-      const height = document.documentElement.clientHeight;
+      /* istanbul ignore next */
+      const width = window.innerWidth || document.documentElement.clientWidth;
+      /* istanbul ignore next */
+      const height = window.innerHeight || document.documentElement.clientHeight;
       if(unit === 'vmax') {
         size *= Math.max(width, height) / 100;
       } else {
@@ -56,7 +62,7 @@ export function toNumber(value) {
   if(typeof value === 'string') {
     value = sizeToPixel(value);
   }
-  if(!Number.isFinite(value)) throw new Error('Invalid value');
+  if(!Number.isFinite(value)) throw new TypeError('Invalid value');
   return value;
 }
 

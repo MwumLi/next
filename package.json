@@ -55,6 +55,9 @@
   },
   "jest": {
     "testRegex": "/test/.*.test.js$",
+    "testEnvironmentOptions": {
+      "pretendToBeVisual": true
+    },
     "moduleNameMapper": {},
     "setupFiles": [
       "./src/polyfill/jest-jsdom"

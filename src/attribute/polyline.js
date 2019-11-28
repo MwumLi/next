@@ -5,6 +5,8 @@ import {makeSmoothCurveLine} from '../utils/smooth_curve';
 const setDefault = Symbol.for('spritejs_setAttributeDefault');
 const setAttribute = Symbol.for('spritejs_setAttribute');
 const getAttribute = Symbol.for('spritejs_getAttribute');
+const declareAlias = Symbol.for('spritejs_declareAlias');
+
 
 function getPath(attr) {
   const {points, smooth, close} = attr;
@@ -37,6 +39,7 @@ export default class Polyline extends Path {
       closeType: 'none', // none | normal
       /* close */
     });
+    this[declareAlias]('close');
   }
 
   // readonly

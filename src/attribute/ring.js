@@ -5,6 +5,7 @@ import {toNumber, toArray} from '../utils/attribute_value';
 const setDefault = Symbol.for('spritejs_setAttributeDefault');
 const setAttribute = Symbol.for('spritejs_setAttribute');
 const getAttribute = Symbol.for('spritejs_getAttribute');
+const declareAlias = Symbol.for('spritejs_declareAlias');
 
 function getPath(attr) {
   let {innerRadius, outerRadius, startAngle, endAngle} = attr;
@@ -55,6 +56,7 @@ export default class Ring extends Path {
       endAngle: 360,
       /* angle */
     });
+    this[declareAlias]('radius', 'angle');
   }
 
   // readonly

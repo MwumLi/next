@@ -4,8 +4,8 @@ import {parseColor} from '../utils/color';
 
 const setAttribute = Symbol.for('spritejs_setAttribute');
 const getAttribute = Symbol.for('spritejs_getAttribute');
-const attributes = Symbol.for('spritejs_attributes');
 const setDefault = Symbol.for('spritejs_setAttributeDefault');
+const declareAlias = Symbol.for('spritejs_declareAlias');
 
 export default class Block extends Node {
   constructor(subject) {
@@ -36,16 +36,7 @@ export default class Block extends Node {
       /* padding */
       boxSizing: 'content-box',
     });
-  }
-
-  get [attributes]() {
-    const ret = super[attributes];
-    return Object.assign(ret, {
-      anchor: this.anchor,
-      size: this.size,
-      padding: this.padding,
-      borderRadius: this.borderRadius,
-    });
+    this[declareAlias]('anchor', 'size', 'border', 'borderRadius', 'padding');
   }
 
   get anchorX() {

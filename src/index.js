@@ -19,6 +19,7 @@ import Scene from './node/scene';
 import ownerDocument from './document';
 
 import {parseColor, Gradient} from './utils/color';
+import {sizeToPixel} from './utils/attribute_value';
 
 const createElement = ownerDocument.createElement;
 const isSpriteNode = ownerDocument.isSpriteNode;
@@ -46,6 +47,7 @@ export {
   Triangle,
   createElement,
   isSpriteNode,
-  parseColor,
   registerNode,
+  parseColor,
+  sizeToPixel,
 };
