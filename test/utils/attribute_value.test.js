@@ -137,6 +137,8 @@ describe('parse value', () => {
     expect(toArray(123)).toBe(123);
     expect(toArray('10,20,30')).toEqual(['10', '20', '30']);
     expect(toArray('bold 20px')).toEqual(['bold', '20px']);
+    expect(toArray('1rem')).toBe('1rem');
+    expect(toArray('')).toBe(null);
   });
 });
 

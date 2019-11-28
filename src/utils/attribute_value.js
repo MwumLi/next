@@ -67,7 +67,11 @@ export function toNumber(value) {
 }
 
 export function toArray(value) {
-  if(typeof value === 'string') return value.split(/[\s,]+/g);
+  if(value === '') return null;
+  if(typeof value === 'string') value = value.split(/[\s,]+/g);
+  if(Array.isArray(value)) {
+    if(value.length === 1) return value[0];
+  }
   return value;
 }
 
