@@ -17,7 +17,7 @@ export default class Layer extends Group {
     super();
     if(!options.canvas) {
       const {width, height} = this.getResolution();
-      const canvas = createCanvas(width, height, {offscreen: false});
+      const canvas = createCanvas(width, height, {offscreen: !!options.offscreen});
       if(canvas.style) canvas.style.position = 'absolute';
       if(canvas.dataset) canvas.dataset.layerId = options.id;
       options.canvas = canvas;
@@ -33,6 +33,14 @@ export default class Layer extends Group {
     this.canvas = canvas;
     this[_timeline] = new Timeline();
     this.__mouseCapturedTarget = null;
+  }
+
+  get offscreen() {
+    return !!this.options.offscreen;
+  }
+
+  get autoRender() {
+    return this[_autoRender];
   }
 
   /* override */
@@ -143,18 +151,39 @@ export default class Layer extends Group {
     if(meshes && meshes.length) {
       this.renderer.drawMeshes(meshes);
     }
+    if(this.prepareRender) {
+      if(this.prepareRender._requestID) {
+        cancelAnimationFrame(this.prepareRender._requestID);
+      }
+      this.prepareRender._resolve();
+      delete this.prepareRender;
+    }
   }
 
   /* override */
   forceUpdate() {
-    if(this[_autoRender] && !this.prepareRender) {
-      this.prepareRender = new Promise((resolve) => {
-        requestAnimationFrame(() => {
-          delete this.prepareRender;
-          this.render();
-          resolve();
+    if(!this.prepareRender) {
+      if(this.parent && this.parent.hasOffscreenCanvas) {
+        this.parent.forceUpdate();
+      } else {
+        let _resolve = null;
+        let _requestID = null;
+        const prepareRender = new Promise((resolve) => {
+          _resolve = resolve;
+
+          if(this[_autoRender]) {
+            _requestID = requestAnimationFrame(() => {
+              delete prepareRender._requestID;
+              this.render();
+            });
+          }
         });
-      });
+
+        prepareRender._resolve = _resolve;
+        prepareRender._requestID = _requestID;
+
+        this.prepareRender = prepareRender;
+      }
     }
   }
 

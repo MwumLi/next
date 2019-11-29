@@ -90,13 +90,24 @@
     //   path.attr({texture: 'guanguan1.png'});
     // });
 
-    // const bglayer = scene.layer('bglayer');
+    const bglayer = scene.layer('bglayer', {offscreen: true});
     const fglayer = scene.layer('fglayer');
+
+    const b = new spritejs.Sprite();
+    b.attr({
+      pos: [-50, 0],
+      size: [600, 600],
+      bgcolor: 'blue',
+      border: [10, 'red'],
+      boxSizing: 'border-box',
+    });
+    bglayer.appendChild(b);
 
     const l = new spritejs.Label();
     l.attr({
       text: 'abc',
       size: [100, 30],
+      x: -100,
       // pos: [350, 150],
       bgcolor: '#f4f2e6',
       textAlign: 'center',

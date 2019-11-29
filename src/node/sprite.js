@@ -16,7 +16,10 @@ export default class Sprite extends Block {
   }
 
   async setTexture(url) {
-    let textureImage = loadTexture(url);
+    let textureImage = url;
+    if(typeof url === 'string') {
+      textureImage = loadTexture(url);
+    }
     if(typeof textureImage.then === 'function') {
       textureImage = await textureImage;
     }

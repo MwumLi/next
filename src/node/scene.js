@@ -10,6 +10,28 @@ import ownerDocument from '../document';
 
 const _enteredTargets = Symbol('enteredTargets');
 
+function getRefCanvas(scene, layer) {
+  const children = scene.children;
+  let ref = null;
+  for(let i = 0; i < children.length; i++) {
+    const child = children[i];
+    if(layer === child || ref != null) {
+      ref = child;
+    }
+    if(ref && ref !== layer && !ref.offscreen) {
+      return ref.canvas;
+    }
+  }
+  return null;
+}
+
+function drawImage(layer, offscreenLayer) {
+  const [left, top] = layer.renderOffset;
+  const {width, height} = layer.getResolution();
+  const displayRatio = layer.displayRatio;
+  layer.renderer.drawImage(offscreenLayer.canvas, -left / displayRatio, -top / displayRatio, width / displayRatio, height / displayRatio);
+}
+
 function delegateEvents(scene) {
   const events = ['mousedown', 'mouseup', 'mousemove', 'mousewheel',
     'touchstart', 'touchend', 'touchmove', 'touchcancel',
@@ -36,7 +58,7 @@ function delegateEvents(scene) {
       const pointerEvents = createPointerEvents(event, {offsetLeft: left, offsetTop: top, displayRatio});
       pointerEvents.forEach((evt) => {
         // evt.scene = scene;
-        for(let i = 0; i < layers.length; i++) {
+        for(let i = layers.length - 1; i >= 0; i--) {
           const layer = layers[i];
           if(layer.options.handleEvent !== false) {
             const ret = layer.dispatchPointerEvent(evt);
@@ -122,6 +144,8 @@ function setViewport(options, canvas) {
   }
 }
 
+const _offscreenLayerCount = Symbol('offscreenLayerCount');
+
 export default class Scene extends Group {
   /**
     width
@@ -164,6 +188,8 @@ export default class Scene extends Group {
     this[_enteredTargets] = new Set();
     this.setResolution(options);
     delegateEvents(this);
+
+    this[_offscreenLayerCount] = 0;
   }
 
   set displayRatio(value) {
@@ -212,6 +238,10 @@ export default class Scene extends Group {
 
   get height() {
     return this.options.height;
+  }
+
+  get hasOffscreenCanvas() {
+    return this[_offscreenLayerCount] > 0;
   }
 
   /* override */
@@ -288,7 +318,11 @@ export default class Scene extends Group {
   appendChild(layer) {
     const ret = super.appendChild(layer);
     const canvas = layer.canvas;
-    this.container.appendChild(canvas);
+    if(!layer.offscreen) {
+      this.container.appendChild(canvas);
+    } else {
+      this[_offscreenLayerCount]++;
+    }
     setViewport(this.options, canvas);
     layer.setResolution(this.getResolution());
     return ret;
@@ -298,7 +332,11 @@ export default class Scene extends Group {
   insertBefore(layer, ref) {
     const ret = super.insertBefore(layer, ref);
     const canvas = layer.canvas;
-    this.container.appendChild(canvas);
+
+    if(!layer.offscreen) {
+      const refChild = getRefCanvas(this, layer);
+      this.container.insertBefore(canvas, refChild);
+    }
     setViewport(this.options, canvas);
     layer.setResolution(this.getResolution());
     return ret;
@@ -307,8 +345,13 @@ export default class Scene extends Group {
   /* override */
   replaceChild(layer, ref) {
     const ret = super.replaceChild(layer, ref);
+    if(ref.canvas.remove) ref.canvas.remove();
+    if(ref.offscreen) this[_offscreenLayerCount]--;
     const canvas = layer.canvas;
-    this.container.appendChild(canvas);
+    if(!layer.offscreen) {
+      const refChild = getRefCanvas(this, layer);
+      this.container.insertBefore(canvas, refChild);
+    }
     setViewport(this.options, canvas);
     layer.setResolution(this.getResolution());
     return ret;
@@ -317,8 +360,11 @@ export default class Scene extends Group {
   /* override */
   removeChild(layer) {
     const ret = super.removeChild(layer);
-    const canvas = layer.canvas;
-    canvas.remove();
+    if(ret) {
+      const canvas = layer.canvas;
+      if(canvas.remove) canvas.remove();
+      if(layer.offscreen) this[_offscreenLayerCount]--;
+    }
     return ret;
   }
 
@@ -329,13 +375,6 @@ export default class Scene extends Group {
     for(let i = 0; i < layers.length; i++) {
       if(layers[i].id === id) return layers[i];
     }
-
-    // const {width, height} = this.getResolution();
-    // const canvas = createCanvas(width, height, {offscreen: false});
-    // if(canvas.style) canvas.style.position = 'absolute';
-    // if(canvas.dataset) canvas.dataset.layerId = id;
-    // this.container.appendChild(canvas);
-    // options.canvas = canvas;
 
     const worker = options.worker;
     let layer;
@@ -351,6 +390,60 @@ export default class Scene extends Group {
     return layer;
   }
 
+  /* override */
+  forceUpdate() {
+    if(!this._requestID) {
+      this._requestID = requestAnimationFrame(() => {
+        delete this._requestID;
+        this.render();
+      });
+    }
+  }
+
+  // for offscreen mode rendering
+  render() {
+    const layers = this.orderedChildren;
+    let hostLayer = null;
+    const offscreens = [];
+
+    for(let i = 0; i < layers.length; i++) {
+      const layer = layers[i];
+      const hasOffscreens = offscreens.length > 0;
+      if(layer instanceof Layer && !layer.offscreen) {
+        if(!layer.autoRender) {
+          if(hasOffscreens) {
+            console.warn('Some offscreen canvas will not be rendered.');
+            offscreens.length = 0;
+          }
+        } else {
+          hostLayer = layer;
+          if(hasOffscreens) {
+            layer.renderer.clear();
+            for(let j = 0; j < offscreens.length; j++) {
+              const ol = offscreens[j];
+              ol.render();
+              drawImage(layer, ol);
+            }
+            offscreens.length = 0;
+            layer.render({clear: false});
+          } else if(layer.prepareRender) {
+            layer.render();
+          }
+        }
+      } else if(layer.offscreen) {
+        if(hostLayer) {
+          if(layer.prepareRender) layer.render();
+          drawImage(hostLayer, layer);
+        } else {
+          offscreens.push(layer);
+        }
+      } else if(layer instanceof LayerWorker && hasOffscreens) {
+        console.warn('Some offscreen canvas will not be rendered.');
+        offscreens.length = 0;
+      }
+    }
+  }
+
   snapshot({offscreen = false} = {}) {
     const _canvas = offscreen ? 'snapshotOffScreenCanvas' : 'snapshotCanvas';
     const {width, height} = this.getResolution();
@@ -361,7 +454,7 @@ export default class Scene extends Group {
     context.clearRect(0, 0, width, height);
     for(let i = 0; i < layers.length; i++) {
       const layer = layers[i];
-      layer.render();
+      if(layer.render) layer.render();
       const canvas = layer.canvas;
       if(canvas) {
         context.drawImage(canvas, 0, 0, width, height);
