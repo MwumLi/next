@@ -15,7 +15,7 @@ export function loadTexture(src, alias) {
         };
         img.src = src;
       });
-    } else { // run in worker
+    } else if(typeof fetch === 'function') { // run in worker
       return fetch(src, {
         method: 'GET',
         mode: 'cors',
@@ -28,6 +28,8 @@ export function loadTexture(src, alias) {
           return bitmap;
         });
       });
+    } else {
+      return src;
     }
   }
   return loadedTextures[src];

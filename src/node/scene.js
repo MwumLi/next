@@ -1,4 +1,4 @@
-import {createCanvas} from '@mesh.js/core';
+import {createCanvas, ENV} from '@mesh.js/core';
 import Node from './node';
 import Layer from './layer';
 import LayerWorker from './layer-worker';
@@ -7,6 +7,7 @@ import createPointerEvents from '../event/pointer-events';
 import Event from '../event/event';
 import {loadTexture, loadFrames} from '../utils/texture_loader';
 import ownerDocument from '../document';
+import {requestAnimationFrame} from '../utils/animation_frame';
 
 const _enteredTargets = Symbol('enteredTargets');
 
@@ -154,6 +155,15 @@ export default class Scene extends Group {
    */
   constructor(options = {}) {
     super();
+    if(!options.container) {
+      if(typeof ENV.Container === 'function') {
+        options.container = new ENV.Container();
+      } else if(typeof Container === 'function') {
+        options.container = new Container();
+      } else {
+        throw new Error('No container specified.');
+      }
+    }
     this.container = options.container;
     if(this.container.style) {
       if(!this.container.style.overflow) {

@@ -1,5 +1,5 @@
 const fs = require('fs');
-const {Container} = require('../lib/polyfill/node-canvas');
+const {Container} = require('../lib/platform/node-canvas');
 const {Scene, Sprite} = require('../lib');
 
 const container = new Container(512, 512);

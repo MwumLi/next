@@ -62,3 +62,5 @@ export class Container extends EventEmitter {
     return this.removeAllListeners(type);
   }
 }
+
+global.Container = Container;

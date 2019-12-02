@@ -2,6 +2,7 @@ import {Renderer, createCanvas} from '@mesh.js/core';
 import {Timeline} from 'sprite-animator';
 import Group from './group';
 import ownerDocument from '../document';
+import {requestAnimationFrame, cancelAnimationFrame} from '../utils/animation_frame';
 
 const defaultOptions = {
   antialias: true,
@@ -17,9 +18,14 @@ export default class Layer extends Group {
     super();
     if(!options.canvas) {
       const {width, height} = this.getResolution();
-      const canvas = createCanvas(width, height, {offscreen: !!options.offscreen});
+      const canvas = createCanvas(width, height, {
+        offscreen: !!options.offscreen,
+        id: options.id,
+        extra: options.extra,
+      });
       if(canvas.style) canvas.style.position = 'absolute';
       if(canvas.dataset) canvas.dataset.layerId = options.id;
+      if(canvas.contextType) options.contextType = canvas.contextType;
       options.canvas = canvas;
     }
     const canvas = options.canvas;
@@ -36,7 +42,7 @@ export default class Layer extends Group {
   }
 
   get offscreen() {
-    return !!this.options.offscreen;
+    return !!this.options.offscreen || this.canvas._offscreen;
   }
 
   get autoRender() {
@@ -110,6 +116,7 @@ export default class Layer extends Group {
         renderer.glRenderer.gl.viewport(0, 0, width, height);
       }
       this.attributes.size = [width, height];
+      this.dispatchEvent({type: 'resolutionchange', width, height});
     }
     const [left, top] = this.renderOffset;
     const displayRatio = this.displayRatio;
@@ -150,6 +157,7 @@ export default class Layer extends Group {
     const meshes = this.draw();
     if(meshes && meshes.length) {
       this.renderer.drawMeshes(meshes);
+      if(this.canvas.draw) this.canvas.draw();
     }
     if(this.prepareRender) {
       if(this.prepareRender._requestID) {
@@ -165,6 +173,12 @@ export default class Layer extends Group {
     if(!this.prepareRender) {
       if(this.parent && this.parent.hasOffscreenCanvas) {
         this.parent.forceUpdate();
+        let _resolve = null;
+        const prepareRender = new Promise((resolve) => {
+          _resolve = resolve;
+        });
+        prepareRender._resolve = _resolve;
+        this.prepareRender = prepareRender;
       } else {
         let _resolve = null;
         let _requestID = null;

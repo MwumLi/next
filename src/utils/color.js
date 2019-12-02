@@ -2,7 +2,7 @@ import rgba from 'color-rgba';
 
 class Gradient {
   constructor({vector, colors}) {
-    if(!Array.isArray(vector) || (vector.length !== 4 && vector.length !== 6)) {
+    if(!Array.isArray(vector) || (vector.length !== 4 && vector.length !== 6 && vector.length !== 3)) {
       throw new TypeError('Invalid gradient');
     }
     this.vector = vector;
@@ -36,6 +36,11 @@ export function setFillColor(mesh, {color: fillColor}) {
     if(vector.length === 4) {
       vector = [vector[0] + vectorOffset[0], vector[1] + vectorOffset[1], vector[2] + vectorOffset[0], vector[3] + vectorOffset[1]];
       mesh.setLinearGradient({vector, colors, type: 'fill'});
+    } else if(vector.length === 3) {
+      vector = [vector[0] + vectorOffset[0],
+        vector[1] + vectorOffset[1],
+        vector[2]];
+      mesh.setCircularGradient({vector, colors, type: 'fill'});
     } else {
       vector = [vector[0] + vectorOffset[0],
         vector[1] + vectorOffset[1],
@@ -68,6 +73,11 @@ export function setStrokeColor(mesh,
     if(vector.length === 4) {
       vector = [vector[0] + vectorOffset[0], vector[1] + vectorOffset[1], vector[2] + vectorOffset[0], vector[3] + vectorOffset[1]];
       mesh.setLinearGradient({vector, colors, type: 'stroke'});
+    } else if(vector.length === 3) {
+      vector = [vector[0] + vectorOffset[0],
+        vector[1] + vectorOffset[1],
+        vector[2]];
+      mesh.setCircularGradient({vector, colors, type: 'stroke'});
     } else {
       vector = [vector[0] + vectorOffset[0],
         vector[1] + vectorOffset[1],

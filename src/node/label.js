@@ -3,6 +3,7 @@ import {createTexture} from '../utils/texture_loader';
 import Block from './block';
 import Attr from '../attribute/label';
 import ownerDocument from '../document';
+import {requestAnimationFrame} from '../utils/animation_frame';
 
 const _textImage = Symbol('textImage');
 const _textImageTask = Symbol('textImageTask');
