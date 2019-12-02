@@ -36,7 +36,7 @@ function drawImage(layer, offscreenLayer) {
 function delegateEvents(scene) {
   const events = ['mousedown', 'mouseup', 'mousemove', 'mousewheel',
     'touchstart', 'touchend', 'touchmove', 'touchcancel',
-    'click', 'dblclick'];
+    'click', 'dblclick', 'longpress'];
 
   const container = scene.container;
   const {left, top, displayRatio} = scene.options;
