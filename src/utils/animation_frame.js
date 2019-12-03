@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 /* eslint-disable no-undef */
 function nowtime() {
   if(typeof performance !== 'undefined' && performance.now) {

@@ -52,6 +52,7 @@ function updateOffset(attr) {
     if(rotateValue === 'auto') {
       rotateValue = point.angle;
     } else if(rotateValue === 'reverse') {
+      /* istanbul ignore next */
       rotateValue = Math.PI + point.angle;
     } else {
       rotateValue = Math.PI * rotateValue / 180;
@@ -246,13 +247,22 @@ export default class Node {
   }
 
   set transform(value) {
+    let _matrixValue = null;
+    if(Array.isArray(value)) {
+      _matrixValue = value;
+      value = `matrix(${value.map(toNumber).join()})`;
+    }
+    if(typeof value === 'string') value = value.replace(/\s*,\s*/g, ',');
+    else if(value != null) {
+      throw new TypeError('Invalid transform value.');
+    }
     if(this[setAttribute]('transform', value)) {
       const transformMap = this[_transforms];
       if(transformMap.has('matrix')) {
         transformMap.delete('matrix');
       }
-      if(Array.isArray(value)) {
-        transformMap.set('matrix', value);
+      if(_matrixValue) {
+        transformMap.set('matrix', _matrixValue);
       } else if(value) {
         const transforms = value.match(/(matrix|translate|rotate|scale|skew)\([^()]+\)/g);
         if(transforms) {
@@ -274,6 +284,8 @@ export default class Node {
               transformMap.set('matrix', m);
             }
           }
+        } else {
+          throw new TypeError('Invalid transform value.');
         }
       }
       this[_transformMatrix] = null;
@@ -431,6 +443,7 @@ export default class Node {
     this[setAttribute]('filter', value);
   }
 
+  /* istanbul ignore next */
   set offset(value) {
     /* ignore setting offset for animations */
   }

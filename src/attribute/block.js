@@ -125,6 +125,7 @@ export default class Block extends Node {
   }
 
   set borderDash(value) {
+    value = toArray(value);
     if(value != null && !Array.isArray(value)) value = [value];
     this[setAttribute]('borderDash', value.map(toNumber));
   }
@@ -243,8 +244,6 @@ export default class Block extends Node {
     value = toArray(value);
     if(!Array.isArray(value)) {
       value = [value, value, value, value];
-    } else if(value.length === 1) {
-      value = [value[0], value[0], value[0], value[0]];
     } else if(value.length === 2) {
       value = [value[0], value[1], value[0], value[1]];
     } else if(value.length === 3) {

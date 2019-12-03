@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 /**
  * 使用 贝塞尔曲线 模拟绘制平滑曲线
  * @param {*} points 绘制点

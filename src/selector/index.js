@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import {parseColor} from '../utils/color';
 import ownerDocument from '../document';
 
