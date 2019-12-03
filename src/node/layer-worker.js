@@ -47,7 +47,12 @@ if(typeof Worker === 'function') {
 
         this[_inited] = true;
       } else {
-        throw new Error('Cannot change resolution of layer-worker.');
+        this.postMessage({
+          type: 'resolution_change',
+          width,
+          height,
+        });
+        // throw new Error('Cannot change resolution of layer-worker.');
       }
     }
 

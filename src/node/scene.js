@@ -281,6 +281,7 @@ export default class Scene extends Group {
       if(mode === 'stickyWidth') this.options.top = 0.5 * (height - h);
       if(mode === 'stickyBottom') this.options.top = height - h;
     }
+
     super.setResolution({width, height});
   }
 

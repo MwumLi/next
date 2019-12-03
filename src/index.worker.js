@@ -21,6 +21,9 @@ const layerCreated = new Promise((resolve) => {
       resolve(layer);
     } else if(layer && evt.data.type === 'event') {
       layer.dispatchPointerEvent(evt.data.event);
+    } else if(evt.data.type === 'resolution_change') {
+      const {width, height} = evt.data;
+      layer.setResolution({width, height});
     }
   });
 });
