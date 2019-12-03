@@ -23,15 +23,22 @@ module.exports = function (env = {}) {
     __DEV__: env.mode === 'development',
   }));
 
+  let filename = '[name]';
+  if(env.esnext) filename += '.es';
+  if(env.mode === 'production') filename += '.min';
+  filename += '.js';
+
+  const entry = {
+    spritejs: './src/index',
+    'spritejs.worker': './src/index.worker',
+  };
+
   return {
     mode: env.mode || 'none',
-    entry: {
-      spritejs: './src/index',
-      'spritejs.worker': './src/index.worker',
-    },
+    entry,
     output: {
       path: path.resolve(__dirname, 'dist'),
-      filename: '[name].js',
+      filename,
       publicPath: '/js/',
       library: ['spritejs'],
       libraryTarget: 'umd',
@@ -40,6 +47,7 @@ module.exports = function (env = {}) {
     },
     resolve: {
       alias: {
+        'gl-renderer': 'gl-renderer/src',
         '@mesh.js/core': '@mesh.js/core/src',
       },
     },
@@ -47,7 +55,7 @@ module.exports = function (env = {}) {
       rules: [
         {
           test: /\.js$/,
-          exclude: /node_modules\/(?!@mesh.js).*/,
+          exclude: /node_modules\/(?!@mesh.js|gl-renderer).*/,
           use: {
             loader: 'babel-loader',
             options: babelConf,
