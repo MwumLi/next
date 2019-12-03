@@ -17,7 +17,7 @@ checks:
   file-lines:
     enabled: true
     config:
-      threshold: 350
+      threshold: 500
 exclude_patterns:
 - "config/"
 - "db/"
