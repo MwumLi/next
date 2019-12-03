@@ -25,6 +25,8 @@ exclude_patterns:
 - "lib/"
 - "example/"
 - "docs/"
+- "demos/"
+- "misc/"
 - "features/"
 - "**/node_modules/"
 - "script/"
