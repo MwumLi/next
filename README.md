@@ -1,5 +1,6 @@
 [![npm status](https://img.shields.io/npm/v/@spritejs/next.svg)](https://www.npmjs.com/package/@spritejs/next)
 [![build status](https://api.travis-ci.org/spritejs/next.svg?branch=master)](https://travis-ci.org/spritejs/next)
+[![Maintainability](https://api.codeclimate.com/v1/badges/9ba455ffc1fa95cc56ad/maintainability)](https://codeclimate.com/github/spritejs/next/maintainability)
 
 ## 简介
 
