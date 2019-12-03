@@ -4,8 +4,6 @@ const setDefault = Symbol.for('spritejs_setAttributeDefault');
 const setAttribute = Symbol.for('spritejs_setAttribute');
 const getAttribute = Symbol.for('spritejs_getAttribute');
 
-const _subject = Symbol.for('spritejs_subject');
-
 export default class Sprite extends Block {
   constructor(subject) {
     super(subject);
@@ -22,11 +20,7 @@ export default class Sprite extends Block {
   }
 
   set texture(value) {
-    if(value.src) value = value.src;
-    if(this[setAttribute]('texture', value)) {
-      const subject = this[_subject];
-      subject.setTexture(value);
-    }
+    this[setAttribute]('texture', value);
   }
 
   get textureRect() {

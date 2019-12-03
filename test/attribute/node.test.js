@@ -16,10 +16,6 @@ describe('attribute set get', () => {
   };
   const attr = new NodeAttr(subject);
 
-  test('subject', () => {
-    expect(getSubject(attr)).toBe(subject);
-  });
-
   test('attribute alias', () => {
     let attrs = getAttributes(attr);
     expect('_foobar' in attrs).toBeFalsy();

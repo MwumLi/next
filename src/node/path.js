@@ -4,7 +4,7 @@ import pasition from 'pasition';
 import Node from './node';
 import Attr from '../attribute/path';
 import {setFillColor, setStrokeColor} from '../utils/color';
-import {loadTexture, createTexture} from '../utils/texture_loader';
+import {createTexture, applyTexture} from '../utils/texture_loader';
 import {compareValue} from '../utils/attribute_value';
 import {parseFilterString, applyFilters} from '../utils/filter';
 import ownerDocument from '../document';
@@ -12,7 +12,6 @@ import getBoundingBox from '../utils/bounding_box';
 import applyRenderEvent from '../utils/render_event';
 
 const _mesh = Symbol('mesh');
-const _textureImage = Symbol('textureImage');
 const _textureContext = Symbol('textureContext');
 const _filters = Symbol('filters');
 
@@ -35,19 +34,6 @@ export default class Path extends Node {
         return path;
       },
     };
-  }
-
-  async setTexture(url) {
-    let textureImage = loadTexture(url);
-    if(typeof textureImage.then === 'function') {
-      textureImage = await textureImage;
-    }
-    if(url === this.attributes.texture) {
-      this[_textureImage] = textureImage;
-      this.updateContours();
-      this.forceUpdate();
-    }
-    return textureImage;
   }
 
   set d(value) {
@@ -129,6 +115,9 @@ export default class Path extends Node {
       if(this[_mesh]) {
         applyFilters(this[_mesh], this[_filters]);
       }
+    }
+    if(key === 'texture') {
+      applyTexture(this, newValue);
     }
   }
 
@@ -225,7 +214,7 @@ export default class Path extends Node {
   draw() {
     const mesh = this.mesh;
     if(mesh) {
-      const textureImage = this[_textureImage];
+      const textureImage = this.textureImage;
       if(textureImage) {
         const texture = mesh.texture;
         const contentRect = this.originalContentRect;

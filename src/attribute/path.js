@@ -5,7 +5,6 @@ import {toNumber, toString, toArray} from '../utils/attribute_value';
 const setDefault = Symbol.for('spritejs_setAttributeDefault');
 const setAttribute = Symbol.for('spritejs_setAttribute');
 const getAttribute = Symbol.for('spritejs_getAttribute');
-const _subject = Symbol.for('spritejs_subject');
 
 export default class Path extends Node {
   constructor(subject) {
@@ -93,7 +92,7 @@ export default class Path extends Node {
   set lineDash(value) {
     value = toArray(value);
     if(value != null && !Array.isArray(value)) value = [value];
-    this[setAttribute]('lineDash', value.map(toNumber));
+    this[setAttribute]('lineDash', value ? value.map(toNumber) : null);
   }
 
   get lineDashOffset() {
@@ -117,11 +116,7 @@ export default class Path extends Node {
   }
 
   set texture(value) {
-    if(value.src) value = value.src;
-    if(this[setAttribute]('texture', value)) {
-      const subject = this[_subject];
-      subject.setTexture(value);
-    }
+    this[setAttribute]('texture', value);
   }
 
   get textureRect() {

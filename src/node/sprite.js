@@ -1,10 +1,9 @@
-import {loadTexture, createTexture} from '../utils/texture_loader';
+import {createTexture, applyTexture} from '../utils/texture_loader';
 import {compareValue} from '../utils/attribute_value';
 import Block from './block';
 import Attr from '../attribute/sprite';
 import ownerDocument from '../document';
 
-const _textureImage = Symbol('textureImage');
 const _textureContext = Symbol('textureContext');
 
 export default class Sprite extends Block {
@@ -15,32 +14,12 @@ export default class Sprite extends Block {
     super(attrs);
   }
 
-  async setTexture(url) {
-    let textureImage = url;
-    if(typeof url === 'string') {
-      textureImage = loadTexture(url);
-    }
-    if(typeof textureImage.then === 'function') {
-      textureImage = await textureImage;
-    }
-    if(url === this.attributes.texture) {
-      this[_textureImage] = textureImage;
-      this.updateContours();
-      this.forceUpdate();
-    }
-    return textureImage;
-  }
-
-  get textureImage() {
-    return this[_textureImage];
-  }
-
   /* override */
   get contentSize() {
     let [w, h] = super.contentSize;
     const {width, height} = this.attributes;
     if(width == null || height == null) {
-      const img = this[_textureImage];
+      const img = this.textureImage;
       const sourceRect = this.attributes.sourceRect;
       if(sourceRect) {
         if(width == null) w = sourceRect[2];
@@ -54,12 +33,21 @@ export default class Sprite extends Block {
   }
 
   /* override */
+  onPropertyChange(key, newValue, oldValue) {
+    super.onPropertyChange(key, newValue, oldValue);
+    if(key === 'texture') {
+      applyTexture(this, newValue);
+      // this.setTexture(newValue);
+    }
+  }
+
+  /* override */
   draw() {
     const meshes = super.draw();
     if(meshes && meshes.length) {
       const clientBoxMesh = this.clientBoxMesh;
       // console.log(clientBoxMesh);
-      const textureImage = this[_textureImage];
+      const textureImage = this.textureImage;
       if(textureImage) {
         const texture = clientBoxMesh.texture;
         const contentRect = this.originalContentRect;

@@ -60,9 +60,9 @@ export default class Block extends Node {
 
   /* override */
   get isVisible() {
-    const [width, height] = this.contentSize;
+    const [width, height] = this.offsetSize;
 
-    return this.attributes.opacity > 0 && (!!this.hasBorder || width > 0 && height > 0);
+    return this.attributes.opacity > 0 && width > 0 && height > 0;
   }
 
   get hasBorder() {

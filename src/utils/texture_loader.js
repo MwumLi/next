@@ -35,6 +35,22 @@ export function loadTexture(src, alias) {
   return loadedTextures[src];
 }
 
+export async function applyTexture(node, image) {
+  let textureImage = image;
+  if(typeof image === 'string') {
+    textureImage = loadTexture(image);
+  }
+  if(typeof textureImage.then === 'function') {
+    textureImage = await textureImage;
+  }
+  if(image === node.attributes.texture) {
+    node.textureImage = textureImage;
+    node.updateContours();
+    node.forceUpdate();
+  }
+  return textureImage;
+}
+
 const _textureMap = Symbol('textureMap');
 
 export function createTexture(image, renderer) {

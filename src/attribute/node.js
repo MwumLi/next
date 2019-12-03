@@ -8,8 +8,8 @@ const setAttribute = Symbol.for('spritejs_setAttribute');
 const getAttribute = Symbol.for('spritejs_getAttribute');
 const attributes = Symbol.for('spritejs_attributes');
 const changedAttrs = Symbol.for('spritejs_changedAttrs');
-const _subject = Symbol.for('spritejs_subject');
 
+const _subject = Symbol('subject');
 const _attr = Symbol('attr');
 const _default = Symbol('default');
 const _alias = Symbol('alias');
@@ -87,10 +87,6 @@ export default class Node {
 
   static getChangedAttributes(attr) {
     return attr[changedAttrs];
-  }
-
-  static getSubject(attr) {
-    return attr[_subject];
   }
 
   constructor(subject) {
