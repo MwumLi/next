@@ -24,23 +24,11 @@ function sleep(ms) {
 
     const color = [127 + 128 * Math.random(), 255 * Math.random(), 128 * Math.random()].map(Math.round);
 
-    const gradient = new Gradient({
-      vector: [10, 30, 180, 90],
-      colors: [{
-        offset: 0,
-        color: `rgba(${color[0]},${color[1]},${color[2]},0)`,
-      }, {
-        offset: 1,
-        color: `rgba(${color[0]},${color[1]},${color[2]},0)`,
-      }],
-    });
-
     s.attr({
       pos,
       rotate,
       lineWidth: 6,
       d: `M10,80 q${controller},-80 350,0`,
-      strokeColor: gradient,
     });
 
     scene.layer().append(s);
@@ -64,7 +52,7 @@ function sleep(ms) {
 
       const len = s.getPathLength();
       const [x, y] = s.getPointAtLength(p * len);
-      const vector = [10, 30, x + 5, y];
+      const vector = [0, 0, x + 5, y];
 
       const gradient = new Gradient({
         vector,
