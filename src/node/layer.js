@@ -1,4 +1,4 @@
-import {Renderer, createCanvas} from '@mesh.js/core';
+import {Renderer, ENV} from '@mesh.js/core';
 import {Timeline} from 'sprite-animator';
 import Group from './group';
 import ownerDocument from '../document';
@@ -18,7 +18,7 @@ export default class Layer extends Group {
     super();
     if(!options.canvas) {
       const {width, height} = this.getResolution();
-      const canvas = createCanvas(width, height, {
+      const canvas = ENV.createCanvas(width, height, {
         offscreen: !!options.offscreen,
         id: options.id,
         extra: options.extra,

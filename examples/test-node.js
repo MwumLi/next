@@ -1,9 +1,10 @@
 const fs = require('fs');
-const {Container} = require('../lib/platform/node-canvas');
-const {Scene, Sprite} = require('../lib');
+const {polyfill} = require('../lib/platform/node-canvas');
+const {Scene, Sprite, ENV} = require('../lib');
 
-const container = new Container(512, 512);
-const scene = new Scene({container});
+polyfill({ENV});
+
+const scene = new Scene({width: 512, height: 512});
 const fglayer = scene.layer('fglayer');
 const url = 'https://p0.ssl.qhimg.com/t01a72262146b87165f.png';
 

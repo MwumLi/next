@@ -1,38 +1,10 @@
-import {createCanvas} from '@mesh.js/core';
+import {ENV} from '@mesh.js/core';
 
 const loadedTextures = {};
 
 export function loadTexture(src, alias) {
-  if(!loadedTextures[src]) {
-    if(typeof Image === 'function') {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      loadedTextures[src] = new Promise((resolve) => {
-        img.onload = function () {
-          loadedTextures[src] = img;
-          if(alias) loadedTextures[alias] = img;
-          resolve(img);
-        };
-        img.src = src;
-      });
-    } else if(typeof fetch === 'function') { // run in worker
-      return fetch(src, {
-        method: 'GET',
-        mode: 'cors',
-        cache: 'default',
-      }).then((response) => {
-        return response.blob();
-      }).then((blob) => {
-        return createImageBitmap(blob, {imageOrientation: 'flipY'}).then((bitmap) => {
-          loadedTextures[src] = bitmap;
-          return bitmap;
-        });
-      });
-    } else {
-      return src;
-    }
-  }
-  return loadedTextures[src];
+  const img = ENV.loadImage(src, {alias, useImageBitmap: false});
+  return img != null ? img : src;
 }
 
 export async function applyTexture(node, image) {
@@ -91,7 +63,7 @@ export async function loadFrames(src, frameData) {
   Object.entries(frames).forEach(([key, frame]) => {
     const {w, h} = frame.sourceSize;
 
-    const canvas = createCanvas(w, h),
+    const canvas = ENV.createCanvas(w, h),
       srcRect = frame.frame,
       rect = frame.spriteSourceSize,
       context = canvas.getContext('2d');

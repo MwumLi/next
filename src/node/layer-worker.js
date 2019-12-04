@@ -1,4 +1,4 @@
-import {createCanvas} from '@mesh.js/core';
+import {ENV} from '@mesh.js/core';
 
 const _inited = Symbol('inited');
 
@@ -15,7 +15,7 @@ if(typeof Worker === 'function') {
 
       if(!options.canvas) {
         const {width, height} = this.getResolution();
-        const canvas = createCanvas(width, height, {offscreen: false});
+        const canvas = ENV.createCanvas(width, height, {offscreen: false});
         if(canvas.style) canvas.style.position = 'absolute';
         if(canvas.dataset) canvas.dataset.layerId = options.id;
         options.canvas = canvas;

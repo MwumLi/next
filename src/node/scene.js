@@ -1,4 +1,4 @@
-import {createCanvas, ENV} from '@mesh.js/core';
+import {ENV} from '@mesh.js/core';
 import Node from './node';
 import Layer from './layer';
 import LayerWorker from './layer-worker';
@@ -157,9 +157,7 @@ export default class Scene extends Group {
     super();
     if(!options.container) {
       if(typeof ENV.Container === 'function') {
-        options.container = new ENV.Container();
-      } else if(typeof Container === 'function') {
-        options.container = new Container();
+        options.container = new ENV.Container(options.width || 300, options.height || 150);
       } else {
         throw new Error('No container specified.');
       }
@@ -458,7 +456,7 @@ export default class Scene extends Group {
   snapshot({offscreen = false} = {}) {
     const _canvas = offscreen ? 'snapshotOffScreenCanvas' : 'snapshotCanvas';
     const {width, height} = this.getResolution();
-    this[_canvas] = this[_canvas] || createCanvas(width, height, {offscreen});
+    this[_canvas] = this[_canvas] || ENV.createCanvas(width, height, {offscreen});
     const context = this[_canvas].getContext('2d');
     const layers = this.orderedChildren;
 

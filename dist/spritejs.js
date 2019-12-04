@@ -177,6 +177,14 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__(1).glMatrix.setMatrixArrayType(Array);
 
 
+/**
+  ENV: {
+    Container,
+    createCanvas,
+    loadImage,
+  }
+ */
+
 
 
 
@@ -7893,23 +7901,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mesh_cloud__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(90);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MeshCloud", function() { return _mesh_cloud__WEBPACK_IMPORTED_MODULE_3__["default"]; });
 
-/* harmony import */ var _utils_canvas__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(35);
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "createCanvas", function() { return _utils_canvas__WEBPACK_IMPORTED_MODULE_4__["createCanvas"]; });
+/* harmony import */ var _utils_create_text__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(43);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "createText", function() { return _utils_create_text__WEBPACK_IMPORTED_MODULE_4__["default"]; });
 
-/* harmony import */ var _utils_create_text__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(43);
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "createText", function() { return _utils_create_text__WEBPACK_IMPORTED_MODULE_5__["default"]; });
+/* harmony import */ var _utils_parse_font__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(39);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "parseFont", function() { return _utils_parse_font__WEBPACK_IMPORTED_MODULE_5__["default"]; });
 
-/* harmony import */ var _utils_parse_font__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(38);
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "parseFont", function() { return _utils_parse_font__WEBPACK_IMPORTED_MODULE_6__["default"]; });
+/* harmony import */ var _utils_parse_color__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(76);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "parseColor", function() { return _utils_parse_color__WEBPACK_IMPORTED_MODULE_6__["default"]; });
 
-/* harmony import */ var _utils_parse_color__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(76);
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "parseColor", function() { return _utils_parse_color__WEBPACK_IMPORTED_MODULE_7__["default"]; });
-
-/* harmony import */ var _utils_env__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(40);
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ENV", function() { return _utils_env__WEBPACK_IMPORTED_MODULE_8__["default"]; });
+/* harmony import */ var _utils_env__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(35);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ENV", function() { return _utils_env__WEBPACK_IMPORTED_MODULE_7__["default"]; });
 
 __webpack_require__(1).glMatrix.setMatrixArrayType(Array);
-
 
 
 
@@ -7941,17 +7945,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _canvas_renderer__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(34);
 /* harmony import */ var _utils_compress__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(41);
 /* harmony import */ var _utils_create_text__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(43);
-/* harmony import */ var _utils_canvas__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(35);
+/* harmony import */ var _utils_canvas__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(37);
 /* harmony import */ var _figure2d__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(44);
 /* harmony import */ var _mesh2d__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(61);
 /* harmony import */ var _utils_transform__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(71);
-/* harmony import */ var _utils_shader_creator__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(85);
+/* harmony import */ var _utils_env__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(35);
+/* harmony import */ var _utils_shader_creator__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(85);
 
 
 
 
 
 __webpack_require__(1).glMatrix.setMatrixArrayType(Array);
+
 
 
 
@@ -8052,9 +8058,9 @@ function () {
     if (contextType === 'webgl' || contextType === 'webgl2') {
       if (contextType === 'webgl2') this[_options].webgl2 = true;
       var renderer = new gl_renderer__WEBPACK_IMPORTED_MODULE_4__["default"](canvas, this[_options]);
-      Object(_utils_shader_creator__WEBPACK_IMPORTED_MODULE_13__["createShaders"])(renderer);
-      Object(_utils_shader_creator__WEBPACK_IMPORTED_MODULE_13__["applyShader"])(renderer);
-      Object(_utils_shader_creator__WEBPACK_IMPORTED_MODULE_13__["createCloudShaders"])(renderer);
+      Object(_utils_shader_creator__WEBPACK_IMPORTED_MODULE_14__["createShaders"])(renderer);
+      Object(_utils_shader_creator__WEBPACK_IMPORTED_MODULE_14__["applyShader"])(renderer);
+      Object(_utils_shader_creator__WEBPACK_IMPORTED_MODULE_14__["createCloudShaders"])(renderer);
       var gl = renderer.gl; // gl.clearColor(1.0, 1.0, 1.0, 1.0);
       // gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ZERO, gl.ONE);
 
@@ -8177,7 +8183,7 @@ function () {
           var hasGlobalTransform = !Object(_utils_transform__WEBPACK_IMPORTED_MODULE_12__["isUnitTransform"])(this[_globalTransform]);
           var hasCloudColor = cloud.hasCloudColor;
           var hasCloudFilter = true;
-          Object(_utils_shader_creator__WEBPACK_IMPORTED_MODULE_13__["applyCloudShader"])(renderer, {
+          Object(_utils_shader_creator__WEBPACK_IMPORTED_MODULE_14__["applyCloudShader"])(renderer, {
             hasTexture: hasTexture,
             hasFilter: hasFilter,
             hasGradient: hasGradient,
@@ -8268,7 +8274,7 @@ function () {
 
             if (!program && mesh.filterCanvas) {
               // 有一些滤镜用shader不好实现：blur、drop-shadow、url
-              Object(_utils_shader_creator__WEBPACK_IMPORTED_MODULE_13__["applyShader"])(renderer, {
+              Object(_utils_shader_creator__WEBPACK_IMPORTED_MODULE_14__["applyShader"])(renderer, {
                 hasTexture: true
               });
               var _this$canvas2 = this.canvas,
@@ -8277,7 +8283,7 @@ function () {
               var filterContext = this.filterContext;
 
               if (!filterContext) {
-                var canvas = Object(_utils_canvas__WEBPACK_IMPORTED_MODULE_9__["createCanvas"])(width, height);
+                var canvas = _utils_env__WEBPACK_IMPORTED_MODULE_13__["default"].createCanvas(width, height);
                 filterContext = canvas.getContext('2d');
                 this.filterContext = filterContext;
               }
@@ -8328,7 +8334,7 @@ function () {
                 var hasTexture = !!mesh.uniforms.u_texSampler;
                 var hasFilter = !!mesh.uniforms.u_filterFlag;
                 var hasGradient = !!mesh.uniforms.u_radialGradientVector;
-                Object(_utils_shader_creator__WEBPACK_IMPORTED_MODULE_13__["applyShader"])(renderer, {
+                Object(_utils_shader_creator__WEBPACK_IMPORTED_MODULE_14__["applyShader"])(renderer, {
                   hasTexture: hasTexture,
                   hasFilter: hasFilter,
                   hasGradient: hasGradient,
@@ -8733,18 +8739,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Renderer; });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(26);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
-/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(18);
-/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(22);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(23);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(28);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(29);
-/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(28);
+/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(14);
+/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(18);
+/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(22);
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(23);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(29);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(30);
 /* harmony import */ var _default_vert_glsl__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(31);
 /* harmony import */ var _default_frag_glsl__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(32);
@@ -8766,61 +8772,6 @@ __webpack_require__(1).glMatrix.setMatrixArrayType(Array);
 var GLSL_LIBS = {};
 
 var _renderFrameID = Symbol('renderFrameID');
-
-var shaderCache = {};
-
-function fetchShader(_x) {
-  return _fetchShader.apply(this, arguments);
-}
-
-function _fetchShader() {
-  _fetchShader = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_6___default()(
-  /*#__PURE__*/
-  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5(url) {
-    var res, content;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
-      while (1) {
-        switch (_context5.prev = _context5.next) {
-          case 0:
-            if (!shaderCache[url]) {
-              _context5.next = 2;
-              break;
-            }
-
-            return _context5.abrupt("return", shaderCache[url]);
-
-          case 2:
-            _context5.next = 4;
-            return fetch(url);
-
-          case 4:
-            res = _context5.sent;
-
-            if (!(res.status >= 200 && res.status < 300)) {
-              _context5.next = 11;
-              break;
-            }
-
-            _context5.next = 8;
-            return res.text();
-
-          case 8:
-            content = _context5.sent;
-            shaderCache[url] = content;
-            return _context5.abrupt("return", content);
-
-          case 11:
-            return _context5.abrupt("return", null);
-
-          case 12:
-          case "end":
-            return _context5.stop();
-        }
-      }
-    }, _callee5);
-  }));
-  return _fetchShader.apply(this, arguments);
-}
 
 function mapTextureCoordinate(positions) {
   var size = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 3;
@@ -8866,7 +8817,7 @@ var uniformTypeMap = {
 var Renderer =
 /*#__PURE__*/
 function () {
-  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4___default()(Renderer, null, [{
+  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_5___default()(Renderer, null, [{
     key: "addLibs",
     value: function addLibs() {
       var libs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -8897,17 +8848,12 @@ function () {
     value: function SHORT(points, buffer) {
       return Object(_helpers__WEBPACK_IMPORTED_MODULE_7__["pointsToBuffer"])(points, Int16Array, buffer);
     }
-  }, {
-    key: "loadImage",
-    value: function loadImage(source, useImageBitmap) {
-      return Object(_helpers__WEBPACK_IMPORTED_MODULE_7__["loadImage"])(source, useImageBitmap);
-    }
   }]);
 
   function Renderer(canvas) {
     var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_3___default()(this, Renderer);
+    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_4___default()(this, Renderer);
 
     this.options = Object.assign({}, Renderer.defaultOptions, opts);
     this.canvas = canvas;
@@ -8930,7 +8876,7 @@ function () {
     this._events = {};
   }
 
-  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4___default()(Renderer, [{
+  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_5___default()(Renderer, [{
     key: "_declareUniform",
     // WebGLRenderingContext.uniform[1234][fi][v]()
     // WebGLRenderingContext.uniformMatrix[234]fv()
@@ -8979,7 +8925,7 @@ function () {
               v = [v];
             }
 
-            if (isMatrix) setUniform(uniform, false, v);else if (isTypeV) setUniform(uniform, v);else setUniform.apply(void 0, [uniform].concat(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_2___default()(v)));
+            if (isMatrix) setUniform(uniform, false, v);else if (isTypeV) setUniform(uniform, v);else setUniform.apply(void 0, [uniform].concat(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_3___default()(v)));
             if (that.options.autoUpdate) that.update();
           },
           configurable: false,
@@ -9032,7 +8978,7 @@ function () {
 
         if (uniforms) {
           Object.entries(uniforms).forEach(function (_ref2) {
-            var _ref3 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default()(_ref2, 2),
+            var _ref3 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_2___default()(_ref2, 2),
                 key = _ref3[0],
                 value = _ref3[1];
 
@@ -9127,7 +9073,7 @@ function () {
         if (attributes) {
           var copied = {};
           Object.entries(attributes).forEach(function (_ref5) {
-            var _ref6 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default()(_ref5, 2),
+            var _ref6 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_2___default()(_ref5, 2),
                 key = _ref6[0],
                 value = _ref6[1];
 
@@ -9204,7 +9150,7 @@ function () {
           var _matched = matched[i].match(patt);
 
           if (_matched && _matched[3] !== this.options.vertexPosition && _matched[3] !== this.options.vertexTextureCoord) {
-            var _matched2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default()(_matched, 4),
+            var _matched2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_2___default()(_matched, 4),
                 type = _matched2[1],
                 size = _matched2[2],
                 name = _matched2[3];
@@ -9227,7 +9173,7 @@ function () {
         var _matched = m.match(/^\s*uniform\s+(\w+)\s+(\w+)(\[\d+\])?/);
 
         var _matched$slice = _matched.slice(1),
-            _matched$slice2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default()(_matched$slice, 3),
+            _matched$slice2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_2___default()(_matched$slice, 3),
             type = _matched$slice2[0],
             name = _matched$slice2[1],
             isTypeV = _matched$slice2[2];
@@ -9279,7 +9225,7 @@ function () {
       }
 
       Object.entries(program._attribute).forEach(function (_ref7) {
-        var _ref8 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default()(_ref7, 2),
+        var _ref8 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_2___default()(_ref7, 2),
             name = _ref8[0],
             item = _ref8[1];
 
@@ -9373,7 +9319,7 @@ function () {
   }, {
     key: "compile",
     value: function () {
-      var _compile2 = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_6___default()(
+      var _compile2 = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(frag, vert) {
         var loaded, _compile, _compile3, fragmentShader, vertexShader, program;
@@ -9383,7 +9329,7 @@ function () {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _compile3 = function _ref10() {
-                  _compile3 = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_6___default()(
+                  _compile3 = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()(
                   /*#__PURE__*/
                   _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(content) {
                     var includes, matched, i, m, _matched, type, name, c, _c;
@@ -9450,7 +9396,7 @@ function () {
                             }
 
                             _context.next = 24;
-                            return fetchShader(name);
+                            return Renderer.fetchShader(name);
 
                           case 24:
                             _c = _context.sent;
@@ -9492,7 +9438,7 @@ function () {
                   return _compile3.apply(this, arguments);
                 };
 
-                _compile = function _ref9(_x4) {
+                _compile = function _ref9(_x3) {
                   return _compile3.apply(this, arguments);
                 };
 
@@ -9533,7 +9479,7 @@ function () {
         }, _callee2, this);
       }));
 
-      function compile(_x2, _x3) {
+      function compile(_x, _x2) {
         return _compile2.apply(this, arguments);
       }
 
@@ -9542,7 +9488,7 @@ function () {
   }, {
     key: "load",
     value: function () {
-      var _load = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_6___default()(
+      var _load = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(frag) {
         var vert,
@@ -9553,7 +9499,7 @@ function () {
               case 0:
                 vert = _args3.length > 1 && _args3[1] !== undefined ? _args3[1] : null;
                 _context3.next = 3;
-                return fetchShader(frag);
+                return Renderer.fetchShader(frag);
 
               case 3:
                 frag = _context3.sent;
@@ -9564,7 +9510,7 @@ function () {
                 }
 
                 _context3.next = 7;
-                return fetchShader(vert);
+                return Renderer.fetchShader(vert);
 
               case 7:
                 vert = _context3.sent;
@@ -9580,7 +9526,7 @@ function () {
         }, _callee3, this);
       }));
 
-      function load(_x5) {
+      function load(_x4) {
         return _load.apply(this, arguments);
       }
 
@@ -9626,7 +9572,7 @@ function () {
   }, {
     key: "loadTexture",
     value: function () {
-      var _loadTexture = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_6___default()(
+      var _loadTexture = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4(source) {
         var _ref11,
@@ -9641,7 +9587,9 @@ function () {
               case 0:
                 _ref11 = _args4.length > 1 && _args4[1] !== undefined ? _args4[1] : {}, _ref11$useImageBitmap = _ref11.useImageBitmap, useImageBitmap = _ref11$useImageBitmap === void 0 ? true : _ref11$useImageBitmap;
                 _context4.next = 3;
-                return Object(_helpers__WEBPACK_IMPORTED_MODULE_7__["loadImage"])(source, useImageBitmap);
+                return Renderer.loadImage(source, {
+                  useImageBitmap: useImageBitmap
+                });
 
               case 3:
                 img = _context4.sent;
@@ -9655,7 +9603,7 @@ function () {
         }, _callee4, this);
       }));
 
-      function loadTexture(_x6) {
+      function loadTexture(_x5) {
         return _loadTexture.apply(this, arguments);
       }
 
@@ -9727,7 +9675,7 @@ function () {
   return Renderer;
 }();
 
-_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_5___default()(Renderer, "defaultOptions", {
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(Renderer, "defaultOptions", {
   preserveDrawingBuffer: true,
   autoUpdate: true,
   vertexPosition: 'a_vertexPosition',
@@ -9735,11 +9683,13 @@ _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_5___default()(Ren
   webgl2: false
 });
 
-_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_5___default()(Renderer, "UBYTE", Renderer.UNSIGNED_BYTE);
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(Renderer, "UBYTE", Renderer.UNSIGNED_BYTE);
 
-_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_5___default()(Renderer, "USHORT", Renderer.UNSIGNED_SHORT);
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(Renderer, "USHORT", Renderer.UNSIGNED_SHORT);
 
-_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_5___default()(Renderer, "fetchShader", fetchShader);
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(Renderer, "fetchShader", _helpers__WEBPACK_IMPORTED_MODULE_7__["fetchShader"]);
+
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(Renderer, "loadImage", _helpers__WEBPACK_IMPORTED_MODULE_7__["loadImage"]);
 
 
 
@@ -10486,27 +10436,6 @@ try {
 /* 28 */
 /***/ (function(module, exports) {
 
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-module.exports = _defineProperty;
-
-/***/ }),
-/* 29 */
-/***/ (function(module, exports) {
-
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
   try {
     var info = gen[key](arg);
@@ -10546,6 +10475,27 @@ function _asyncToGenerator(fn) {
 module.exports = _asyncToGenerator;
 
 /***/ }),
+/* 29 */
+/***/ (function(module, exports) {
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+module.exports = _defineProperty;
+
+/***/ }),
 /* 30 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -10555,6 +10505,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createProgram", function() { return createProgram; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pointsToBuffer", function() { return pointsToBuffer; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadImage", function() { return loadImage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchShader", function() { return fetchShader; });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(26);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(28);
+/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
 __webpack_require__(1).glMatrix.setMatrixArrayType(Array);
 
 function create3DContext(canvas, opt_attribs) {
@@ -10579,7 +10537,7 @@ function setupWebGL(canvas, opt_attribs) {
   var context = create3DContext(canvas, opt_attribs);
 
   if (!context) {
-    throw new Error('Sorry, your browser doesn\'t support WebGL.');
+    throw new Error("Sorry, your browser doesn't support WebGL.");
   }
 
   return context;
@@ -10591,8 +10549,7 @@ function createProgram(gl, vertex, fragment) {
 
   if (!gl.getShaderParameter(vertShdr, gl.COMPILE_STATUS)) {
     var msg = "Vertex shader failed to compile.  The error log is:".concat(gl.getShaderInfoLog(vertShdr));
-    console.error(msg);
-    return -1;
+    throw new Error(msg);
   }
 
   var fragShdr = gl.createShader(gl.FRAGMENT_SHADER);
@@ -10602,8 +10559,7 @@ function createProgram(gl, vertex, fragment) {
   if (!gl.getShaderParameter(fragShdr, gl.COMPILE_STATUS)) {
     var _msg = "Fragment shader failed to compile.  The error log is:".concat(gl.getShaderInfoLog(fragShdr));
 
-    console.error(_msg);
-    return -1;
+    throw new Error(_msg);
   }
 
   var program = gl.createProgram();
@@ -10614,8 +10570,7 @@ function createProgram(gl, vertex, fragment) {
   if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
     var _msg2 = "Shader program failed to link.  The error log is:".concat(gl.getProgramInfoLog(program));
 
-    console.error(_msg2);
-    return -1;
+    throw new Error(_msg2);
   }
 
   gl.deleteShader(vertShdr);
@@ -10657,7 +10612,11 @@ function pointsToBuffer(points) {
 }
 var imageCache = {};
 function loadImage(src) {
-  var useImageBitmap = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+  var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+      _ref$useImageBitmap = _ref.useImageBitmap,
+      useImageBitmap = _ref$useImageBitmap === void 0 ? true : _ref$useImageBitmap,
+      _ref$alias = _ref.alias,
+      alias = _ref$alias === void 0 ? null : _ref$alias;
 
   if (!imageCache[src]) {
     if (typeof Image === 'function') {
@@ -10670,17 +10629,19 @@ function loadImage(src) {
               imageOrientation: 'flipY'
             }).then(function (bitmap) {
               imageCache[src] = bitmap;
+              if (alias) imageCache[alias] = bitmap;
               resolve(bitmap);
             });
           } else {
             imageCache[src] = img;
+            if (alias) imageCache[alias] = img;
             resolve(img);
           }
         };
 
         img.src = src;
       });
-    } else {
+    } else if (typeof fetch === 'function') {
       // run in worker
       return fetch(src, {
         method: 'GET',
@@ -10693,13 +10654,67 @@ function loadImage(src) {
           imageOrientation: 'flipY'
         }).then(function (bitmap) {
           imageCache[src] = bitmap;
+          if (alias) imageCache[alias] = bitmap;
           return bitmap;
         });
       });
     }
   }
 
-  return Promise.resolve(imageCache[src]);
+  return imageCache[src];
+}
+var shaderCache = {};
+function fetchShader(_x) {
+  return _fetchShader.apply(this, arguments);
+}
+
+function _fetchShader() {
+  _fetchShader = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()(
+  /*#__PURE__*/
+  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(url) {
+    var res, content;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            if (!shaderCache[url]) {
+              _context.next = 2;
+              break;
+            }
+
+            return _context.abrupt("return", shaderCache[url]);
+
+          case 2:
+            _context.next = 4;
+            return fetch(url);
+
+          case 4:
+            res = _context.sent;
+
+            if (!(res.status >= 200 && res.status < 300)) {
+              _context.next = 11;
+              break;
+            }
+
+            _context.next = 8;
+            return res.text();
+
+          case 8:
+            content = _context.sent;
+            shaderCache[url] = content;
+            return _context.abrupt("return", content);
+
+          case 11:
+            throw new Error('Shader loaded error.');
+
+          case 12:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _fetchShader.apply(this, arguments);
 }
 
 /***/ }),
@@ -10739,14 +10754,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(26);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(29);
+/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(28);
 /* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(22);
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(23);
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var gl_renderer__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(24);
-/* harmony import */ var _utils_canvas__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(35);
+/* harmony import */ var _utils_env__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(35);
+/* harmony import */ var _utils_canvas__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(37);
 
 
 
@@ -10792,7 +10807,9 @@ function () {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return gl_renderer__WEBPACK_IMPORTED_MODULE_6__["default"].loadImage(textureURL, false);
+                return _utils_env__WEBPACK_IMPORTED_MODULE_6__["default"].loadImage(textureURL, {
+                  useImageBitmap: false
+                });
 
               case 2:
                 image = _context.sent;
@@ -10868,7 +10885,7 @@ function () {
         if (cloudFilter) filter = filter ? "".concat(filter, " ").concat(cloudFilter) : cloudFilter;
 
         if (filter && _this.filterBuffer !== false) {
-          var canvas = Object(_utils_canvas__WEBPACK_IMPORTED_MODULE_7__["createCanvas"])(width, height);
+          var canvas = _utils_env__WEBPACK_IMPORTED_MODULE_6__["default"].createCanvas(width, height);
 
           if (canvas) {
             _this.filterBuffer = canvas.getContext('2d');
@@ -10934,16 +10951,73 @@ function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function(global) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createCanvas", function() { return createCanvas; });
+/* WEBPACK VAR INJECTION */(function(global) {/* harmony import */ var gl_renderer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(24);
+__webpack_require__(1).glMatrix.setMatrixArrayType(Array);
+
+
+var ENV = {
+  createCanvas: function createCanvas(width, height) {
+    var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    var offscreen = options.offscreen !== false;
+    var canvas;
+
+    if (typeof global.createCanvas === 'function') {
+      canvas = global.createCanvas(width, height, options);
+    } else if (offscreen && typeof OffscreenCanvas === 'function') {
+      canvas = new OffscreenCanvas(width, height);
+    } else {
+      canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+    }
+
+    return canvas;
+  },
+  loadImage: gl_renderer__WEBPACK_IMPORTED_MODULE_0__["default"].loadImage
+};
+/* harmony default export */ __webpack_exports__["default"] = (ENV);
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(36)))
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || new Function("return this")();
+} catch (e) {
+	// This works if the window reference is available
+	if (typeof window === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 37 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "applyFilter", function() { return applyFilter; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawMesh2D", function() { return drawMesh2D; });
 /* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
 /* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1);
-/* harmony import */ var _vector_to_rgba__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(37);
-/* harmony import */ var _parse_font__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(38);
-/* harmony import */ var _math__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(39);
-/* harmony import */ var _env__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(40);
+/* harmony import */ var _vector_to_rgba__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(38);
+/* harmony import */ var _parse_font__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(39);
+/* harmony import */ var _math__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(40);
 
 
 __webpack_require__(1).glMatrix.setMatrixArrayType(Array);
@@ -10952,26 +11026,6 @@ __webpack_require__(1).glMatrix.setMatrixArrayType(Array);
 
 
 
-
-function createCanvas(width, height) {
-  var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-  var offscreen = options.offscreen !== false;
-  var canvas;
-
-  if (typeof _env__WEBPACK_IMPORTED_MODULE_5__["default"].createCanvas === 'function') {
-    canvas = _env__WEBPACK_IMPORTED_MODULE_5__["default"].createCanvas(width, height, options);
-  } else if (typeof global.createCanvas === 'function') {
-    canvas = global.createCanvas(width, height, options);
-  } else if (offscreen && typeof OffscreenCanvas === 'function') {
-    canvas = new OffscreenCanvas(width, height);
-  } else {
-    canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
-  }
-
-  return canvas;
-}
 function applyFilter(context, filter) {
   var canvas = context.canvas;
   context.save();
@@ -11199,36 +11253,9 @@ function drawMesh2D(mesh, context) {
     }
   }
 }
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(36)))
 
 /***/ }),
-/* 36 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || new Function("return this")();
-} catch (e) {
-	// This works if the window reference is available
-	if (typeof window === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11244,7 +11271,7 @@ function vectorToRGBA(vector) {
 }
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11388,7 +11415,7 @@ function parseFont(str, defaultHeight) {
 }
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11423,19 +11450,6 @@ function transformPoint(p, m) {
 
   return [x * m[0] + y * m[2] + m[4], x * m[1] + y * m[3] + m[5]];
 }
-
-/***/ }),
-/* 40 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-__webpack_require__(1).glMatrix.setMatrixArrayType(Array);
-
-var ENV = {
-  createCanvas: undefined
-};
-/* harmony default export */ __webpack_exports__["default"] = (ENV);
 
 /***/ }),
 /* 41 */
@@ -11727,9 +11741,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return createText; });
 /* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
 /* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _parse_font__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(38);
-/* harmony import */ var _canvas__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(35);
-/* harmony import */ var _vector_to_rgba__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(37);
+/* harmony import */ var _parse_font__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(39);
+/* harmony import */ var _env__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(35);
+/* harmony import */ var _vector_to_rgba__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(38);
 
 
 __webpack_require__(1).glMatrix.setMatrixArrayType(Array);
@@ -11746,7 +11760,7 @@ function createText(text, _ref) {
   var key = [text, font, String(fillColor), String(strokeColor)].join('###');
   var textCanvas = cacheMap[key];
   if (textCanvas) return textCanvas;
-  textCanvas = Object(_canvas__WEBPACK_IMPORTED_MODULE_2__["createCanvas"])(1, 1);
+  textCanvas = _env__WEBPACK_IMPORTED_MODULE_2__["default"].createCanvas(1, 1);
   var textContext = textCanvas.getContext('2d');
   textContext.save();
   textContext.font = font;
@@ -13369,7 +13383,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var bound_points__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(bound_points__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _extrude_polyline__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(62);
 /* harmony import */ var _utils_flatten_meshes__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(42);
-/* harmony import */ var _utils_vector_to_rgba__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(37);
+/* harmony import */ var _utils_vector_to_rgba__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(38);
 /* harmony import */ var _utils_positions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(59);
 /* harmony import */ var _utils_color_matrix__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(70);
 /* harmony import */ var _utils_transform__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(71);
@@ -14901,7 +14915,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sepia", function() { return sepia; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "opacity", function() { return opacity; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hueRotate", function() { return hueRotate; });
-/* harmony import */ var _math__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(39);
+/* harmony import */ var _math__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(40);
 __webpack_require__(1).glMatrix.setMatrixArrayType(Array);
 
 
@@ -19321,7 +19335,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return _default; });
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(28);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(29);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
 /* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1__);
@@ -19333,7 +19347,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(1);
 /* harmony import */ var _utils_color_matrix__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(70);
-/* harmony import */ var _utils_math__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(39);
+/* harmony import */ var _utils_math__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(40);
 /* harmony import */ var _utils_parse_color__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(76);
 
 
@@ -19834,7 +19848,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(23);
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(28);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(29);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(1);
 /* harmony import */ var _attribute_node__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(93);
@@ -20471,7 +20485,7 @@ var _getAttribute = Symbol.for('spritejs_getAttribute');
 var attributes = Symbol.for('spritejs_attributes');
 var changedAttrs = Symbol.for('spritejs_changedAttrs');
 
-var _subject = Symbol.for('spritejs_subject');
+var _subject = Symbol('subject');
 
 var _attr = Symbol('attr');
 
@@ -20538,6 +20552,7 @@ function updateOffset(attr) {
     if (rotateValue === 'auto') {
       rotateValue = point.angle;
     } else if (rotateValue === 'reverse') {
+      /* istanbul ignore next */
       rotateValue = Math.PI + point.angle;
     } else {
       rotateValue = Math.PI * rotateValue / 180;
@@ -20598,11 +20613,6 @@ function () {
     key: "getChangedAttributes",
     value: function getChangedAttributes(attr) {
       return attr[changedAttrs];
-    }
-  }, {
-    key: "getSubject",
-    value: function getSubject(attr) {
-      return attr[_subject];
     }
   }]);
 
@@ -20789,6 +20799,17 @@ function () {
       return this[_getAttribute]('transform');
     },
     set: function set(value) {
+      var _matrixValue = null;
+
+      if (Array.isArray(value)) {
+        _matrixValue = value;
+        value = "matrix(".concat(value.map(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_6__["toNumber"]).join(), ")");
+      }
+
+      if (typeof value === 'string') value = value.replace(/\s*,\s*/g, ',');else if (value != null) {
+        throw new TypeError('Invalid transform value.');
+      }
+
       if (this[_setAttribute]('transform', value)) {
         var transformMap = this[_transforms];
 
@@ -20796,8 +20817,8 @@ function () {
           transformMap.delete('matrix');
         }
 
-        if (Array.isArray(value)) {
-          transformMap.set('matrix', value);
+        if (_matrixValue) {
+          transformMap.set('matrix', _matrixValue);
         } else if (value) {
           var transforms = value.match(/(matrix|translate|rotate|scale|skew)\([^()]+\)/g);
 
@@ -20828,6 +20849,8 @@ function () {
                 transformMap.set('matrix', m);
               }
             }
+          } else {
+            throw new TypeError('Invalid transform value.');
           }
         }
 
@@ -21006,6 +21029,8 @@ function () {
     set: function set(value) {
       this[_setAttribute]('filter', value);
     }
+    /* istanbul ignore next */
+
   }, {
     key: "offset",
     set: function set(value) {
@@ -25985,6 +26010,8 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__(1).glMatrix.setMatrixArrayType(Array);
 
+/* istanbul ignore file */
+
 /* eslint-disable no-undef */
 function nowtime() {
   if (typeof performance !== 'undefined' && performance.now) {
@@ -26374,7 +26401,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(102);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(28);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(29);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8__);
 /* harmony import */ var _mesh_js_core__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(12);
 /* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(1);
@@ -26726,11 +26753,11 @@ function (_Node) {
   }, {
     key: "isVisible",
     get: function get() {
-      var _this$contentSize4 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(this.contentSize, 2),
-          width = _this$contentSize4[0],
-          height = _this$contentSize4[1];
+      var _this$offsetSize = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(this.offsetSize, 2),
+          width = _this$offsetSize[0],
+          height = _this$offsetSize[1];
 
-      return this.attributes.opacity > 0 && (!!this.hasBorder || width > 0 && height > 0);
+      return this.attributes.opacity > 0 && width > 0 && height > 0;
     }
   }, {
     key: "hasBorder",
@@ -27041,6 +27068,7 @@ function (_Node) {
       return this[getAttribute]('borderDash');
     },
     set: function set(value) {
+      value = Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_7__["toArray"])(value);
       if (value != null && !Array.isArray(value)) value = [value];
       this[setAttribute]('borderDash', value.map(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_7__["toNumber"]));
     }
@@ -27155,8 +27183,6 @@ function (_Node) {
 
       if (!Array.isArray(value)) {
         value = [value, value, value, value];
-      } else if (value.length === 1) {
-        value = [value[0], value[0], value[0], value[0]];
       } else if (value.length === 2) {
         value = [value[0], value[1], value[0], value[1]];
       } else if (value.length === 3) {
@@ -27257,45 +27283,47 @@ function parseColor(color) {
   return "rgba(".concat(ret.join(), ")");
 }
 
-function setFillColor(mesh, _ref3) {
-  var fillColor = _ref3.color;
 
-  if (fillColor.vector) {
-    // gradient
-    var vectorOffset = mesh.boundingBox[0];
-    var vector = fillColor.vector,
-        colors = fillColor.colors;
+function applyMeshGradient(mesh, type, color) {
+  var vectorOffset = mesh.boundingBox[0];
+
+  if (color.vector) {
+    var vector = color.vector,
+        colors = color.colors;
 
     if (vector.length === 4) {
       vector = [vector[0] + vectorOffset[0], vector[1] + vectorOffset[1], vector[2] + vectorOffset[0], vector[3] + vectorOffset[1]];
       mesh.setLinearGradient({
         vector: vector,
         colors: colors,
-        type: 'fill'
+        type: type
       });
     } else if (vector.length === 3) {
       vector = [vector[0] + vectorOffset[0], vector[1] + vectorOffset[1], vector[2]];
       mesh.setCircularGradient({
         vector: vector,
         colors: colors,
-        type: 'fill'
+        type: type
       });
     } else {
       vector = [vector[0] + vectorOffset[0], vector[1] + vectorOffset[1], vector[2], vector[3] + vectorOffset[0], vector[4] + vectorOffset[1], vector[5]];
       mesh.setRadialGradient({
         vector: vector,
         colors: colors,
-        type: 'fill'
+        type: type
       });
     }
-  } else {
-    if (mesh.gradient) {
-      if (mesh.gradient.fill) {
-        delete mesh.gradient.fill;
-        delete mesh.uniforms.u_radialGradientVector;
-      }
-    }
+  } else if (mesh.gradient && mesh.gradient[type]) {
+    delete mesh.gradient[type];
+    delete mesh.uniforms.u_radialGradientVector;
+  }
+}
 
+function setFillColor(mesh, _ref3) {
+  var fillColor = _ref3.color;
+  applyMeshGradient(mesh, 'fill', fillColor);
+
+  if (!fillColor.vector) {
     mesh.setFill({
       color: fillColor
     });
@@ -27311,43 +27339,10 @@ function setStrokeColor(mesh, _ref4) {
       lineDash = _ref4.lineDash,
       lineDashOffset = _ref4.lineDashOffset,
       miterLimit = _ref4.miterLimit;
+  applyMeshGradient(mesh, 'stroke', strokeColor);
 
   if (strokeColor.vector) {
-    // gradient
-    var vectorOffset = mesh.boundingBox[0];
-    var _strokeColor = strokeColor,
-        vector = _strokeColor.vector,
-        colors = _strokeColor.colors;
-
-    if (vector.length === 4) {
-      vector = [vector[0] + vectorOffset[0], vector[1] + vectorOffset[1], vector[2] + vectorOffset[0], vector[3] + vectorOffset[1]];
-      mesh.setLinearGradient({
-        vector: vector,
-        colors: colors,
-        type: 'stroke'
-      });
-    } else if (vector.length === 3) {
-      vector = [vector[0] + vectorOffset[0], vector[1] + vectorOffset[1], vector[2]];
-      mesh.setCircularGradient({
-        vector: vector,
-        colors: colors,
-        type: 'stroke'
-      });
-    } else {
-      vector = [vector[0] + vectorOffset[0], vector[1] + vectorOffset[1], vector[2], vector[3] + vectorOffset[0], vector[4] + vectorOffset[1], vector[5]];
-      mesh.setRadialGradient({
-        vector: vector,
-        colors: colors,
-        type: 'stroke'
-      });
-    }
-
     strokeColor = [0, 0, 0, 1];
-  } else if (mesh.gradient) {
-    if (mesh.gradient.stroke) {
-      delete mesh.gradient.stroke;
-      delete mesh.uniforms.u_radialGradientVector;
-    }
   }
 
   mesh.setStroke({
@@ -27626,31 +27621,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Sprite; });
 /* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
 /* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(26);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(29);
-/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(22);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(23);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(97);
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(99);
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(100);
-/* harmony import */ var _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(102);
-/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(28);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var _utils_texture_loader__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(255);
-/* harmony import */ var _utils_attribute_value__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(94);
-/* harmony import */ var _block__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(247);
-/* harmony import */ var _attribute_sprite__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(256);
-/* harmony import */ var _document__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(245);
-
-
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(22);
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(23);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(97);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(99);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(100);
+/* harmony import */ var _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(102);
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(29);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _utils_texture_loader__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(255);
+/* harmony import */ var _utils_attribute_value__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(94);
+/* harmony import */ var _block__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(247);
+/* harmony import */ var _attribute_sprite__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(256);
+/* harmony import */ var _document__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(245);
 
 
 
@@ -27668,88 +27657,48 @@ __webpack_require__(1).glMatrix.setMatrixArrayType(Array);
 
 
 
-var _textureImage = Symbol('textureImage');
-
 var _textureContext = Symbol('textureContext');
 
 var Sprite =
 /*#__PURE__*/
 function (_Block) {
-  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_8___default()(Sprite, _Block);
+  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6___default()(Sprite, _Block);
 
   function Sprite() {
     var attrs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_3___default()(this, Sprite);
+    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default()(this, Sprite);
 
     if (typeof attrs === 'string') attrs = {
       texture: attrs
     };
-    return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6___default()(Sprite).call(this, attrs));
+    return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Sprite).call(this, attrs));
   }
+  /* override */
 
-  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4___default()(Sprite, [{
-    key: "setTexture",
-    value: function () {
-      var _setTexture = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2___default()(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.mark(function _callee(url) {
-        var textureImage;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                textureImage = url;
 
-                if (typeof url === 'string') {
-                  textureImage = Object(_utils_texture_loader__WEBPACK_IMPORTED_MODULE_10__["loadTexture"])(url);
-                }
-
-                if (!(typeof textureImage.then === 'function')) {
-                  _context.next = 6;
-                  break;
-                }
-
-                _context.next = 5;
-                return textureImage;
-
-              case 5:
-                textureImage = _context.sent;
-
-              case 6:
-                if (url === this.attributes.texture) {
-                  this[_textureImage] = textureImage;
-                  this.updateContours();
-                  this.forceUpdate();
-                }
-
-                return _context.abrupt("return", textureImage);
-
-              case 8:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      function setTexture(_x) {
-        return _setTexture.apply(this, arguments);
-      }
-
-      return setTexture;
-    }()
-  }, {
-    key: "draw",
+  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default()(Sprite, [{
+    key: "onPropertyChange",
 
     /* override */
+    value: function onPropertyChange(key, newValue, oldValue) {
+      _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Sprite.prototype), "onPropertyChange", this).call(this, key, newValue, oldValue);
+
+      if (key === 'texture') {
+        Object(_utils_texture_loader__WEBPACK_IMPORTED_MODULE_8__["applyTexture"])(this, newValue); // this.setTexture(newValue);
+      }
+    }
+    /* override */
+
+  }, {
+    key: "draw",
     value: function draw() {
-      var meshes = _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6___default()(Sprite.prototype), "draw", this).call(this);
+      var meshes = _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Sprite.prototype), "draw", this).call(this);
 
       if (meshes && meshes.length) {
         var clientBoxMesh = this.clientBoxMesh; // console.log(clientBoxMesh);
 
-        var textureImage = this[_textureImage];
+        var textureImage = this.textureImage;
 
         if (textureImage) {
           var texture = clientBoxMesh.texture;
@@ -27758,8 +27707,8 @@ function (_Block) {
           var textureRepeat = this.attributes.textureRepeat;
           var sourceRect = this.attributes.sourceRect;
 
-          if (!texture || this[_textureContext] && this[_textureContext] !== this.renderer || texture.image !== textureImage || texture.options.repeat !== textureRepeat || !Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_11__["compareValue"])(texture.options.rect, textureRect) || !Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_11__["compareValue"])(texture.options.srcRect, sourceRect)) {
-            var newTexture = Object(_utils_texture_loader__WEBPACK_IMPORTED_MODULE_10__["createTexture"])(textureImage, this.renderer);
+          if (!texture || this[_textureContext] && this[_textureContext] !== this.renderer || texture.image !== textureImage || texture.options.repeat !== textureRepeat || !Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_9__["compareValue"])(texture.options.rect, textureRect) || !Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_9__["compareValue"])(texture.options.srcRect, sourceRect)) {
+            var newTexture = Object(_utils_texture_loader__WEBPACK_IMPORTED_MODULE_8__["createTexture"])(textureImage, this.renderer);
 
             if (textureRect) {
               textureRect[0] += contentRect[0];
@@ -27781,16 +27730,9 @@ function (_Block) {
       return meshes;
     }
   }, {
-    key: "textureImage",
-    get: function get() {
-      return this[_textureImage];
-    }
-    /* override */
-
-  }, {
     key: "contentSize",
     get: function get() {
-      var _get2 = _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6___default()(Sprite.prototype), "contentSize", this),
+      var _get2 = _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Sprite.prototype), "contentSize", this),
           _get3 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(_get2, 2),
           w = _get3[0],
           h = _get3[1];
@@ -27800,7 +27742,7 @@ function (_Block) {
           height = _this$attributes.height;
 
       if (width == null || height == null) {
-        var img = this[_textureImage];
+        var img = this.textureImage;
         var sourceRect = this.attributes.sourceRect;
 
         if (sourceRect) {
@@ -27817,12 +27759,12 @@ function (_Block) {
   }]);
 
   return Sprite;
-}(_block__WEBPACK_IMPORTED_MODULE_12__["default"]);
+}(_block__WEBPACK_IMPORTED_MODULE_10__["default"]);
 
-_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_9___default()(Sprite, "Attr", _attribute_sprite__WEBPACK_IMPORTED_MODULE_13__["default"]);
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(Sprite, "Attr", _attribute_sprite__WEBPACK_IMPORTED_MODULE_11__["default"]);
 
 
-_document__WEBPACK_IMPORTED_MODULE_14__["default"].registerNode(Sprite, 'sprite');
+_document__WEBPACK_IMPORTED_MODULE_12__["default"].registerNode(Sprite, 'sprite');
 
 /***/ }),
 /* 255 */
@@ -27831,13 +27773,14 @@ _document__WEBPACK_IMPORTED_MODULE_14__["default"].registerNode(Sprite, 'sprite'
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadTexture", function() { return loadTexture; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "applyTexture", function() { return applyTexture; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createTexture", function() { return createTexture; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadFrames", function() { return loadFrames; });
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(26);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
-/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(29);
+/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
+/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(26);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(28);
 /* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _mesh_js_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(12);
 
@@ -27849,41 +27792,59 @@ __webpack_require__(1).glMatrix.setMatrixArrayType(Array);
 
 var loadedTextures = {};
 function loadTexture(src, alias) {
-  if (!loadedTextures[src]) {
-    if (typeof Image === 'function') {
-      var img = new Image();
-      img.crossOrigin = 'anonymous';
-      loadedTextures[src] = new Promise(function (resolve) {
-        img.onload = function () {
-          loadedTextures[src] = img;
-          if (alias) loadedTextures[alias] = img;
-          resolve(img);
-        };
+  var img = _mesh_js_core__WEBPACK_IMPORTED_MODULE_3__["ENV"].loadImage(src, {
+    alias: alias,
+    useImageBitmap: false
+  });
+  return img != null ? img : src;
+}
+function applyTexture(_x, _x2) {
+  return _applyTexture.apply(this, arguments);
+}
 
-        img.src = src;
-      });
-    } else if (typeof fetch === 'function') {
-      // run in worker
-      return fetch(src, {
-        method: 'GET',
-        mode: 'cors',
-        cache: 'default'
-      }).then(function (response) {
-        return response.blob();
-      }).then(function (blob) {
-        return createImageBitmap(blob, {
-          imageOrientation: 'flipY'
-        }).then(function (bitmap) {
-          loadedTextures[src] = bitmap;
-          return bitmap;
-        });
-      });
-    } else {
-      return src;
-    }
-  }
+function _applyTexture() {
+  _applyTexture = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2___default()(
+  /*#__PURE__*/
+  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.mark(function _callee(node, image) {
+    var textureImage;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            textureImage = image;
 
-  return loadedTextures[src];
+            if (typeof image === 'string') {
+              textureImage = loadTexture(image);
+            }
+
+            if (!(typeof textureImage.then === 'function')) {
+              _context.next = 6;
+              break;
+            }
+
+            _context.next = 5;
+            return textureImage;
+
+          case 5:
+            textureImage = _context.sent;
+
+          case 6:
+            if (image === node.attributes.texture) {
+              node.textureImage = textureImage;
+              node.updateContours();
+              node.forceUpdate();
+            }
+
+            return _context.abrupt("return", textureImage);
+
+          case 8:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _applyTexture.apply(this, arguments);
 }
 
 var _textureMap = Symbol('textureMap');
@@ -27912,25 +27873,25 @@ function createTexture(image, renderer) {
   }
   */
 
-function loadFrames(_x, _x2) {
+function loadFrames(_x3, _x4) {
   return _loadFrames.apply(this, arguments);
 }
 
 function _loadFrames() {
   _loadFrames = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2___default()(
   /*#__PURE__*/
-  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(src, frameData) {
+  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.mark(function _callee2(src, frameData) {
     var response, texture, frames;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.wrap(function _callee2$(_context2) {
       while (1) {
-        switch (_context.prev = _context.next) {
+        switch (_context2.prev = _context2.next) {
           case 0:
             if (!(typeof frameData === 'string')) {
-              _context.next = 7;
+              _context2.next = 7;
               break;
             }
 
-            _context.next = 3;
+            _context2.next = 3;
             return fetch(frameData, {
               method: 'GET',
               mode: 'cors',
@@ -27938,29 +27899,29 @@ function _loadFrames() {
             });
 
           case 3:
-            response = _context.sent;
-            _context.next = 6;
+            response = _context2.sent;
+            _context2.next = 6;
             return response.json();
 
           case 6:
-            frameData = _context.sent;
+            frameData = _context2.sent;
 
           case 7:
-            _context.next = 9;
+            _context2.next = 9;
             return loadTexture(src);
 
           case 9:
-            texture = _context.sent;
+            texture = _context2.sent;
             frames = frameData.frames;
             Object.entries(frames).forEach(function (_ref) {
-              var _ref2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default()(_ref, 2),
+              var _ref2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(_ref, 2),
                   key = _ref2[0],
                   frame = _ref2[1];
 
               var _frame$sourceSize = frame.sourceSize,
                   w = _frame$sourceSize.w,
                   h = _frame$sourceSize.h;
-              var canvas = Object(_mesh_js_core__WEBPACK_IMPORTED_MODULE_3__["createCanvas"])(w, h),
+              var canvas = _mesh_js_core__WEBPACK_IMPORTED_MODULE_3__["ENV"].createCanvas(w, h),
                   srcRect = frame.frame,
                   rect = frame.spriteSourceSize,
                   context = canvas.getContext('2d');
@@ -27981,14 +27942,14 @@ function _loadFrames() {
               context.restore();
               loadedTextures[key] = canvas;
             });
-            return _context.abrupt("return", texture);
+            return _context2.abrupt("return", texture);
 
           case 13:
           case "end":
-            return _context.stop();
+            return _context2.stop();
         }
       }
-    }, _callee);
+    }, _callee2);
   }));
   return _loadFrames.apply(this, arguments);
 }
@@ -28024,8 +27985,6 @@ var setDefault = Symbol.for('spritejs_setAttributeDefault');
 var setAttribute = Symbol.for('spritejs_setAttribute');
 var getAttribute = Symbol.for('spritejs_getAttribute');
 
-var _subject = Symbol.for('spritejs_subject');
-
 var Sprite =
 /*#__PURE__*/
 function (_Block) {
@@ -28054,12 +28013,7 @@ function (_Block) {
       return this[getAttribute]('texture');
     },
     set: function set(value) {
-      if (value.src) value = value.src;
-
-      if (this[setAttribute]('texture', value)) {
-        var subject = this[_subject];
-        subject.setTexture(value);
-      }
+      this[setAttribute]('texture', value);
     }
   }, {
     key: "textureRect",
@@ -28099,41 +28053,35 @@ function (_Block) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Path; });
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(26);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(29);
-/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(18);
-/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(22);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(23);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(97);
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(99);
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(100);
-/* harmony import */ var _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(102);
-/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(28);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var _mesh_js_core__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(12);
-/* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(1);
-/* harmony import */ var pasition__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(258);
-/* harmony import */ var pasition__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(pasition__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(91);
-/* harmony import */ var _attribute_path__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(259);
-/* harmony import */ var _utils_color__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(249);
-/* harmony import */ var _utils_texture_loader__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(255);
-/* harmony import */ var _utils_attribute_value__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(94);
-/* harmony import */ var _utils_filter__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(251);
-/* harmony import */ var _document__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(245);
-/* harmony import */ var _utils_bounding_box__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(252);
-/* harmony import */ var _utils_render_event__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(253);
-
-
+/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
+/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(22);
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(23);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(97);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(99);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(100);
+/* harmony import */ var _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(102);
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(29);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _mesh_js_core__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(12);
+/* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(1);
+/* harmony import */ var pasition__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(258);
+/* harmony import */ var pasition__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(pasition__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(91);
+/* harmony import */ var _attribute_path__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(259);
+/* harmony import */ var _utils_color__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(249);
+/* harmony import */ var _utils_texture_loader__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(255);
+/* harmony import */ var _utils_attribute_value__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(94);
+/* harmony import */ var _utils_filter__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(251);
+/* harmony import */ var _document__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(245);
+/* harmony import */ var _utils_bounding_box__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(252);
+/* harmony import */ var _utils_render_event__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(253);
 
 
 
@@ -28160,8 +28108,6 @@ __webpack_require__(1).glMatrix.setMatrixArrayType(Array);
 
 var _mesh = Symbol('mesh');
 
-var _textureImage = Symbol('textureImage');
-
 var _textureContext = Symbol('textureContext');
 
 var _filters = Symbol('filters');
@@ -28169,28 +28115,28 @@ var _filters = Symbol('filters');
 var Path =
 /*#__PURE__*/
 function (_Node) {
-  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_8___default()(Path, _Node);
+  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6___default()(Path, _Node);
 
   function Path() {
     var _this;
 
     var attrs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_3___default()(this, Path);
+    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default()(this, Path);
 
     if (typeof attrs === 'string') attrs = {
       d: attrs
     };
-    _this = _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6___default()(Path).call(this, attrs));
+    _this = _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default()(this, _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Path).call(this, attrs));
     _this.effects = {
       d: function d(from, to, p, s, e) {
         var ep = (p - s) / (e - s);
         if (ep <= 0) return from;
         if (ep >= 1) return to;
 
-        var shapes = pasition__WEBPACK_IMPORTED_MODULE_12___default.a._preprocessing(pasition__WEBPACK_IMPORTED_MODULE_12___default.a.path2shapes(from), pasition__WEBPACK_IMPORTED_MODULE_12___default.a.path2shapes(to));
+        var shapes = pasition__WEBPACK_IMPORTED_MODULE_10___default.a._preprocessing(pasition__WEBPACK_IMPORTED_MODULE_10___default.a.path2shapes(from), pasition__WEBPACK_IMPORTED_MODULE_10___default.a.path2shapes(to));
 
-        var shape = pasition__WEBPACK_IMPORTED_MODULE_12___default.a._lerp.apply(pasition__WEBPACK_IMPORTED_MODULE_12___default.a, _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_2___default()(shapes).concat([ep]))[0];
+        var shape = pasition__WEBPACK_IMPORTED_MODULE_10___default.a._lerp.apply(pasition__WEBPACK_IMPORTED_MODULE_10___default.a, _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(shapes).concat([ep]))[0];
 
         var path = shape.reduce(function (str, c) {
           return "".concat(str).concat(c.slice(2).join(' '), " ");
@@ -28201,54 +28147,7 @@ function (_Node) {
     return _this;
   }
 
-  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4___default()(Path, [{
-    key: "setTexture",
-    value: function () {
-      var _setTexture = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(url) {
-        var textureImage;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                textureImage = Object(_utils_texture_loader__WEBPACK_IMPORTED_MODULE_16__["loadTexture"])(url);
-
-                if (!(typeof textureImage.then === 'function')) {
-                  _context.next = 5;
-                  break;
-                }
-
-                _context.next = 4;
-                return textureImage;
-
-              case 4:
-                textureImage = _context.sent;
-
-              case 5:
-                if (url === this.attributes.texture) {
-                  this[_textureImage] = textureImage;
-                  this.updateContours();
-                  this.forceUpdate();
-                }
-
-                return _context.abrupt("return", textureImage);
-
-              case 7:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      function setTexture(_x) {
-        return _setTexture.apply(this, arguments);
-      }
-
-      return setTexture;
-    }()
-  }, {
+  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default()(Path, [{
     key: "getPathLength",
     value: function getPathLength() {
       if (this.mesh) {
@@ -28278,7 +28177,7 @@ function (_Node) {
       var width = _ref.width,
           height = _ref.height;
 
-      _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6___default()(Path.prototype), "setResolution", this).call(this, {
+      _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Path.prototype), "setResolution", this).call(this, {
         width: width,
         height: height
       });
@@ -28293,7 +28192,7 @@ function (_Node) {
   }, {
     key: "onPropertyChange",
     value: function onPropertyChange(key, newValue, oldValue) {
-      _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6___default()(Path.prototype), "onPropertyChange", this).call(this, key, newValue, oldValue);
+      _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Path.prototype), "onPropertyChange", this).call(this, key, newValue, oldValue);
 
       if (key === 'd' || key === 'normalize') {
         this.updateContours();
@@ -28304,7 +28203,7 @@ function (_Node) {
       }
 
       if (this[_mesh] && key === 'fillColor') {
-        Object(_utils_color__WEBPACK_IMPORTED_MODULE_15__["setFillColor"])(this[_mesh], {
+        Object(_utils_color__WEBPACK_IMPORTED_MODULE_13__["setFillColor"])(this[_mesh], {
           color: newValue
         });
       }
@@ -28321,7 +28220,7 @@ function (_Node) {
               lineDash = _this$attributes2.lineDash,
               lineDashOffset = _this$attributes2.lineDashOffset,
               miterLimit = _this$attributes2.miterLimit;
-          Object(_utils_color__WEBPACK_IMPORTED_MODULE_15__["setStrokeColor"])(this[_mesh], {
+          Object(_utils_color__WEBPACK_IMPORTED_MODULE_13__["setStrokeColor"])(this[_mesh], {
             color: strokeColor,
             lineCap: lineCap,
             lineJoin: lineJoin,
@@ -28334,11 +28233,15 @@ function (_Node) {
       }
 
       if (key === 'filter') {
-        this[_filters] = Object(_utils_filter__WEBPACK_IMPORTED_MODULE_18__["parseFilterString"])(newValue);
+        this[_filters] = Object(_utils_filter__WEBPACK_IMPORTED_MODULE_16__["parseFilterString"])(newValue);
 
         if (this[_mesh]) {
-          Object(_utils_filter__WEBPACK_IMPORTED_MODULE_18__["applyFilters"])(this[_mesh], this[_filters]);
+          Object(_utils_filter__WEBPACK_IMPORTED_MODULE_16__["applyFilters"])(this[_mesh], this[_filters]);
         }
+      }
+
+      if (key === 'texture') {
+        Object(_utils_texture_loader__WEBPACK_IMPORTED_MODULE_14__["applyTexture"])(this, newValue);
       }
     }
     /* override */
@@ -28361,20 +28264,20 @@ function (_Node) {
     value: function getBoundingClientRect() {
       var boundingBox = null;
       if (this.mesh) boundingBox = this.mesh.boundingBox;
-      return Object(_utils_bounding_box__WEBPACK_IMPORTED_MODULE_20__["default"])(boundingBox, this.renderMatrix);
+      return Object(_utils_bounding_box__WEBPACK_IMPORTED_MODULE_18__["default"])(boundingBox, this.renderMatrix);
     }
     /* override */
 
   }, {
     key: "updateContours",
     value: function updateContours() {
-      this.path = new _mesh_js_core__WEBPACK_IMPORTED_MODULE_10__["Figure2D"]();
+      this.path = new _mesh_js_core__WEBPACK_IMPORTED_MODULE_8__["Figure2D"]();
       this.path.addPath(this.attributes.d);
 
       if (this.attributes.normalize) {
         var _this$path;
 
-        (_this$path = this.path).normalize.apply(_this$path, _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_2___default()(this.path.boundingCenter));
+        (_this$path = this.path).normalize.apply(_this$path, _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(this.path.boundingCenter));
       }
     }
     /* override */
@@ -28382,7 +28285,7 @@ function (_Node) {
   }, {
     key: "connect",
     value: function connect(parent, zOrder) {
-      _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6___default()(Path.prototype), "connect", this).call(this, parent, zOrder);
+      _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Path.prototype), "connect", this).call(this, parent, zOrder);
 
       this.setResolution(parent.getResolution());
       this.forceUpdate();
@@ -28394,7 +28297,7 @@ function (_Node) {
     value: function disconnect() {
       var parent = this.parent;
 
-      _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_7___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6___default()(Path.prototype), "disconnect", this).call(this);
+      _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Path.prototype), "disconnect", this).call(this);
 
       if (parent) parent.forceUpdate();
     }
@@ -28406,7 +28309,7 @@ function (_Node) {
       var mesh = this.mesh;
 
       if (mesh) {
-        var textureImage = this[_textureImage];
+        var textureImage = this.textureImage;
 
         if (textureImage) {
           var texture = mesh.texture;
@@ -28415,8 +28318,8 @@ function (_Node) {
           var textureRepeat = this.attributes.textureRepeat;
           var sourceRect = this.attributes.sourceRect;
 
-          if (!texture || this[_textureContext] && this[_textureContext] !== this.renderer || texture.image !== textureImage || texture.options.repeat !== textureRepeat || !Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_17__["compareValue"])(texture.options.rect, textureRect) || !Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_17__["compareValue"])(texture.options.srcRect, sourceRect)) {
-            var newTexture = Object(_utils_texture_loader__WEBPACK_IMPORTED_MODULE_16__["createTexture"])(textureImage, this.renderer);
+          if (!texture || this[_textureContext] && this[_textureContext] !== this.renderer || texture.image !== textureImage || texture.options.repeat !== textureRepeat || !Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_15__["compareValue"])(texture.options.rect, textureRect) || !Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_15__["compareValue"])(texture.options.srcRect, sourceRect)) {
+            var newTexture = Object(_utils_texture_loader__WEBPACK_IMPORTED_MODULE_14__["createTexture"])(textureImage, this.renderer);
 
             if (textureRect) {
               textureRect[0] += contentRect[0];
@@ -28434,7 +28337,7 @@ function (_Node) {
           }
         }
 
-        if (mesh) Object(_utils_render_event__WEBPACK_IMPORTED_MODULE_21__["default"])(this, mesh);
+        if (mesh) Object(_utils_render_event__WEBPACK_IMPORTED_MODULE_19__["default"])(this, mesh);
         return [mesh];
       }
 
@@ -28491,12 +28394,12 @@ function (_Node) {
         var mesh = this[_mesh];
 
         if (!mesh) {
-          mesh = new _mesh_js_core__WEBPACK_IMPORTED_MODULE_10__["Mesh2D"](this.path, this.getResolution());
+          mesh = new _mesh_js_core__WEBPACK_IMPORTED_MODULE_8__["Mesh2D"](this.path, this.getResolution());
           mesh.path = path;
           var fillColor = this.attributes.fillColor;
 
           if (fillColor) {
-            Object(_utils_color__WEBPACK_IMPORTED_MODULE_15__["setFillColor"])(mesh, {
+            Object(_utils_color__WEBPACK_IMPORTED_MODULE_13__["setFillColor"])(mesh, {
               color: fillColor
             });
           }
@@ -28509,7 +28412,7 @@ function (_Node) {
                 lineCap = _this$attributes3.lineCap,
                 lineJoin = _this$attributes3.lineJoin,
                 miterLimit = _this$attributes3.miterLimit;
-            Object(_utils_color__WEBPACK_IMPORTED_MODULE_15__["setStrokeColor"])(mesh, {
+            Object(_utils_color__WEBPACK_IMPORTED_MODULE_13__["setStrokeColor"])(mesh, {
               color: strokeColor,
               lineWidth: lineWidth,
               lineCap: lineCap,
@@ -28522,7 +28425,7 @@ function (_Node) {
           mesh.uniforms.u_opacity = opacity;
 
           if (this[_filters]) {
-            Object(_utils_filter__WEBPACK_IMPORTED_MODULE_18__["applyFilters"])(mesh, this[_filters]);
+            Object(_utils_filter__WEBPACK_IMPORTED_MODULE_16__["applyFilters"])(mesh, this[_filters]);
           }
 
           this[_mesh] = mesh;
@@ -28534,10 +28437,10 @@ function (_Node) {
         var m = this.renderMatrix;
         var m2 = mesh.transformMatrix;
 
-        if (!gl_matrix__WEBPACK_IMPORTED_MODULE_11__["mat2d"].equals(m, m2)) {
+        if (!gl_matrix__WEBPACK_IMPORTED_MODULE_9__["mat2d"].equals(m, m2)) {
           var _mesh2;
 
-          (_mesh2 = mesh).setTransform.apply(_mesh2, _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_2___default()(m));
+          (_mesh2 = mesh).setTransform.apply(_mesh2, _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(m));
         }
 
         return mesh;
@@ -28548,12 +28451,12 @@ function (_Node) {
   }]);
 
   return Path;
-}(_node__WEBPACK_IMPORTED_MODULE_13__["default"]);
+}(_node__WEBPACK_IMPORTED_MODULE_11__["default"]);
 
-_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_9___default()(Path, "Attr", _attribute_path__WEBPACK_IMPORTED_MODULE_14__["default"]);
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(Path, "Attr", _attribute_path__WEBPACK_IMPORTED_MODULE_12__["default"]);
 
 
-_document__WEBPACK_IMPORTED_MODULE_19__["default"].registerNode(Path, 'path');
+_document__WEBPACK_IMPORTED_MODULE_17__["default"].registerNode(Path, 'path');
 
 /***/ }),
 /* 258 */
@@ -29466,8 +29369,6 @@ var setDefault = Symbol.for('spritejs_setAttributeDefault');
 var setAttribute = Symbol.for('spritejs_setAttribute');
 var getAttribute = Symbol.for('spritejs_getAttribute');
 
-var _subject = Symbol.for('spritejs_subject');
-
 var Path =
 /*#__PURE__*/
 function (_Node) {
@@ -29568,7 +29469,7 @@ function (_Node) {
     set: function set(value) {
       value = Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_7__["toArray"])(value);
       if (value != null && !Array.isArray(value)) value = [value];
-      this[setAttribute]('lineDash', value.map(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_7__["toNumber"]));
+      this[setAttribute]('lineDash', value ? value.map(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_7__["toNumber"]) : null);
     }
   }, {
     key: "lineDashOffset",
@@ -29592,12 +29493,7 @@ function (_Node) {
       return this[getAttribute]('texture');
     },
     set: function set(value) {
-      if (value.src) value = value.src;
-
-      if (this[setAttribute]('texture', value)) {
-        var subject = this[_subject];
-        subject.setTexture(value);
-      }
+      this[setAttribute]('texture', value);
     }
   }, {
     key: "textureRect",
@@ -29649,7 +29545,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(102);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(28);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(29);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _path__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(257);
 /* harmony import */ var _document__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(245);
@@ -29836,7 +29732,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(102);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(28);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(29);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _polyline__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(263);
 /* harmony import */ var _document__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(245);
@@ -29901,7 +29797,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(102);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(28);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(29);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _path__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(257);
 /* harmony import */ var _document__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(245);
@@ -30130,6 +30026,8 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__(1).glMatrix.setMatrixArrayType(Array);
 
+/* istanbul ignore file */
+
 /**
  * 使用 贝塞尔曲线 模拟绘制平滑曲线
  * @param {*} points 绘制点
@@ -30330,7 +30228,7 @@ function (_Polyline) {
 
 var superPropBase = __webpack_require__(101);
 
-var defineProperty = __webpack_require__(28);
+var defineProperty = __webpack_require__(29);
 
 function set(target, property, value, receiver) {
   if (typeof Reflect !== "undefined" && Reflect.set) {
@@ -30402,7 +30300,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(102);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(28);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(29);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _polyline__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(263);
 /* harmony import */ var _document__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(245);
@@ -30586,7 +30484,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(102);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(28);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(29);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _polyline__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(263);
 /* harmony import */ var _document__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(245);
@@ -30774,7 +30672,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(102);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(28);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(29);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _polyline__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(263);
 /* harmony import */ var _document__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(245);
@@ -30983,7 +30881,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(102);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(28);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(29);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _path__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(257);
 /* harmony import */ var _document__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(245);
@@ -31261,7 +31159,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(102);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(28);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(29);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _ellipse__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(274);
 /* harmony import */ var _document__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(245);
@@ -31382,7 +31280,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(102);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(28);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(29);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _path__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(257);
 /* harmony import */ var _document__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(245);
@@ -31656,7 +31554,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(102);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(28);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(29);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var _mesh_js_core__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(12);
 /* harmony import */ var _utils_texture_loader__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(255);
@@ -32105,7 +32003,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(102);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(28);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(29);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var _block__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(247);
 /* harmony import */ var _attribute_group__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(283);
@@ -32483,6 +32381,7 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__(1).glMatrix.setMatrixArrayType(Array);
 
+/* istanbul ignore file */
 
 
 
@@ -35283,7 +35182,7 @@ function (_Group) {
           width = _this$getResolution.width,
           height = _this$getResolution.height;
 
-      var _canvas = Object(_mesh_js_core__WEBPACK_IMPORTED_MODULE_7__["createCanvas"])(width, height, {
+      var _canvas = _mesh_js_core__WEBPACK_IMPORTED_MODULE_7__["ENV"].createCanvas(width, height, {
         offscreen: !!options.offscreen,
         id: options.id,
         extra: options.extra
@@ -35554,7 +35453,7 @@ _document__WEBPACK_IMPORTED_MODULE_10__["default"].registerNode(Layer, 'layer');
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(28);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(29);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(22);
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__);
@@ -35612,7 +35511,7 @@ if (typeof Worker === 'function') {
             width = _this$getResolution.width,
             height = _this$getResolution.height;
 
-        var canvas = Object(_mesh_js_core__WEBPACK_IMPORTED_MODULE_7__["createCanvas"])(width, height, {
+        var canvas = _mesh_js_core__WEBPACK_IMPORTED_MODULE_7__["ENV"].createCanvas(width, height, {
           offscreen: false
         });
         if (canvas.style) canvas.style.position = 'absolute';
@@ -35839,7 +35738,7 @@ __webpack_require__.r(__webpack_exports__);
 /* WEBPACK VAR INJECTION */(function(global) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Scene; });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(26);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(29);
+/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(28);
 /* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__);
@@ -36086,9 +35985,7 @@ function (_Group) {
 
     if (!options.container) {
       if (typeof _mesh_js_core__WEBPACK_IMPORTED_MODULE_11__["ENV"].Container === 'function') {
-        options.container = new _mesh_js_core__WEBPACK_IMPORTED_MODULE_11__["ENV"].Container();
-      } else if (typeof Container === 'function') {
-        options.container = new Container();
+        options.container = new _mesh_js_core__WEBPACK_IMPORTED_MODULE_11__["ENV"].Container(options.width || 300, options.height || 150);
       } else {
         throw new Error('No container specified.');
       }
@@ -36448,7 +36345,7 @@ function (_Group) {
           width = _this$getResolution.width,
           height = _this$getResolution.height;
 
-      this[_canvas] = this[_canvas] || Object(_mesh_js_core__WEBPACK_IMPORTED_MODULE_11__["createCanvas"])(width, height, {
+      this[_canvas] = this[_canvas] || _mesh_js_core__WEBPACK_IMPORTED_MODULE_11__["ENV"].createCanvas(width, height, {
         offscreen: offscreen
       });
 

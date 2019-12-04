@@ -1,5 +1,6 @@
-const {Scene} = require('../../lib/spritejs');
-const {Container} = require('../../lib/wx-miniprogram.js');
+const {Scene, ENV} = require('../../lib/spritejs');
+const {polyfill} = require('../../lib/wx-miniprogram.js');
+polyfill({ENV});
 
 /* globals Component,wx */
 Component({
@@ -57,7 +58,6 @@ Component({
     this.getBoundingClientRect = wx.createSelectorQuery().in(this)
       .select('.scene-layout').boundingClientRect();
     this.getBoundingClientRect.exec(([rect]) => {
-      const container = new Container(rect.width, rect.height);
       let displayRatio = 1;
       const pixelUnit = this.data.pixelUnit;
       if(pixelUnit === 'rpx') {
@@ -65,7 +65,8 @@ Component({
         displayRatio = windowWidth / 750;
       }
       const scene = new Scene({
-        container,
+        width: rect.width,
+        height: rect.height,
         extra: this,
         displayRatio,
       });
@@ -74,8 +75,7 @@ Component({
         args[layer.replace(/:[0-9a-f]+$/ig, '')] = scene.layer(layer, this);
       });
       this.scene = scene;
-      this.container = container;
-
+      this.container = scene.container;
       this.triggerEvent('SceneCreated', args);
     });
   },

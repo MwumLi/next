@@ -1,4 +1,11 @@
 import {ENV} from '@mesh.js/core';
+/**
+  ENV: {
+    Container,
+    createCanvas,
+    loadImage,
+  }
+ */
 import Node from './node/node';
 import Block from './node/block';
 import Sprite from './node/sprite';
