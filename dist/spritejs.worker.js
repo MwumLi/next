@@ -20423,6 +20423,22 @@ var _lastChangedAttr = Symbol('lastChangedAttr');
 
 var _offsetFigure = Symbol('offsetFigure');
 
+function setTransform(attr, type, value) {
+  var changed = attr[_setAttribute](type, value);
+
+  if (changed || attr[_lastChangedAttr] !== type) {
+    var transformMap = attr[_transforms];
+
+    if (transformMap.has(type)) {
+      transformMap.delete(type);
+    }
+
+    if (type === 'rotate') value = Math.PI * value / 180;
+    if (value) transformMap.set(type, value);
+    attr[_transformMatrix] = null;
+  }
+}
+
 function updateOffset(attr) {
   var offsetFigure = attr[_offsetFigure];
   var distance = attr.offsetDistance * offsetFigure.getTotalLength();
@@ -20746,14 +20762,10 @@ function () {
       return this[_getAttribute]('transformOrigin');
     },
     set: function set(value) {
-      value = Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_6__["toArray"])(value);
+      value = Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_6__["toArray"])(value, true);
 
       if (value != null && !Array.isArray(value)) {
         value = [value, value];
-      }
-
-      if (Array.isArray(value)) {
-        value = [Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_6__["toNumber"])(value[0]), Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_6__["toNumber"])(value[1])];
       }
 
       if (this[_setAttribute]('transformOrigin', value)) {
@@ -20766,18 +20778,7 @@ function () {
       return this[_getAttribute]('rotate');
     },
     set: function set(value) {
-      var changed = this[_setAttribute]('rotate', value);
-
-      if (changed || this[_lastChangedAttr] !== 'rotate') {
-        var transformMap = this[_transforms];
-
-        if (transformMap.has('rotate')) {
-          transformMap.delete('rotate');
-        }
-
-        if (value) transformMap.set('rotate', Math.PI * value / 180);
-        this[_transformMatrix] = null;
-      }
+      setTransform(this, 'rotate', value);
     }
   }, {
     key: "translate",
@@ -20785,18 +20786,9 @@ function () {
       return this[_getAttribute]('translate');
     },
     set: function set(value) {
-      var changed = this[_setAttribute]('translate', value);
-
-      if (changed || this[_lastChangedAttr] !== 'translate') {
-        var transformMap = this[_transforms];
-
-        if (transformMap.has('translate')) {
-          transformMap.delete('translate');
-        }
-
-        if (value) transformMap.set('translate', value);
-        this[_transformMatrix] = null;
-      }
+      value = Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_6__["toArray"])(value, true);
+      if (value && !Array.isArray(value)) value = [value, value];
+      setTransform(this, 'translate', value);
     }
   }, {
     key: "scale",
@@ -20804,21 +20796,9 @@ function () {
       return this[_getAttribute]('scale');
     },
     set: function set(value) {
-      value = Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_6__["toArray"])(value);
+      value = Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_6__["toArray"])(value, true);
       if (value && !Array.isArray(value)) value = [value, value];
-
-      var changed = this[_setAttribute]('scale', value);
-
-      if (changed || this[_lastChangedAttr] !== 'scale') {
-        var transformMap = this[_transforms];
-
-        if (transformMap.has('scale')) {
-          transformMap.delete('scale');
-        }
-
-        if (value) transformMap.set('scale', value);
-        this[_transformMatrix] = null;
-      }
+      setTransform(this, 'scale', value);
     }
   }, {
     key: "skew",
@@ -20826,18 +20806,9 @@ function () {
       return this[_getAttribute]('skew');
     },
     set: function set(value) {
-      var changed = this[_setAttribute]('skew', value);
-
-      if (changed || this[_lastChangedAttr] !== 'skew') {
-        var transformMap = this[_transforms];
-
-        if (transformMap.has('skew')) {
-          transformMap.delete('skew');
-        }
-
-        if (value) transformMap.set('skew', value);
-        this[_transformMatrix] = null;
-      }
+      value = Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_6__["toArray"])(value, true);
+      if (value && !Array.isArray(value)) value = [value, value];
+      setTransform(this, 'skew', value);
     }
   }, {
     key: "opacity",
@@ -21020,10 +20991,12 @@ function toNumber(value) {
   return value;
 }
 function toArray(value) {
+  var parseNumber = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
   if (value === '') return null;
   if (typeof value === 'string') value = value.split(/[\s,]+/g);
 
   if (Array.isArray(value)) {
+    if (parseNumber) value = value.map(toNumber);
     if (value.length === 1) return value[0];
   }
 
@@ -26951,7 +26924,7 @@ function (_Node) {
       return this[getAttribute]('borderDash');
     },
     set: function set(value) {
-      value = Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_7__["toArray"])(value);
+      value = Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_7__["toArray"])(value, true);
       if (value != null && !Array.isArray(value)) value = [value];
       this[setAttribute]('borderDash', value.map(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_7__["toNumber"]));
     }
@@ -26969,7 +26942,7 @@ function (_Node) {
       return this[getAttribute]('borderTopLeftRadius');
     },
     set: function set(value) {
-      value = Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_7__["toArray"])(value);
+      value = Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_7__["toArray"])(value, true);
       if (!Array.isArray(value)) value = [value, value];
       this[setAttribute]('borderTopLeftRadius', value.map(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_7__["toNumber"]));
     }
@@ -26979,7 +26952,7 @@ function (_Node) {
       return this[getAttribute]('borderTopRightRadius');
     },
     set: function set(value) {
-      value = Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_7__["toArray"])(value);
+      value = Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_7__["toArray"])(value, true);
       if (!Array.isArray(value)) value = [value, value];
       this[setAttribute]('borderTopRightRadius', value.map(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_7__["toNumber"]));
     }
@@ -26989,7 +26962,7 @@ function (_Node) {
       return this[getAttribute]('borderBottomRightRadius');
     },
     set: function set(value) {
-      value = Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_7__["toArray"])(value);
+      value = Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_7__["toArray"])(value, true);
       if (!Array.isArray(value)) value = [value, value];
       this[setAttribute]('borderBottomRightRadius', value.map(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_7__["toNumber"]));
     }
@@ -26999,7 +26972,7 @@ function (_Node) {
       return this[getAttribute]('borderBottomLeftRadius');
     },
     set: function set(value) {
-      value = Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_7__["toArray"])(value);
+      value = Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_7__["toArray"])(value, true);
       if (!Array.isArray(value)) value = [value, value];
       this[setAttribute]('borderBottomLeftRadius', value.map(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_7__["toNumber"]));
     }
@@ -27518,11 +27491,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(29);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _utils_texture_loader__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(255);
-/* harmony import */ var _utils_attribute_value__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(94);
-/* harmony import */ var _block__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(247);
-/* harmony import */ var _attribute_sprite__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(256);
-/* harmony import */ var _document__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(245);
+/* harmony import */ var _utils_texture__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(255);
+/* harmony import */ var _block__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(247);
+/* harmony import */ var _attribute_sprite__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(256);
+/* harmony import */ var _document__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(245);
 
 
 
@@ -27538,9 +27510,6 @@ __webpack_require__(1).glMatrix.setMatrixArrayType(Array);
 
 
 
-
-
-var _textureContext = Symbol('textureContext');
 
 var Sprite =
 /*#__PURE__*/
@@ -27568,7 +27537,7 @@ function (_Block) {
       _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Sprite.prototype), "onPropertyChange", this).call(this, key, newValue, oldValue);
 
       if (key === 'texture') {
-        Object(_utils_texture_loader__WEBPACK_IMPORTED_MODULE_8__["applyTexture"])(this, newValue); // this.setTexture(newValue);
+        Object(_utils_texture__WEBPACK_IMPORTED_MODULE_8__["applyTexture"])(this, newValue); // this.setTexture(newValue);
       }
     }
     /* override */
@@ -27579,35 +27548,8 @@ function (_Block) {
       var meshes = _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Sprite.prototype), "draw", this).call(this);
 
       if (meshes && meshes.length) {
-        var clientBoxMesh = this.clientBoxMesh; // console.log(clientBoxMesh);
-
-        var textureImage = this.textureImage;
-
-        if (textureImage) {
-          var texture = clientBoxMesh.texture;
-          var contentRect = this.originalContentRect;
-          var textureRect = this.attributes.textureRect;
-          var textureRepeat = this.attributes.textureRepeat;
-          var sourceRect = this.attributes.sourceRect;
-
-          if (!texture || this[_textureContext] && this[_textureContext] !== this.renderer || texture.image !== textureImage || texture.options.repeat !== textureRepeat || !Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_9__["compareValue"])(texture.options.rect, textureRect) || !Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_9__["compareValue"])(texture.options.srcRect, sourceRect)) {
-            var newTexture = Object(_utils_texture_loader__WEBPACK_IMPORTED_MODULE_8__["createTexture"])(textureImage, this.renderer);
-
-            if (textureRect) {
-              textureRect[0] += contentRect[0];
-              textureRect[1] += contentRect[1];
-            } else {
-              textureRect = contentRect;
-            }
-
-            clientBoxMesh.setTexture(newTexture, {
-              rect: textureRect,
-              repeat: textureRepeat,
-              srcRect: sourceRect
-            });
-            this[_textureContext] = this.renderer;
-          }
-        }
+        var clientBoxMesh = this.clientBoxMesh;
+        Object(_utils_texture__WEBPACK_IMPORTED_MODULE_8__["drawTexture"])(this, clientBoxMesh);
       }
 
       return meshes;
@@ -27642,12 +27584,12 @@ function (_Block) {
   }]);
 
   return Sprite;
-}(_block__WEBPACK_IMPORTED_MODULE_10__["default"]);
+}(_block__WEBPACK_IMPORTED_MODULE_9__["default"]);
 
-_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(Sprite, "Attr", _attribute_sprite__WEBPACK_IMPORTED_MODULE_11__["default"]);
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(Sprite, "Attr", _attribute_sprite__WEBPACK_IMPORTED_MODULE_10__["default"]);
 
 
-_document__WEBPACK_IMPORTED_MODULE_12__["default"].registerNode(Sprite, 'sprite');
+_document__WEBPACK_IMPORTED_MODULE_11__["default"].registerNode(Sprite, 'sprite');
 
 /***/ }),
 /* 255 */
@@ -27658,6 +27600,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadTexture", function() { return loadTexture; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "applyTexture", function() { return applyTexture; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createTexture", function() { return createTexture; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawTexture", function() { return drawTexture; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadFrames", function() { return loadFrames; });
 /* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
 /* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__);
@@ -27666,6 +27609,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(28);
 /* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _mesh_js_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(12);
+/* harmony import */ var _attribute_value__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(94);
 
 
 
@@ -27673,8 +27617,10 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__(1).glMatrix.setMatrixArrayType(Array);
 
 
+
 var loadedTextures = {};
 function loadTexture(src, alias) {
+  if (loadedTextures[src]) return loadedTextures[src];
   var img = _mesh_js_core__WEBPACK_IMPORTED_MODULE_3__["ENV"].loadImage(src, {
     alias: alias,
     useImageBitmap: false
@@ -27740,6 +27686,38 @@ function createTexture(image, renderer) {
   renderer[_textureMap].set(image, texture);
 
   return texture;
+}
+
+var _textureContext = Symbol('textureContext');
+
+function drawTexture(node, mesh) {
+  var textureImage = node.textureImage;
+
+  if (textureImage) {
+    var texture = mesh.texture;
+    var contentRect = node.originalContentRect;
+    var textureRect = node.attributes.textureRect;
+    var textureRepeat = node.attributes.textureRepeat;
+    var sourceRect = node.attributes.sourceRect;
+
+    if (!texture || node[_textureContext] && node[_textureContext] !== node.renderer || texture.image !== textureImage || texture.options.repeat !== textureRepeat || !Object(_attribute_value__WEBPACK_IMPORTED_MODULE_4__["compareValue"])(texture.options.rect, textureRect) || !Object(_attribute_value__WEBPACK_IMPORTED_MODULE_4__["compareValue"])(texture.options.srcRect, sourceRect)) {
+      var newTexture = createTexture(textureImage, node.renderer);
+
+      if (textureRect) {
+        textureRect[0] += contentRect[0];
+        textureRect[1] += contentRect[1];
+      } else {
+        textureRect = contentRect;
+      }
+
+      mesh.setTexture(newTexture, {
+        rect: textureRect,
+        repeat: textureRepeat,
+        srcRect: sourceRect
+      });
+      node[_textureContext] = node.renderer;
+    }
+  }
 }
 /**
   u3d-json compatible: https://www.codeandweb.com/texturepacker
@@ -27959,12 +27937,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(91);
 /* harmony import */ var _attribute_path__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(259);
 /* harmony import */ var _utils_color__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(249);
-/* harmony import */ var _utils_texture_loader__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(255);
-/* harmony import */ var _utils_attribute_value__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(94);
-/* harmony import */ var _utils_filter__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(251);
-/* harmony import */ var _document__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(245);
-/* harmony import */ var _utils_bounding_box__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(252);
-/* harmony import */ var _utils_render_event__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(253);
+/* harmony import */ var _utils_texture__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(255);
+/* harmony import */ var _utils_filter__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(251);
+/* harmony import */ var _document__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(245);
+/* harmony import */ var _utils_bounding_box__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(252);
+/* harmony import */ var _utils_render_event__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(253);
 
 
 
@@ -27988,10 +27965,7 @@ __webpack_require__(1).glMatrix.setMatrixArrayType(Array);
 
 
 
-
 var _mesh = Symbol('mesh');
-
-var _textureContext = Symbol('textureContext');
 
 var _filters = Symbol('filters');
 
@@ -28116,15 +28090,15 @@ function (_Node) {
       }
 
       if (key === 'filter') {
-        this[_filters] = Object(_utils_filter__WEBPACK_IMPORTED_MODULE_16__["parseFilterString"])(newValue);
+        this[_filters] = Object(_utils_filter__WEBPACK_IMPORTED_MODULE_15__["parseFilterString"])(newValue);
 
         if (this[_mesh]) {
-          Object(_utils_filter__WEBPACK_IMPORTED_MODULE_16__["applyFilters"])(this[_mesh], this[_filters]);
+          Object(_utils_filter__WEBPACK_IMPORTED_MODULE_15__["applyFilters"])(this[_mesh], this[_filters]);
         }
       }
 
       if (key === 'texture') {
-        Object(_utils_texture_loader__WEBPACK_IMPORTED_MODULE_14__["applyTexture"])(this, newValue);
+        Object(_utils_texture__WEBPACK_IMPORTED_MODULE_14__["applyTexture"])(this, newValue);
       }
     }
     /* override */
@@ -28147,7 +28121,7 @@ function (_Node) {
     value: function getBoundingClientRect() {
       var boundingBox = null;
       if (this.mesh) boundingBox = this.mesh.boundingBox;
-      return Object(_utils_bounding_box__WEBPACK_IMPORTED_MODULE_18__["default"])(boundingBox, this.renderMatrix);
+      return Object(_utils_bounding_box__WEBPACK_IMPORTED_MODULE_17__["default"])(boundingBox, this.renderMatrix);
     }
     /* override */
 
@@ -28192,35 +28166,8 @@ function (_Node) {
       var mesh = this.mesh;
 
       if (mesh) {
-        var textureImage = this.textureImage;
-
-        if (textureImage) {
-          var texture = mesh.texture;
-          var contentRect = this.originalContentRect;
-          var textureRect = this.attributes.textureRect;
-          var textureRepeat = this.attributes.textureRepeat;
-          var sourceRect = this.attributes.sourceRect;
-
-          if (!texture || this[_textureContext] && this[_textureContext] !== this.renderer || texture.image !== textureImage || texture.options.repeat !== textureRepeat || !Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_15__["compareValue"])(texture.options.rect, textureRect) || !Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_15__["compareValue"])(texture.options.srcRect, sourceRect)) {
-            var newTexture = Object(_utils_texture_loader__WEBPACK_IMPORTED_MODULE_14__["createTexture"])(textureImage, this.renderer);
-
-            if (textureRect) {
-              textureRect[0] += contentRect[0];
-              textureRect[1] += contentRect[1];
-            } else {
-              textureRect = contentRect;
-            }
-
-            mesh.setTexture(newTexture, {
-              rect: textureRect,
-              repeat: textureRepeat,
-              srcRect: sourceRect
-            });
-            this[_textureContext] = this.renderer;
-          }
-        }
-
-        if (mesh) Object(_utils_render_event__WEBPACK_IMPORTED_MODULE_19__["default"])(this, mesh);
+        Object(_utils_texture__WEBPACK_IMPORTED_MODULE_14__["drawTexture"])(this, mesh);
+        Object(_utils_render_event__WEBPACK_IMPORTED_MODULE_18__["default"])(this, mesh);
         return [mesh];
       }
 
@@ -28308,7 +28255,7 @@ function (_Node) {
           mesh.uniforms.u_opacity = opacity;
 
           if (this[_filters]) {
-            Object(_utils_filter__WEBPACK_IMPORTED_MODULE_16__["applyFilters"])(mesh, this[_filters]);
+            Object(_utils_filter__WEBPACK_IMPORTED_MODULE_15__["applyFilters"])(mesh, this[_filters]);
           }
 
           this[_mesh] = mesh;
@@ -28339,7 +28286,7 @@ function (_Node) {
 _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default()(Path, "Attr", _attribute_path__WEBPACK_IMPORTED_MODULE_12__["default"]);
 
 
-_document__WEBPACK_IMPORTED_MODULE_17__["default"].registerNode(Path, 'path');
+_document__WEBPACK_IMPORTED_MODULE_16__["default"].registerNode(Path, 'path');
 
 /***/ }),
 /* 258 */
@@ -29350,7 +29297,7 @@ function (_Node) {
       return this[getAttribute]('lineDash');
     },
     set: function set(value) {
-      value = Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_7__["toArray"])(value);
+      value = Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_7__["toArray"])(value, true);
       if (value != null && !Array.isArray(value)) value = [value];
       this[setAttribute]('lineDash', value ? value.map(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_7__["toNumber"]) : null);
     }
@@ -29819,7 +29766,7 @@ function (_Path) {
       return [this.radiusX, this.radiusY];
     },
     set: function set(value) {
-      value = Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_7__["toArray"])(value);
+      value = Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_7__["toArray"])(value, true);
       if (!Array.isArray(value)) value = [value, value];
       this.radiusX = value[0];
       this.radiusY = value[1];
@@ -29918,7 +29865,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(29);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var _mesh_js_core__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(12);
-/* harmony import */ var _utils_texture_loader__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(255);
+/* harmony import */ var _utils_texture__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(255);
 /* harmony import */ var _block__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(247);
 /* harmony import */ var _attribute_label__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(281);
 /* harmony import */ var _document__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(245);
@@ -30037,7 +29984,7 @@ function (_Block) {
           var texture = clientBoxMesh.texture;
 
           if (!texture || this[_textureContext] && this[_textureContext] !== this.renderer || texture.image !== textImage) {
-            texture = Object(_utils_texture_loader__WEBPACK_IMPORTED_MODULE_9__["createTexture"])(textImage, this.renderer);
+            texture = Object(_utils_texture__WEBPACK_IMPORTED_MODULE_9__["createTexture"])(textImage, this.renderer);
             this[_updateTextureRect] = true;
           } else {
             texture = clientBoxMesh.uniforms.u_texSampler;
