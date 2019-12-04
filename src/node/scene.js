@@ -5,7 +5,7 @@ import LayerWorker from './layer-worker';
 import Group from './group';
 import createPointerEvents from '../event/pointer-events';
 import Event from '../event/event';
-import {loadTexture, loadFrames} from '../utils/texture_loader';
+import {loadTexture, loadFrames} from '../utils/texture';
 import ownerDocument from '../document';
 import {requestAnimationFrame} from '../utils/animation_frame';
 

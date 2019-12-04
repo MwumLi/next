@@ -1,4 +1,5 @@
 import {ENV} from '@mesh.js/core';
+import {compareValue} from './attribute_value';
 
 const loadedTextures = {};
 
@@ -32,6 +33,40 @@ export function createTexture(image, renderer) {
   const texture = renderer.createTexture(image);
   renderer[_textureMap].set(image, texture);
   return texture;
+}
+
+const _textureContext = Symbol('textureContext');
+export function drawTexture(node, mesh) {
+  const textureImage = node.textureImage;
+  if(textureImage) {
+    const texture = mesh.texture;
+    const contentRect = node.originalContentRect;
+    let textureRect = node.attributes.textureRect;
+    const textureRepeat = node.attributes.textureRepeat;
+    const sourceRect = node.attributes.sourceRect;
+
+    if(!texture
+      || node[_textureContext] && node[_textureContext] !== node.renderer
+      || texture.image !== textureImage
+      || texture.options.repeat !== textureRepeat
+      || !compareValue(texture.options.rect, textureRect)
+      || !compareValue(texture.options.srcRect, sourceRect)) {
+      const newTexture = createTexture(textureImage, node.renderer);
+
+      if(textureRect) {
+        textureRect[0] += contentRect[0];
+        textureRect[1] += contentRect[1];
+      } else {
+        textureRect = contentRect;
+      }
+      mesh.setTexture(newTexture, {
+        rect: textureRect,
+        repeat: textureRepeat,
+        srcRect: sourceRect,
+      });
+      node[_textureContext] = node.renderer;
+    }
+  }
 }
 
 /**

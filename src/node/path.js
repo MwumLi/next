@@ -4,15 +4,13 @@ import pasition from 'pasition';
 import Node from './node';
 import Attr from '../attribute/path';
 import {setFillColor, setStrokeColor} from '../utils/color';
-import {createTexture, applyTexture} from '../utils/texture_loader';
-import {compareValue} from '../utils/attribute_value';
+import {applyTexture, drawTexture} from '../utils/texture';
 import {parseFilterString, applyFilters} from '../utils/filter';
 import ownerDocument from '../document';
 import getBoundingBox from '../utils/bounding_box';
 import applyRenderEvent from '../utils/render_event';
 
 const _mesh = Symbol('mesh');
-const _textureContext = Symbol('textureContext');
 const _filters = Symbol('filters');
 
 export default class Path extends Node {
@@ -214,37 +212,8 @@ export default class Path extends Node {
   draw() {
     const mesh = this.mesh;
     if(mesh) {
-      const textureImage = this.textureImage;
-      if(textureImage) {
-        const texture = mesh.texture;
-        const contentRect = this.originalContentRect;
-        let textureRect = this.attributes.textureRect;
-        const textureRepeat = this.attributes.textureRepeat;
-        const sourceRect = this.attributes.sourceRect;
-
-        if(!texture
-          || this[_textureContext] && this[_textureContext] !== this.renderer
-          || texture.image !== textureImage
-          || texture.options.repeat !== textureRepeat
-          || !compareValue(texture.options.rect, textureRect)
-          || !compareValue(texture.options.srcRect, sourceRect)) {
-          const newTexture = createTexture(textureImage, this.renderer);
-
-          if(textureRect) {
-            textureRect[0] += contentRect[0];
-            textureRect[1] += contentRect[1];
-          } else {
-            textureRect = contentRect;
-          }
-          mesh.setTexture(newTexture, {
-            rect: textureRect,
-            repeat: textureRepeat,
-            srcRect: sourceRect,
-          });
-          this[_textureContext] = this.renderer;
-        }
-      }
-      if(mesh) applyRenderEvent(this, mesh);
+      drawTexture(this, mesh);
+      applyRenderEvent(this, mesh);
       return [mesh];
     }
 

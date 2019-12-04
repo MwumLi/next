@@ -1,5 +1,5 @@
 import {createText} from '@mesh.js/core';
-import {createTexture} from '../utils/texture_loader';
+import {createTexture} from '../utils/texture';
 import Block from './block';
 import Attr from '../attribute/label';
 import ownerDocument from '../document';
