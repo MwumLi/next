@@ -3,6 +3,7 @@ import {ENV} from '@mesh.js/core';
 const loadedTextures = {};
 
 export function loadTexture(src, alias) {
+  if(loadedTextures[src]) return loadedTextures[src];
   const img = ENV.loadImage(src, {alias, useImageBitmap: false});
   return img != null ? img : src;
 }
@@ -94,7 +95,6 @@ export async function loadFrames(src, frameData) {
     }
 
     context.restore();
-
     loadedTextures[key] = canvas;
   });
 
