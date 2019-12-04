@@ -42,6 +42,19 @@ const _changedAttrs = Symbol('changedAttrs');
 const _lastChangedAttr = Symbol('lastChangedAttr');
 const _offsetFigure = Symbol('offsetFigure');
 
+function setTransform(attr, type, value) {
+  const changed = attr[setAttribute](type, value);
+  if(changed || attr[_lastChangedAttr] !== type) {
+    const transformMap = attr[_transforms];
+    if(transformMap.has(type)) {
+      transformMap.delete(type);
+    }
+    if(type === 'rotate') value = Math.PI * value / 180;
+    if(value) transformMap.set(type, value);
+    attr[_transformMatrix] = null;
+  }
+}
+
 function updateOffset(attr) {
   const offsetFigure = attr[_offsetFigure];
   const distance = attr.offsetDistance * offsetFigure.getTotalLength();
@@ -293,12 +306,9 @@ export default class Node {
   }
 
   set transformOrigin(value) {
-    value = toArray(value);
+    value = toArray(value, true);
     if(value != null && !Array.isArray(value)) {
       value = [value, value];
-    }
-    if(Array.isArray(value)) {
-      value = [toNumber(value[0]), toNumber(value[1])];
     }
     if(this[setAttribute]('transformOrigin', value)) {
       this[_transformMatrix] = null;
@@ -310,15 +320,7 @@ export default class Node {
   }
 
   set rotate(value) {
-    const changed = this[setAttribute]('rotate', value);
-    if(changed || this[_lastChangedAttr] !== 'rotate') {
-      const transformMap = this[_transforms];
-      if(transformMap.has('rotate')) {
-        transformMap.delete('rotate');
-      }
-      if(value) transformMap.set('rotate', Math.PI * value / 180);
-      this[_transformMatrix] = null;
-    }
+    setTransform(this, 'rotate', value);
   }
 
   get translate() {
@@ -326,15 +328,9 @@ export default class Node {
   }
 
   set translate(value) {
-    const changed = this[setAttribute]('translate', value);
-    if(changed || this[_lastChangedAttr] !== 'translate') {
-      const transformMap = this[_transforms];
-      if(transformMap.has('translate')) {
-        transformMap.delete('translate');
-      }
-      if(value) transformMap.set('translate', value);
-      this[_transformMatrix] = null;
-    }
+    value = toArray(value, true);
+    if(value && !Array.isArray(value)) value = [value, value];
+    setTransform(this, 'translate', value);
   }
 
   get scale() {
@@ -342,17 +338,9 @@ export default class Node {
   }
 
   set scale(value) {
-    value = toArray(value);
+    value = toArray(value, true);
     if(value && !Array.isArray(value)) value = [value, value];
-    const changed = this[setAttribute]('scale', value);
-    if(changed || this[_lastChangedAttr] !== 'scale') {
-      const transformMap = this[_transforms];
-      if(transformMap.has('scale')) {
-        transformMap.delete('scale');
-      }
-      if(value) transformMap.set('scale', value);
-      this[_transformMatrix] = null;
-    }
+    setTransform(this, 'scale', value);
   }
 
   get skew() {
@@ -360,15 +348,9 @@ export default class Node {
   }
 
   set skew(value) {
-    const changed = this[setAttribute]('skew', value);
-    if(changed || this[_lastChangedAttr] !== 'skew') {
-      const transformMap = this[_transforms];
-      if(transformMap.has('skew')) {
-        transformMap.delete('skew');
-      }
-      if(value) transformMap.set('skew', value);
-      this[_transformMatrix] = null;
-    }
+    value = toArray(value, true);
+    if(value && !Array.isArray(value)) value = [value, value];
+    setTransform(this, 'skew', value);
   }
 
   get opacity() {

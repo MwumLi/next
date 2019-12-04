@@ -125,7 +125,7 @@ export default class Block extends Node {
   }
 
   set borderDash(value) {
-    value = toArray(value);
+    value = toArray(value, true);
     if(value != null && !Array.isArray(value)) value = [value];
     this[setAttribute]('borderDash', value.map(toNumber));
   }
@@ -143,7 +143,7 @@ export default class Block extends Node {
   }
 
   set borderTopLeftRadius(value) {
-    value = toArray(value);
+    value = toArray(value, true);
     if(!Array.isArray(value)) value = [value, value];
     this[setAttribute]('borderTopLeftRadius', value.map(toNumber));
   }
@@ -153,7 +153,7 @@ export default class Block extends Node {
   }
 
   set borderTopRightRadius(value) {
-    value = toArray(value);
+    value = toArray(value, true);
     if(!Array.isArray(value)) value = [value, value];
     this[setAttribute]('borderTopRightRadius', value.map(toNumber));
   }
@@ -163,7 +163,7 @@ export default class Block extends Node {
   }
 
   set borderBottomRightRadius(value) {
-    value = toArray(value);
+    value = toArray(value, true);
     if(!Array.isArray(value)) value = [value, value];
     this[setAttribute]('borderBottomRightRadius', value.map(toNumber));
   }
@@ -173,7 +173,7 @@ export default class Block extends Node {
   }
 
   set borderBottomLeftRadius(value) {
-    value = toArray(value);
+    value = toArray(value, true);
     if(!Array.isArray(value)) value = [value, value];
     this[setAttribute]('borderBottomLeftRadius', value.map(toNumber));
   }

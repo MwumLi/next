@@ -66,10 +66,11 @@ export function toNumber(value) {
   return value;
 }
 
-export function toArray(value) {
+export function toArray(value, parseNumber = false) {
   if(value === '') return null;
   if(typeof value === 'string') value = value.split(/[\s,]+/g);
   if(Array.isArray(value)) {
+    if(parseNumber) value = value.map(toNumber);
     if(value.length === 1) return value[0];
   }
   return value;

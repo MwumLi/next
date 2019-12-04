@@ -38,7 +38,7 @@ export default class Triangle extends Polyline {
   }
 
   set sides(value) {
-    value = toArray(value);
+    value = toArray(value, true);
     if(value != null && !Array.isArray(value)) value = [value, value];
     if(this[setAttribute]('sides', value)) {
       const points = getPoints(this);

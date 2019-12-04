@@ -95,7 +95,7 @@ export default class Ring extends Path {
   }
 
   set radius(value) {
-    value = toArray(value);
+    value = toArray(value, true);
     if(!Array.isArray(value)) value = [value, value];
     this.innerRadius = value[0];
     this.outerRadius = value[1];

@@ -81,7 +81,7 @@ export default class Ellipse extends Path {
   }
 
   set radius(value) {
-    value = toArray(value);
+    value = toArray(value, true);
     if(!Array.isArray(value)) value = [value, value];
     this.radiusX = value[0];
     this.radiusY = value[1];

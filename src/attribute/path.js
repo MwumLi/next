@@ -90,7 +90,7 @@ export default class Path extends Node {
   }
 
   set lineDash(value) {
-    value = toArray(value);
+    value = toArray(value, true);
     if(value != null && !Array.isArray(value)) value = [value];
     this[setAttribute]('lineDash', value ? value.map(toNumber) : null);
   }
