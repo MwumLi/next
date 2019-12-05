@@ -121,7 +121,7 @@ export default class Path extends Node {
 
   /* override */
   get isVisible() {
-    return this.attributes.opacity > 0 && !!this.d;
+    return !!this.d;
   }
 
   get mesh() {

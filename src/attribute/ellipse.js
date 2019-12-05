@@ -19,13 +19,10 @@ function getPath(attr) {
     f.closePath();
   }
   const path = f.path;
-  if(path) {
-    const ret = path.reduce((a, b) => {
-      return a + b.join(' ');
-    }, '');
-    return ret;
-  }
-  return '';
+  const ret = path.reduce((a, b) => {
+    return a + b.join(' ');
+  }, '');
+  return ret;
 }
 
 export default class Ellipse extends Path {

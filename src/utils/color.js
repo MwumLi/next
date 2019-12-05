@@ -16,6 +16,12 @@ class Gradient {
   }
 }
 
+export function isTransparent(color) {
+  if(color instanceof Gradient) return false;
+  if(color == null) return true;
+  return rgba(color)[3] === 0;
+}
+
 export function parseColor(color) {
   // if(Array.isArray(color)) return color;
   if(color == null) return color;

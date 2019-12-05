@@ -61,8 +61,7 @@ export default class Block extends Node {
   /* override */
   get isVisible() {
     const [width, height] = this.offsetSize;
-
-    return this.attributes.opacity > 0 && width > 0 && height > 0;
+    return width > 0 && height > 0;
   }
 
   get hasBorder() {

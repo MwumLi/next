@@ -8237,7 +8237,7 @@ class Renderer {
     const renderer = this[_glRenderer] || this[_canvasRenderer];
 
     if (this[_glRenderer]) {
-      const meshData = Object(_utils_compress__WEBPACK_IMPORTED_MODULE_3__["default"])(this, meshes);
+      const meshData = Object(_utils_compress__WEBPACK_IMPORTED_MODULE_3__["default"])(this, meshes, program == null);
       const gl = renderer.gl;
       if (clear) gl.clear(gl.COLOR_BUFFER_BIT);
       const hasGlobalTransform = !Object(_utils_transform__WEBPACK_IMPORTED_MODULE_8__["isUnitTransform"])(this[_globalTransform]);
@@ -10059,8 +10059,9 @@ function packData(temp, enableBlend) {
   }
 }
 
-function* compress(renderer, meshes, maxSize = renderer.options.bufferSize) {
+function* compress(renderer, meshes, ignoreTrasnparent = false) {
   const temp = [];
+  const maxSize = renderer.options.bufferSize;
   let size = 0;
   let enableBlend = false;
 
@@ -10069,7 +10070,7 @@ function* compress(renderer, meshes, maxSize = renderer.options.bufferSize) {
     const meshData = mesh.meshData;
     let len = 0;
 
-    if (meshData && meshData.positions.length) {
+    if ((!ignoreTrasnparent || !mesh.canIgnore()) && meshData && meshData.positions.length) {
       mesh.packIndex = i;
       const filterCanvas = mesh.filterCanvas;
       len = meshData.positions.length;
@@ -11924,7 +11925,7 @@ class Mesh2D {
 
   get enableBlend() {
     if (this[_blend] === true || this[_blend] === false) return this[_blend];
-    return this[_uniforms].u_opacity < 1.0 || this[_strokeColor] != null && this[_strokeColor][3] < 1.0 || this[_fillColor] != null && this[_fillColor][3] < 1.0 || this[_uniforms].u_colorMatrix != null && this[_uniforms].u_colorMatrix[18] < 1.0 || this[_gradient] || this.beforeRender || this.afterRender;
+    return this[_uniforms].u_opacity < 1.0 || this[_strokeColor] != null && this[_strokeColor][3] < 1.0 || this[_fillColor] != null && this[_fillColor][3] < 1.0 || this[_uniforms].u_colorMatrix != null && this[_uniforms].u_colorMatrix[18] < 1.0 || this[_uniforms].u_radialGradientVector != null || this.beforeRender || this.afterRender;
   }
 
   get filterCanvas() {
@@ -12138,6 +12139,14 @@ class Mesh2D {
       this[_bound][1][0] = width;
       this[_bound][1][1] = height;
     }
+  }
+
+  canIgnore() {
+    const noStroke = this[_stroke] == null || this[_stroke].thickness === 0 || this[_strokeColor][3] === 0;
+    const noFill = this[_fill] == null || this[_fillColor][3] === 0;
+    const noGradient = this[_uniforms].u_radialGradientVector == null;
+    const noTexture = this[_uniforms].u_texSampler == null;
+    return this[_uniforms].u_opacity === 0 || noStroke && noFill && noGradient && noTexture && !this.beforeRender && !this.afterRender;
   } // join: 'miter' or 'bevel'
   // cap: 'butt' or 'square'
   // lineDash: null
@@ -23931,7 +23940,7 @@ class Block extends _node__WEBPACK_IMPORTED_MODULE_2__["default"] {
 
   get isVisible() {
     const [width, height] = this.offsetSize;
-    return this.attributes.opacity > 0 && width > 0 && height > 0;
+    return width > 0 && height > 0;
   }
 
   get hasBorder() {
@@ -24550,6 +24559,7 @@ class Block extends _node__WEBPACK_IMPORTED_MODULE_0__["default"] {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isTransparent", function() { return isTransparent; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parseColor", function() { return parseColor; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Gradient", function() { return Gradient; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setFillColor", function() { return setFillColor; });
@@ -24590,6 +24600,11 @@ class Gradient {
 
 }
 
+function isTransparent(color) {
+  if (color instanceof Gradient) return false;
+  if (color == null) return true;
+  return color_rgba__WEBPACK_IMPORTED_MODULE_0___default()(color)[3] === 0;
+}
 function parseColor(color) {
   // if(Array.isArray(color)) return color;
   if (color == null) return color;
@@ -25368,7 +25383,7 @@ class Path extends _node__WEBPACK_IMPORTED_MODULE_3__["default"] {
 
 
   get isVisible() {
-    return this.attributes.opacity > 0 && !!this.d;
+    return !!this.d;
   }
 
   get mesh() {

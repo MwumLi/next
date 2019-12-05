@@ -106,24 +106,24 @@ export default class Label extends Block {
     return this[getAttribute]('strokeColor');
   }
 
-  set strokeWidth(value) {
-    this[setAttribute]('strokeWidth', toNumber(value));
+  set strokeColor(value) {
+    this[setAttribute]('strokeColor', parseColor(value));
   }
 
   get strokeWidth() {
     return this[getAttribute]('strokeWidth');
   }
 
-  set verticalAlign(value) {
-    this[setAttribute]('verticalAlign', toString(value));
+  set strokeWidth(value) {
+    this[setAttribute]('strokeWidth', toNumber(value));
   }
 
   get verticalAlign() {
     return this[getAttribute]('verticalAlign');
   }
 
-  set strokeColor(value) {
-    this[setAttribute]('strokeColor', parseColor(value));
+  set verticalAlign(value) {
+    this[setAttribute]('verticalAlign', toString(value));
   }
 
   get fillColor() {
@@ -140,15 +140,25 @@ export default class Label extends Block {
   }
 
   set font(value) {
-    const fontInfo = parseFont(value);
-    this.fontStyle = fontInfo.style;
-    this.fontVariant = fontInfo.variant;
-    this.fontWeight = fontInfo.weight;
-    this.fontStretch = fontInfo.stretch;
-    this.fontSize = toNumber(`${fontInfo.size}${fontInfo.unit}`);
-    if(fontInfo.lineHeight) {
-      this.lineHeight = fontInfo.pxLineHeight;
+    if(value == null) {
+      this.fontStyle = null;
+      this.fontVariant = null;
+      this.fontWeight = null;
+      this.fontStretch = null;
+      this.fontSize = null;
+      this.lineHeight = null;
+      this.fontFamily = null;
+    } else {
+      const fontInfo = parseFont(value);
+      this.fontStyle = fontInfo.style;
+      this.fontVariant = fontInfo.variant;
+      this.fontWeight = fontInfo.weight;
+      this.fontStretch = fontInfo.stretch;
+      this.fontSize = toNumber(`${fontInfo.size}${fontInfo.unit}`);
+      if(fontInfo.lineHeight) {
+        this.lineHeight = fontInfo.pxLineHeight;
+      }
+      this.fontFamily = fontInfo.family;
     }
-    this.fontFamily = fontInfo.family;
   }
 }

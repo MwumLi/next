@@ -33,4 +33,7 @@ export default {
   },
   // tab waterfall
   editorViewMode: 'tab',
+  editorOptions: {
+    disableLayerHinting: true,
+  }
 };
