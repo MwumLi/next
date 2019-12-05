@@ -110,9 +110,9 @@ export default class Path extends Node {
     }
     if(key === 'filter') {
       this[_filters] = parseFilterString(newValue);
-      if(this[_mesh]) {
-        applyFilters(this[_mesh], this[_filters]);
-      }
+      // if(this[_mesh]) {
+      //   applyFilters(this[_mesh], this[_filters]);
+      // }
     }
     if(key === 'texture') {
       applyTexture(this, newValue);
@@ -149,9 +149,9 @@ export default class Path extends Node {
         }
         const opacity = this.attributes.opacity;
         mesh.uniforms.u_opacity = opacity;
-        if(this[_filters]) {
-          applyFilters(mesh, this[_filters]);
-        }
+        // if(this[_filters]) {
+        //   applyFilters(mesh, this[_filters]);
+        // }
         this[_mesh] = mesh;
       } else if(mesh.path !== path) {
         mesh.contours = path.contours;
@@ -166,6 +166,10 @@ export default class Path extends Node {
       return mesh;
     }
     return null;
+  }
+
+  get filters() {
+    return this[_filters] || (this.parent && this.parent.filters);
   }
 
   /* override */
@@ -212,6 +216,7 @@ export default class Path extends Node {
   draw() {
     const mesh = this.mesh;
     if(mesh) {
+      applyFilters(mesh, this.filters);
       drawTexture(this, mesh);
       applyRenderEvent(this, mesh);
       return [mesh];

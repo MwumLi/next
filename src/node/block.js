@@ -113,9 +113,9 @@ export default class Block extends Node {
         setStrokeColor(borderBoxMesh,
           {color: borderColor, lineWidth: borderWidth, lineDash: borderDash, lineDashOffset: borderDashOffset});
         borderBoxMesh.uniforms.u_opacity = opacity;
-        if(this[_filters]) {
-          applyFilters(borderBoxMesh, this[_filters]);
-        }
+        // if(this[_filters]) {
+        //   applyFilters(borderBoxMesh, this[_filters]);
+        // }
       } else if(borderBoxMesh.box !== this.borderBox) {
         borderBoxMesh.contours = this.borderBox.contours;
         borderBoxMesh.box = this.borderBox;
@@ -146,9 +146,9 @@ export default class Block extends Node {
           setFillColor(clientBoxMesh, {color: bgcolor});
         }
         clientBoxMesh.uniforms.u_opacity = opacity;
-        if(this[_filters]) {
-          applyFilters(clientBoxMesh, this[_filters]);
-        }
+        // if(this[_filters]) {
+        //   applyFilters(clientBoxMesh, this[_filters]);
+        // }
       } else if(clientBoxMesh.box !== this.clientBox) {
         clientBoxMesh.contours = this.clientBox.contours;
         clientBoxMesh.box = this.clientBox;
@@ -161,6 +161,10 @@ export default class Block extends Node {
       return clientBoxMesh;
     }
     return null;
+  }
+
+  get filters() {
+    return this[_filters] || (this.parent && this.parent.filters);
   }
 
   /* override */
@@ -233,12 +237,12 @@ export default class Block extends Node {
     }
     if(key === 'filter') {
       this[_filters] = parseFilterString(newValue);
-      if(this[_clientBoxMesh]) {
-        applyFilters(this[_clientBoxMesh], this[_filters]);
-      }
-      if(this[_borderBoxMesh]) {
-        applyFilters(this[_borderBoxMesh], this[_filters]);
-      }
+      // if(this[_clientBoxMesh]) {
+      //   applyFilters(this[_clientBoxMesh], this[_filters]);
+      // }
+      // if(this[_borderBoxMesh]) {
+      //   applyFilters(this[_borderBoxMesh], this[_filters]);
+      // }
     }
   }
 
@@ -290,11 +294,13 @@ export default class Block extends Node {
 
     const borderBoxMesh = this.borderBoxMesh;
     if(borderBoxMesh) {
+      applyFilters(borderBoxMesh, this.filters);
       ret.push(borderBoxMesh);
     }
 
     const clientBoxMesh = this.clientBoxMesh;
     if(clientBoxMesh) {
+      applyFilters(clientBoxMesh, this.filters);
       ret.push(clientBoxMesh);
     }
 

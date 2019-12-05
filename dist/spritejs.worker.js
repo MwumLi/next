@@ -26453,15 +26453,12 @@ function (_Node) {
       }
 
       if (key === 'filter') {
-        this[_filters] = Object(_utils_filter__WEBPACK_IMPORTED_MODULE_15__["parseFilterString"])(newValue);
-
-        if (this[_clientBoxMesh]) {
-          Object(_utils_filter__WEBPACK_IMPORTED_MODULE_15__["applyFilters"])(this[_clientBoxMesh], this[_filters]);
-        }
-
-        if (this[_borderBoxMesh]) {
-          Object(_utils_filter__WEBPACK_IMPORTED_MODULE_15__["applyFilters"])(this[_borderBoxMesh], this[_filters]);
-        }
+        this[_filters] = Object(_utils_filter__WEBPACK_IMPORTED_MODULE_15__["parseFilterString"])(newValue); // if(this[_clientBoxMesh]) {
+        //   applyFilters(this[_clientBoxMesh], this[_filters]);
+        // }
+        // if(this[_borderBoxMesh]) {
+        //   applyFilters(this[_borderBoxMesh], this[_filters]);
+        // }
       }
     }
     /* override */
@@ -26523,12 +26520,14 @@ function (_Node) {
       var borderBoxMesh = this.borderBoxMesh;
 
       if (borderBoxMesh) {
+        Object(_utils_filter__WEBPACK_IMPORTED_MODULE_15__["applyFilters"])(borderBoxMesh, this.filters);
         ret.push(borderBoxMesh);
       }
 
       var clientBoxMesh = this.clientBoxMesh;
 
       if (clientBoxMesh) {
+        Object(_utils_filter__WEBPACK_IMPORTED_MODULE_15__["applyFilters"])(clientBoxMesh, this.filters);
         ret.push(clientBoxMesh);
       }
 
@@ -26682,11 +26681,9 @@ function (_Node) {
             lineDash: borderDash,
             lineDashOffset: borderDashOffset
           });
-          borderBoxMesh.uniforms.u_opacity = opacity;
-
-          if (this[_filters]) {
-            Object(_utils_filter__WEBPACK_IMPORTED_MODULE_15__["applyFilters"])(borderBoxMesh, this[_filters]);
-          }
+          borderBoxMesh.uniforms.u_opacity = opacity; // if(this[_filters]) {
+          //   applyFilters(borderBoxMesh, this[_filters]);
+          // }
         } else if (borderBoxMesh.box !== this.borderBox) {
           borderBoxMesh.contours = this.borderBox.contours;
           borderBoxMesh.box = this.borderBox;
@@ -26727,11 +26724,9 @@ function (_Node) {
             });
           }
 
-          clientBoxMesh.uniforms.u_opacity = opacity;
-
-          if (this[_filters]) {
-            Object(_utils_filter__WEBPACK_IMPORTED_MODULE_15__["applyFilters"])(clientBoxMesh, this[_filters]);
-          }
+          clientBoxMesh.uniforms.u_opacity = opacity; // if(this[_filters]) {
+          //   applyFilters(clientBoxMesh, this[_filters]);
+          // }
         } else if (clientBoxMesh.box !== this.clientBox) {
           clientBoxMesh.contours = this.clientBox.contours;
           clientBoxMesh.box = this.clientBox;
@@ -26750,6 +26745,11 @@ function (_Node) {
       }
 
       return null;
+    }
+  }, {
+    key: "filters",
+    get: function get() {
+      return this[_filters] || this.parent && this.parent.filters;
     }
   }]);
 
@@ -28107,11 +28107,9 @@ function (_Node) {
       }
 
       if (key === 'filter') {
-        this[_filters] = Object(_utils_filter__WEBPACK_IMPORTED_MODULE_15__["parseFilterString"])(newValue);
-
-        if (this[_mesh]) {
-          Object(_utils_filter__WEBPACK_IMPORTED_MODULE_15__["applyFilters"])(this[_mesh], this[_filters]);
-        }
+        this[_filters] = Object(_utils_filter__WEBPACK_IMPORTED_MODULE_15__["parseFilterString"])(newValue); // if(this[_mesh]) {
+        //   applyFilters(this[_mesh], this[_filters]);
+        // }
       }
 
       if (key === 'texture') {
@@ -28183,6 +28181,7 @@ function (_Node) {
       var mesh = this.mesh;
 
       if (mesh) {
+        Object(_utils_filter__WEBPACK_IMPORTED_MODULE_15__["applyFilters"])(mesh, this.filters);
         Object(_utils_texture__WEBPACK_IMPORTED_MODULE_14__["drawTexture"])(this, mesh);
         Object(_utils_render_event__WEBPACK_IMPORTED_MODULE_18__["default"])(this, mesh);
         return [mesh];
@@ -28269,11 +28268,9 @@ function (_Node) {
           }
 
           var opacity = this.attributes.opacity;
-          mesh.uniforms.u_opacity = opacity;
-
-          if (this[_filters]) {
-            Object(_utils_filter__WEBPACK_IMPORTED_MODULE_15__["applyFilters"])(mesh, this[_filters]);
-          }
+          mesh.uniforms.u_opacity = opacity; // if(this[_filters]) {
+          //   applyFilters(mesh, this[_filters]);
+          // }
 
           this[_mesh] = mesh;
         } else if (mesh.path !== path) {
@@ -28294,6 +28291,11 @@ function (_Node) {
       }
 
       return null;
+    }
+  }, {
+    key: "filters",
+    get: function get() {
+      return this[_filters] || this.parent && this.parent.filters;
     }
   }]);
 
@@ -29700,15 +29702,10 @@ function getPath(attr) {
   }
 
   var path = f.path;
-
-  if (path) {
-    var ret = path.reduce(function (a, b) {
-      return a + b.join(' ');
-    }, '');
-    return ret;
-  }
-
-  return '';
+  var ret = path.reduce(function (a, b) {
+    return a + b.join(' ');
+  }, '');
+  return ret;
 }
 
 var Ellipse =
@@ -30252,19 +30249,19 @@ function (_Block) {
     }
   }, {
     key: "strokeWidth",
-    set: function set(value) {
-      this[setAttribute]('strokeWidth', Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_6__["toNumber"])(value));
-    },
     get: function get() {
       return this[getAttribute]('strokeWidth');
+    },
+    set: function set(value) {
+      this[setAttribute]('strokeWidth', Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_6__["toNumber"])(value));
     }
   }, {
     key: "verticalAlign",
-    set: function set(value) {
-      this[setAttribute]('verticalAlign', value);
-    },
     get: function get() {
       return this[getAttribute]('verticalAlign');
+    },
+    set: function set(value) {
+      this[setAttribute]('verticalAlign', value);
     }
   }, {
     key: "fillColor",
@@ -30287,18 +30284,28 @@ function (_Block) {
       return "".concat(fontStyle, " ").concat(fontVariant, " ").concat(fontWeight, " ").concat(fontStretch, " ").concat(fontSize, "px/").concat(lineHeight, "px ").concat(fontFamily);
     },
     set: function set(value) {
-      var fontInfo = Object(_mesh_js_core__WEBPACK_IMPORTED_MODULE_5__["parseFont"])(value);
-      this.fontStyle = fontInfo.style;
-      this.fontVariant = fontInfo.variant;
-      this.fontWeight = fontInfo.weight;
-      this.fontStretch = fontInfo.stretch;
-      this.fontSize = Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_6__["toNumber"])("".concat(fontInfo.size).concat(fontInfo.unit));
+      if (value == null) {
+        this.fontStyle = null;
+        this.fontVariant = null;
+        this.fontWeight = null;
+        this.fontStretch = null;
+        this.fontSize = null;
+        this.lineHeight = null;
+        this.fontFamily = null;
+      } else {
+        var fontInfo = Object(_mesh_js_core__WEBPACK_IMPORTED_MODULE_5__["parseFont"])(value);
+        this.fontStyle = fontInfo.style;
+        this.fontVariant = fontInfo.variant;
+        this.fontWeight = fontInfo.weight;
+        this.fontStretch = fontInfo.stretch;
+        this.fontSize = Object(_utils_attribute_value__WEBPACK_IMPORTED_MODULE_6__["toNumber"])("".concat(fontInfo.size).concat(fontInfo.unit));
 
-      if (fontInfo.lineHeight) {
-        this.lineHeight = fontInfo.pxLineHeight;
+        if (fontInfo.lineHeight) {
+          this.lineHeight = fontInfo.pxLineHeight;
+        }
+
+        this.fontFamily = fontInfo.family;
       }
-
-      this.fontFamily = fontInfo.family;
     }
   }]);
 
