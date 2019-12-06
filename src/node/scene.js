@@ -1,4 +1,5 @@
 import {ENV} from '@mesh.js/core';
+import {requestAnimationFrame} from 'fast-animation-frame';
 import Node from './node';
 import Layer from './layer';
 import LayerWorker from './layer-worker';
@@ -7,7 +8,6 @@ import createPointerEvents from '../event/pointer-events';
 import Event from '../event/event';
 import {loadTexture, loadFrames} from '../utils/texture';
 import ownerDocument from '../document';
-import {requestAnimationFrame} from '../utils/animation_frame';
 
 const _enteredTargets = Symbol('enteredTargets');
 

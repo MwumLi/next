@@ -6,6 +6,7 @@ import {ENV} from '@mesh.js/core';
     loadImage,
   }
  */
+import {requestAnimationFrame, cancelAnimationFrame} from 'fast-animation-frame';
 import Node from './node/node';
 import Block from './node/block';
 import Sprite from './node/sprite';
@@ -27,7 +28,6 @@ import Scene from './node/scene';
 import ownerDocument from './document';
 
 import {parseColor, Gradient} from './utils/color';
-import {requestAnimationFrame, cancelAnimationFrame} from './utils/animation_frame';
 import {sizeToPixel} from './utils/attribute_value';
 
 const createElement = ownerDocument.createElement;

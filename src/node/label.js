@@ -1,9 +1,9 @@
 import {createText} from '@mesh.js/core';
+import {requestAnimationFrame} from 'fast-animation-frame';
 import {createTexture} from '../utils/texture';
 import Block from './block';
 import Attr from '../attribute/label';
 import ownerDocument from '../document';
-import {requestAnimationFrame} from '../utils/animation_frame';
 
 const _textImage = Symbol('textImage');
 const _textImageTask = Symbol('textImageTask');

@@ -17,8 +17,18 @@ export async function applyTexture(node, image) {
   if(typeof textureImage.then === 'function') {
     textureImage = await textureImage;
   }
+
   if(image === node.attributes.texture) {
+    if(textureImage.image) {
+      if(textureImage.sourceRect) {
+        node.attributes.sourceRect = textureImage.sourceRect;
+      }
+      node.textureImageRotated = !!textureImage.rotated;
+      textureImage = textureImage.image;
+    }
+
     node.textureImage = textureImage;
+
     node.updateContours();
     node.forceUpdate();
   }
@@ -29,7 +39,9 @@ const _textureMap = Symbol('textureMap');
 
 export function createTexture(image, renderer) {
   renderer[_textureMap] = renderer[_textureMap] || new Map();
-  if(renderer[_textureMap].has(image)) return renderer[_textureMap].get(image);
+  if(renderer[_textureMap].has(image)) {
+    return renderer[_textureMap].get(image);
+  }
   const texture = renderer.createTexture(image);
   renderer[_textureMap].set(image, texture);
   return texture;
@@ -38,6 +50,7 @@ export function createTexture(image, renderer) {
 const _textureContext = Symbol('textureContext');
 export function drawTexture(node, mesh) {
   const textureImage = node.textureImage;
+  const textureImageRotated = node.textureImageRotated;
   if(textureImage) {
     const texture = mesh.texture;
     const contentRect = node.originalContentRect;
@@ -63,6 +76,7 @@ export function drawTexture(node, mesh) {
         rect: textureRect,
         repeat: textureRepeat,
         srcRect: sourceRect,
+        rotated: textureImageRotated,
       });
       node[_textureContext] = node.renderer;
     }
@@ -97,40 +111,19 @@ export async function loadFrames(src, frameData) {
   const frames = frameData.frames;
 
   Object.entries(frames).forEach(([key, frame]) => {
-    const {w, h} = frame.sourceSize;
-
-    const canvas = ENV.createCanvas(w, h),
-      srcRect = frame.frame,
-      rect = frame.spriteSourceSize,
-      context = canvas.getContext('2d');
-
+    const {x, y, w, h} = frame.frame;
+    let sourceRect = [x, y, w, h];
     const rotated = frame.rotated;
 
-    context.save();
-
     if(rotated) {
-      context.translate(0, h);
-      context.rotate(-0.5 * Math.PI);
-
-      const tmp = rect.y;
-      rect.y = rect.x;
-      rect.x = h - srcRect.h - tmp;
-
-      context.drawImage(
-        texture,
-        srcRect.x, srcRect.y, srcRect.h, srcRect.w,
-        rect.x, rect.y, rect.h, rect.w
-      );
-    } else {
-      context.drawImage(
-        texture,
-        srcRect.x, srcRect.y, srcRect.w, srcRect.h,
-        rect.x, rect.y, rect.w, rect.h
-      );
+      sourceRect = [sourceRect[0], sourceRect[1], sourceRect[3], sourceRect[2]];
     }
 
-    context.restore();
-    loadedTextures[key] = canvas;
+    loadedTextures[key] = {
+      image: texture,
+      sourceRect,
+      rotated,
+    };
   });
 
   return texture;

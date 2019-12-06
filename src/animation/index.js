@@ -1,6 +1,6 @@
 import {Animator, Effects} from 'sprite-animator';
 import rgba from 'color-rgba';
-import {requestAnimationFrame, cancelAnimationFrame} from '../utils/animation_frame';
+import {requestAnimationFrame, cancelAnimationFrame} from 'fast-animation-frame';
 
 Effects.default = function (from, to, p, s, e) {
   if(typeof from === 'string' && from.indexOf('rgba') === 0) {

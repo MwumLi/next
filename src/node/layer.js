@@ -1,8 +1,8 @@
 import {Renderer, ENV} from '@mesh.js/core';
+import {requestAnimationFrame, cancelAnimationFrame} from 'fast-animation-frame';
 import {Timeline} from 'sprite-animator';
 import Group from './group';
 import ownerDocument from '../document';
-import {requestAnimationFrame, cancelAnimationFrame} from '../utils/animation_frame';
 
 const defaultOptions = {
   antialias: true,
