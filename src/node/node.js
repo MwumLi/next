@@ -13,9 +13,6 @@ const _animations = Symbol('animations');
 const _eventListeners = Symbol('eventListeners');
 const _captureEventListeners = Symbol('captureEventListeners');
 
-const _cacheRenderMatrix = Symbol('cacheRenderMatrix');
-// const _mouseCapture = Symbol('mouseCapture');
-
 export default class Node {
   static Attr = Attr;
 
@@ -78,18 +75,18 @@ export default class Node {
   }
 
   get renderMatrix() {
+    if(this.__cacheRenderMatrix) return this.__cacheRenderMatrix;
     let m = this.transformMatrix;
     const {x, y} = this.attributes;
     m[4] += x;
     m[5] += y;
     const parent = this.parent;
     if(parent) {
-      const renderMatrix = parent[_cacheRenderMatrix] || parent.renderMatrix;
+      const renderMatrix = parent.__cacheRenderMatrix || parent.renderMatrix;
       if(renderMatrix) {
         m = mat2d(renderMatrix) * mat2d(m);
       }
     }
-    this[_cacheRenderMatrix] = m;
     return m;
   }
 
