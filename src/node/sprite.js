@@ -17,8 +17,12 @@ export default class Sprite extends Block {
     const {width, height} = this.attributes;
     if(width == null || height == null) {
       const img = this.textureImage;
+      const textureRect = this.attributes.textureRect;
       const sourceRect = this.attributes.sourceRect;
-      if(sourceRect) {
+      if(textureRect) {
+        if(width == null) w = textureRect[0] + textureRect[2];
+        if(height == null) h = textureRect[1] + textureRect[3];
+      } else if(sourceRect) {
         if(width == null) w = sourceRect[2];
         if(height == null) h = sourceRect[3];
       } else if(img) {
@@ -33,8 +37,14 @@ export default class Sprite extends Block {
   onPropertyChange(key, newValue, oldValue) {
     super.onPropertyChange(key, newValue, oldValue);
     if(key === 'texture') {
-      applyTexture(this, newValue);
+      applyTexture(this, newValue, true);
       // this.setTexture(newValue);
+    }
+    if(key === 'textureRect') {
+      const {width, height} = this.attributes;
+      if(width == null || height == null) {
+        this.updateContours();
+      }
     }
   }
 

@@ -13,6 +13,7 @@ const _animations = Symbol('animations');
 const _eventListeners = Symbol('eventListeners');
 const _captureEventListeners = Symbol('captureEventListeners');
 
+const _cacheRenderMatrix = Symbol('cacheRenderMatrix');
 // const _mouseCapture = Symbol('mouseCapture');
 
 export default class Node {
@@ -82,9 +83,13 @@ export default class Node {
     m[4] += x;
     m[5] += y;
     const parent = this.parent;
-    if(parent && parent.renderMatrix) {
-      m = mat2d(parent.renderMatrix) * mat2d(m);
+    if(parent) {
+      const renderMatrix = parent[_cacheRenderMatrix] || parent.renderMatrix;
+      if(renderMatrix) {
+        m = mat2d(renderMatrix) * mat2d(m);
+      }
     }
+    this[_cacheRenderMatrix] = m;
     return m;
   }
 

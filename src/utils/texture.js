@@ -9,7 +9,7 @@ export function loadTexture(src, alias) {
   return img != null ? img : src;
 }
 
-export async function applyTexture(node, image) {
+export async function applyTexture(node, image, updateContours) {
   let textureImage = image;
   if(typeof image === 'string') {
     textureImage = loadTexture(image);
@@ -27,9 +27,13 @@ export async function applyTexture(node, image) {
       textureImage = textureImage.image;
     }
 
-    node.textureImage = textureImage;
+    const {width, height, textureRect} = node.attributes;
 
-    node.updateContours();
+    if(updateContours && node.textureImage !== textureImage && !textureRect && (width == null || height == null)) {
+      node.updateContours();
+    }
+
+    node.textureImage = textureImage;
     node.forceUpdate();
   }
   return textureImage;

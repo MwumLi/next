@@ -133,9 +133,9 @@ export default class Block extends Node {
   get clientBoxMesh() {
     if(this.clientBox) {
       let clientBoxMesh = this[_clientBoxMesh];
-      const resolution = this.getResolution();
 
       if(!clientBoxMesh) {
+        const resolution = this.getResolution();
         clientBoxMesh = new Mesh2D(this.clientBox, resolution);
         clientBoxMesh.box = this.clientBox;
         this[_clientBoxMesh] = clientBoxMesh;
