@@ -1,5 +1,5 @@
 import {ENV} from '@mesh.js/core';
-import {requestAnimationFrame} from 'fast-animation-frame';
+import {requestAnimationFrame} from '../utils/animation-frame';
 import Node from './node';
 import Layer from './layer';
 import LayerWorker from './layer-worker';

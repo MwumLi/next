@@ -1,6 +1,6 @@
 import {Renderer, ENV} from '@mesh.js/core';
-import {requestAnimationFrame, cancelAnimationFrame} from 'fast-animation-frame';
 import {Timeline} from 'sprite-animator';
+import {requestAnimationFrame, cancelAnimationFrame} from '../utils/animation-frame';
 import Group from './group';
 import ownerDocument from '../document';
 

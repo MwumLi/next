@@ -6,7 +6,7 @@ import {ENV} from '@mesh.js/core';
     loadImage,
   }
  */
-import {requestAnimationFrame, cancelAnimationFrame} from 'fast-animation-frame';
+import {requestAnimationFrame, cancelAnimationFrame} from './utils/animation-frame';
 import Node from './node/node';
 import Block from './node/block';
 import Sprite from './node/sprite';
