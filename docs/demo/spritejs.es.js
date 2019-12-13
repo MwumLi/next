@@ -9994,10 +9994,8 @@ function transformPoint(p, m) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return compress; });
-/* harmony import */ var gl_renderer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
-/* harmony import */ var _flatten_meshes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(28);
+/* harmony import */ var _flatten_meshes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(28);
 __webpack_require__(1).glMatrix.setMatrixArrayType(Array);
-
 
 
 
@@ -10048,69 +10046,11 @@ const bufferCache = {};
 
 function packData(temp, enableBlend) {
   if (temp.length) {
-    const meshData = Object(_flatten_meshes__WEBPACK_IMPORTED_MODULE_1__["default"])(temp);
-    const positionsCount = meshData.positions.length * meshData.positions[0].length;
-
-    if (!bufferCache.positions || bufferCache.positions.length < positionsCount) {
-      bufferCache.positions = gl_renderer__WEBPACK_IMPORTED_MODULE_0__["default"].FLOAT(meshData.positions);
-      meshData.positions = bufferCache.positions;
-    } else {
-      meshData.positions = gl_renderer__WEBPACK_IMPORTED_MODULE_0__["default"].FLOAT(meshData.positions, bufferCache.positions);
-    }
-
-    const cellsCount = meshData.cells.length * meshData.cells[0].length;
-
-    if (!bufferCache.cells || bufferCache.cells.length < cellsCount) {
-      bufferCache.cells = gl_renderer__WEBPACK_IMPORTED_MODULE_0__["default"].USHORT(meshData.cells);
-      meshData.cells = bufferCache.cells;
-    } else {
-      meshData.cellsCount = cellsCount;
-      meshData.cells = gl_renderer__WEBPACK_IMPORTED_MODULE_0__["default"].USHORT(meshData.cells, bufferCache.cells);
-    }
-
-    const textureCoordCount = meshData.textureCoord.length * meshData.textureCoord[0].length;
-
-    if (meshData.textureCoord) {
-      if (!bufferCache.textureCoord || bufferCache.textureCoord.length < textureCoordCount) {
-        bufferCache.textureCoord = gl_renderer__WEBPACK_IMPORTED_MODULE_0__["default"].FLOAT(meshData.textureCoord);
-        meshData.textureCoord = bufferCache.textureCoord;
-      } else {
-        meshData.textureCoord = gl_renderer__WEBPACK_IMPORTED_MODULE_0__["default"].FLOAT(meshData.textureCoord, bufferCache.textureCoord);
-      }
-    }
-
+    const meshData = Object(_flatten_meshes__WEBPACK_IMPORTED_MODULE_0__["default"])(temp, bufferCache);
     meshData.enableBlend = enableBlend;
 
     if (temp[0].filterCanvas) {
       meshData.filterCanvas = true;
-    }
-
-    const colorCount = meshData.attributes.a_color.length * meshData.attributes.a_color[0].length;
-
-    if (!bufferCache.a_color || bufferCache.a_color.length < colorCount) {
-      bufferCache.a_color = gl_renderer__WEBPACK_IMPORTED_MODULE_0__["default"].UBYTE(meshData.attributes.a_color);
-      meshData.attributes.a_color = {
-        data: bufferCache.a_color
-      };
-    } else {
-      meshData.attributes.a_color = {
-        data: gl_renderer__WEBPACK_IMPORTED_MODULE_0__["default"].UBYTE(meshData.attributes.a_color, bufferCache.a_color)
-      };
-    }
-
-    if (meshData.attributes.a_sourceRect) {
-      const sourceRectCount = meshData.attributes.a_sourceRect.length * meshData.attributes.a_sourceRect[0].length;
-
-      if (!bufferCache.a_sourceRect || bufferCache.a_sourceRect.length < sourceRectCount) {
-        bufferCache.a_sourceRect = gl_renderer__WEBPACK_IMPORTED_MODULE_0__["default"].FLOAT(meshData.attributes.a_sourceRect);
-        meshData.attributes.a_sourceRect = {
-          data: bufferCache.a_sourceRect
-        };
-      } else {
-        meshData.attributes.a_sourceRect = {
-          data: gl_renderer__WEBPACK_IMPORTED_MODULE_0__["default"].FLOAT(meshData.attributes.a_sourceRect, bufferCache.a_sourceRect)
-        };
-      }
     }
 
     meshData.packIndex = temp[0].packIndex;
@@ -10174,52 +10114,185 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return flattenMeshes; });
 __webpack_require__(1).glMatrix.setMatrixArrayType(Array);
 
-function flattenMeshes(meshes) {
-  const positions = [];
-  const textureCoord = [];
-  const cells = [];
-  const a_color = [];
-  const a_sourceRect = [];
+function allocateBuffer(meshes, bufferCache) {
+  let positionsCount = 0;
+  let cellsCount = 0;
+  let textureCoordCount = 0;
+  let sourceRectCount = 0;
+  let colorCount = 0;
+
+  for (let i = 0; i < meshes.length; i++) {
+    const mesh = meshes[i].meshData;
+
+    if (mesh) {
+      const dimension = mesh.positions[0].length;
+      positionsCount += mesh.positions.length * dimension;
+      cellsCount += mesh.cells.length * 3;
+      colorCount += mesh.attributes.a_color.length * 4;
+      const _textureCoord = mesh.textureCoord;
+
+      if (_textureCoord) {
+        textureCoordCount += _textureCoord.length * _textureCoord[0].length;
+      }
+
+      const _sourceRect = mesh.attributes.a_sourceRect;
+
+      if (_sourceRect) {
+        sourceRectCount += _sourceRect.length * 4;
+      }
+    }
+  }
+
+  if (!bufferCache.positions || bufferCache.positions.length < positionsCount) {
+    bufferCache.positions = new Float32Array(positionsCount);
+  }
+
+  if (!bufferCache.cells || bufferCache.cells.length < cellsCount) {
+    bufferCache.cells = new Uint16Array(cellsCount);
+  }
+
+  if (textureCoordCount) {
+    if (!bufferCache.textureCoord || bufferCache.textureCoord.length < textureCoordCount) {
+      bufferCache.textureCoord = new Float32Array(textureCoordCount);
+    }
+  }
+
+  if (!bufferCache.a_color || bufferCache.a_color.length < colorCount) {
+    bufferCache.a_color = new Uint8Array(colorCount);
+  }
+
+  if (sourceRectCount) {
+    if (!bufferCache.a_sourceRect || bufferCache.a_sourceRect.length < sourceRectCount) {
+      bufferCache.a_sourceRect = new Float32Array(sourceRectCount);
+    }
+  }
+
+  return bufferCache;
+}
+
+function flattenMeshes(meshes, bufferCache) {
+  let positions = [];
+  let cells = [];
+  let textureCoord = [];
+  let a_color = [];
+  let a_sourceRect = [];
   let idx = 0;
+  let cidx = 0;
   const uniforms = meshes[0] ? meshes[0].uniforms || {} : {};
+
+  if (bufferCache) {
+    allocateBuffer(meshes, bufferCache);
+    cells = bufferCache.cells;
+    positions = bufferCache.positions;
+    textureCoord = bufferCache.textureCoord;
+    a_color = bufferCache.a_color;
+    a_sourceRect = bufferCache.a_sourceRect;
+  }
 
   for (let i = 0; i < meshes.length; i++) {
     let mesh = meshes[i];
 
     if (mesh) {
       if (mesh.meshData) mesh = mesh.meshData;
-      positions.push(...mesh.positions);
+
+      if (bufferCache) {
+        const _positions = mesh.positions;
+
+        for (let j = 0; j < _positions.length; j++) {
+          const p = _positions[j];
+          const o = 3 * (idx + j);
+
+          for (let k = 0; k < p.length; k++) {
+            positions[o + k] = p[k];
+          }
+        }
+      } else {
+        positions.push(...mesh.positions);
+      }
+
       const _cells = mesh.cells;
 
       for (let j = 0; j < _cells.length; j++) {
         const cell = _cells[j];
-        cells.push([cell[0] + idx, cell[1] + idx, cell[2] + idx]);
+
+        if (bufferCache) {
+          const o = 3 * (cidx + j);
+          cells[o] = cell[0] + idx;
+          cells[o + 1] = cell[1] + idx;
+          cells[o + 2] = cell[2] + idx;
+        } else {
+          cells.push([cell[0] + idx, cell[1] + idx, cell[2] + idx]);
+        }
       } // cells.push(...mesh.cells.map(cell => cell.map(c => c + idx)));
 
 
-      a_color.push(...mesh.attributes.a_color);
+      if (bufferCache) {
+        const _colors = mesh.attributes.a_color;
 
-      if (mesh.attributes.a_sourceRect) {
-        a_sourceRect.push(...mesh.attributes.a_sourceRect);
+        for (let j = 0; j < _colors.length; j++) {
+          const c = _colors[j];
+          const o = 4 * (idx + j);
+          a_color[o] = c[0];
+          a_color[o + 1] = c[1];
+          a_color[o + 2] = c[2];
+          a_color[o + 3] = c[3];
+        }
+      } else {
+        a_color.push(...mesh.attributes.a_color);
       }
 
-      if (mesh.textureCoord) textureCoord.push(...mesh.textureCoord);
+      if (mesh.attributes.a_sourceRect) {
+        if (bufferCache) {
+          const _sourceRect = mesh.attributes.a_sourceRect;
+
+          for (let j = 0; j < _sourceRect.length; j++) {
+            const s = _sourceRect[j];
+            const o = 4 * (idx + j);
+            a_sourceRect[o] = s[0];
+            a_sourceRect[o + 1] = s[1];
+            a_sourceRect[o + 2] = s[2];
+            a_sourceRect[o + 3] = s[3];
+          }
+        } else {
+          a_sourceRect.push(...mesh.attributes.a_sourceRect);
+        }
+      }
+
+      if (mesh.textureCoord) {
+        if (bufferCache) {
+          const _textureCoord = mesh.textureCoord;
+
+          for (let j = 0; j < _textureCoord.length; j++) {
+            const t = _textureCoord[j];
+            const o = 3 * (idx + j);
+
+            for (let k = 0; k < t.length; k++) {
+              textureCoord[o + k] = t[k];
+            }
+          }
+        } else {
+          textureCoord.push(...mesh.textureCoord);
+        }
+      }
+
       idx += mesh.positions.length;
+      cidx += mesh.cells.length;
     }
   }
 
   const attributes = {
     a_color
   };
-  if (a_sourceRect.length > 0) attributes.a_sourceRect = a_sourceRect;
+  if (a_sourceRect && a_sourceRect.length > 0) attributes.a_sourceRect = a_sourceRect;
   const ret = {
     positions,
     cells,
     attributes,
-    uniforms
+    uniforms,
+    cellsCount: cidx * 3
   };
 
-  if (textureCoord.length) {
+  if (textureCoord && textureCoord.length) {
     ret.textureCoord = textureCoord;
   }
 
@@ -12101,8 +12174,7 @@ class Mesh2D {
     mesh.enableBlend = this.enableBlend;
     normalizePoints(mesh.positions, this[_bound]);
 
-    if (!this[_uniforms].u_texSampler) {
-      mesh.textureCoord = mesh.positions.map(() => [0, 0]);
+    if (!this[_uniforms].u_texSampler) {// mesh.textureCoord = mesh.positions.map(() => [0, 0]);
     } else {
       this[_applyTexture](mesh, this[_texOptions], false);
     }
@@ -18603,8 +18675,8 @@ class Node {
     };
   }
 
-  draw() {
-    return [];
+  draw(meshes = []) {
+    return meshes;
   }
 
 }
@@ -23978,19 +24050,17 @@ class Event {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Block; });
 /* harmony import */ var _mesh_js_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
-/* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1);
-/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(78);
-/* harmony import */ var _attribute_block__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(224);
-/* harmony import */ var _utils_color__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(225);
-/* harmony import */ var _utils_border_radius__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(226);
-/* harmony import */ var _utils_filter__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(227);
-/* harmony import */ var _document__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(221);
-/* harmony import */ var _utils_bounding_box__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(228);
-/* harmony import */ var _utils_render_event__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(229);
+/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(78);
+/* harmony import */ var _attribute_block__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(224);
+/* harmony import */ var _utils_color__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(225);
+/* harmony import */ var _utils_border_radius__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(226);
+/* harmony import */ var _utils_filter__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(227);
+/* harmony import */ var _document__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(221);
+/* harmony import */ var _utils_bounding_box__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(228);
+/* harmony import */ var _utils_render_event__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(229);
 __webpack_require__(1).glMatrix.setMatrixArrayType(Array);
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 
 
 
@@ -24008,7 +24078,7 @@ const _clientBoxMesh = Symbol('clientBoxMesh');
 
 const _filters = Symbol('filters');
 
-class Block extends _node__WEBPACK_IMPORTED_MODULE_2__["default"] {
+class Block extends _node__WEBPACK_IMPORTED_MODULE_1__["default"] {
   constructor(attrs = {}) {
     super(attrs);
   }
@@ -24074,7 +24144,7 @@ class Block extends _node__WEBPACK_IMPORTED_MODULE_2__["default"] {
 
 
   get isVisible() {
-    const [width, height] = this.offsetSize;
+    const [width, height] = this.borderSize;
     return width > 0 && height > 0;
   }
 
@@ -24115,7 +24185,7 @@ class Block extends _node__WEBPACK_IMPORTED_MODULE_2__["default"] {
       }
     }
 
-    return Object(_utils_bounding_box__WEBPACK_IMPORTED_MODULE_8__["default"])(boundingBox, this.renderMatrix);
+    return Object(_utils_bounding_box__WEBPACK_IMPORTED_MODULE_7__["default"])(boundingBox, this.renderMatrix);
   }
 
   get borderBoxMesh() {
@@ -24134,7 +24204,7 @@ class Block extends _node__WEBPACK_IMPORTED_MODULE_2__["default"] {
           borderDashOffset,
           opacity
         } = this.attributes;
-        Object(_utils_color__WEBPACK_IMPORTED_MODULE_4__["setStrokeColor"])(borderBoxMesh, {
+        Object(_utils_color__WEBPACK_IMPORTED_MODULE_3__["setStrokeColor"])(borderBoxMesh, {
           color: borderColor,
           lineWidth: borderWidth,
           lineDash: borderDash,
@@ -24148,13 +24218,7 @@ class Block extends _node__WEBPACK_IMPORTED_MODULE_2__["default"] {
         borderBoxMesh.box = this.borderBox;
       }
 
-      const m = this.renderMatrix;
-      const m2 = borderBoxMesh.transformMatrix;
-
-      if (!gl_matrix__WEBPACK_IMPORTED_MODULE_1__["mat2d"].equals(m, m2)) {
-        borderBoxMesh.setTransform(...m);
-      }
-
+      borderBoxMesh.setTransform(...this.renderMatrix);
       return borderBoxMesh;
     }
 
@@ -24176,7 +24240,7 @@ class Block extends _node__WEBPACK_IMPORTED_MODULE_2__["default"] {
         } = this.attributes;
 
         if (this.hasBackground) {
-          Object(_utils_color__WEBPACK_IMPORTED_MODULE_4__["setFillColor"])(clientBoxMesh, {
+          Object(_utils_color__WEBPACK_IMPORTED_MODULE_3__["setFillColor"])(clientBoxMesh, {
             color: bgcolor
           });
         }
@@ -24189,13 +24253,7 @@ class Block extends _node__WEBPACK_IMPORTED_MODULE_2__["default"] {
         clientBoxMesh.box = this.clientBox;
       }
 
-      const m = this.renderMatrix;
-      const m2 = clientBoxMesh.transformMatrix;
-
-      if (!gl_matrix__WEBPACK_IMPORTED_MODULE_1__["mat2d"].equals(m, m2)) {
-        clientBoxMesh.setTransform(...m);
-      }
-
+      clientBoxMesh.setTransform(...this.renderMatrix);
       return clientBoxMesh;
     }
 
@@ -24266,7 +24324,7 @@ class Block extends _node__WEBPACK_IMPORTED_MODULE_2__["default"] {
         const bgcolor = this.attributes.bgcolor;
 
         if (bgcolor && bgcolor.vector) {
-          Object(_utils_color__WEBPACK_IMPORTED_MODULE_4__["setFillColor"])(this[_clientBoxMesh], {
+          Object(_utils_color__WEBPACK_IMPORTED_MODULE_3__["setFillColor"])(this[_clientBoxMesh], {
             color: bgcolor
           });
         }
@@ -24281,7 +24339,7 @@ class Block extends _node__WEBPACK_IMPORTED_MODULE_2__["default"] {
             borderDash,
             borderDashOffset
           } = this.attributes;
-          Object(_utils_color__WEBPACK_IMPORTED_MODULE_4__["setStrokeColor"])(this[_borderBoxMesh], {
+          Object(_utils_color__WEBPACK_IMPORTED_MODULE_3__["setStrokeColor"])(this[_borderBoxMesh], {
             color: borderColor,
             lineWidth: borderWidth,
             lineDash: borderDash,
@@ -24292,7 +24350,7 @@ class Block extends _node__WEBPACK_IMPORTED_MODULE_2__["default"] {
     }
 
     if (this[_clientBoxMesh] && key === 'bgcolor') {
-      Object(_utils_color__WEBPACK_IMPORTED_MODULE_4__["setFillColor"])(this[_clientBoxMesh], {
+      Object(_utils_color__WEBPACK_IMPORTED_MODULE_3__["setFillColor"])(this[_clientBoxMesh], {
         color: newValue
       });
     }
@@ -24304,7 +24362,7 @@ class Block extends _node__WEBPACK_IMPORTED_MODULE_2__["default"] {
         borderDash,
         borderDashOffset
       } = this.attributes;
-      Object(_utils_color__WEBPACK_IMPORTED_MODULE_4__["setStrokeColor"])(this[_borderBoxMesh], {
+      Object(_utils_color__WEBPACK_IMPORTED_MODULE_3__["setStrokeColor"])(this[_borderBoxMesh], {
         color: borderColor,
         lineWidth: borderWidth,
         lineDash: borderDash,
@@ -24317,7 +24375,7 @@ class Block extends _node__WEBPACK_IMPORTED_MODULE_2__["default"] {
     }
 
     if (key === 'filter') {
-      this[_filters] = Object(_utils_filter__WEBPACK_IMPORTED_MODULE_6__["parseFilterString"])(newValue); // if(this[_clientBoxMesh]) {
+      this[_filters] = Object(_utils_filter__WEBPACK_IMPORTED_MODULE_5__["parseFilterString"])(newValue); // if(this[_clientBoxMesh]) {
       //   applyFilters(this[_clientBoxMesh], this[_filters]);
       // }
       // if(this[_borderBoxMesh]) {
@@ -24341,13 +24399,13 @@ class Block extends _node__WEBPACK_IMPORTED_MODULE_2__["default"] {
     const left = -anchorX * offsetSize[0] + bw;
     const top = -anchorY * offsetSize[1] + bw;
     this.borderBox = new _mesh_js_core__WEBPACK_IMPORTED_MODULE_0__["Figure2D"]();
-    Object(_utils_border_radius__WEBPACK_IMPORTED_MODULE_5__["createRadiusBox"])(this.borderBox, [left, top, width, height], borderRadius);
+    Object(_utils_border_radius__WEBPACK_IMPORTED_MODULE_4__["createRadiusBox"])(this.borderBox, [left, top, width, height], borderRadius);
     const clientRect = [left + bw, top + bw, width - borderWidth, height - borderWidth];
     const clientBorderRadius = borderRadius.map(r => {
       return Math.max(0, r - bw);
     });
     this.clientBox = new _mesh_js_core__WEBPACK_IMPORTED_MODULE_0__["Figure2D"]();
-    Object(_utils_border_radius__WEBPACK_IMPORTED_MODULE_5__["createRadiusBox"])(this.clientBox, clientRect, clientBorderRadius);
+    Object(_utils_border_radius__WEBPACK_IMPORTED_MODULE_4__["createRadiusBox"])(this.clientBox, clientRect, clientBorderRadius);
   }
   /* override */
 
@@ -24368,42 +24426,41 @@ class Block extends _node__WEBPACK_IMPORTED_MODULE_2__["default"] {
   /* override */
 
 
-  draw() {
-    if (!this.isVisible) return [];
-    const ret = [];
+  draw(meshes = []) {
+    // if(!this.isVisible) return meshes;
     const borderBoxMesh = this.borderBoxMesh;
 
     if (borderBoxMesh) {
-      Object(_utils_filter__WEBPACK_IMPORTED_MODULE_6__["applyFilters"])(borderBoxMesh, this.filters);
-      ret.push(borderBoxMesh);
+      Object(_utils_filter__WEBPACK_IMPORTED_MODULE_5__["applyFilters"])(borderBoxMesh, this.filters);
+      meshes.push(borderBoxMesh);
     }
 
     const clientBoxMesh = this.clientBoxMesh;
 
     if (clientBoxMesh) {
-      Object(_utils_filter__WEBPACK_IMPORTED_MODULE_6__["applyFilters"])(clientBoxMesh, this.filters);
-      ret.push(clientBoxMesh);
+      Object(_utils_filter__WEBPACK_IMPORTED_MODULE_5__["applyFilters"])(clientBoxMesh, this.filters);
+      meshes.push(clientBoxMesh);
     }
 
     if (borderBoxMesh) {
-      Object(_utils_render_event__WEBPACK_IMPORTED_MODULE_9__["default"])(this, borderBoxMesh);
+      Object(_utils_render_event__WEBPACK_IMPORTED_MODULE_8__["default"])(this, borderBoxMesh);
 
       if (clientBoxMesh) {
         clientBoxMesh.beforeRender = null;
         clientBoxMesh.afterRender = null;
       }
     } else if (clientBoxMesh) {
-      Object(_utils_render_event__WEBPACK_IMPORTED_MODULE_9__["default"])(this, clientBoxMesh);
+      Object(_utils_render_event__WEBPACK_IMPORTED_MODULE_8__["default"])(this, clientBoxMesh);
     }
 
-    return ret;
+    return meshes;
   }
 
 }
 
-_defineProperty(Block, "Attr", _attribute_block__WEBPACK_IMPORTED_MODULE_3__["default"]);
+_defineProperty(Block, "Attr", _attribute_block__WEBPACK_IMPORTED_MODULE_2__["default"]);
 
-_document__WEBPACK_IMPORTED_MODULE_7__["default"].registerNode(Block, 'block');
+_document__WEBPACK_IMPORTED_MODULE_6__["default"].registerNode(Block, 'block');
 
 /***/ }),
 /* 224 */
@@ -25116,11 +25173,11 @@ class Sprite extends _block__WEBPACK_IMPORTED_MODULE_1__["default"] {
   /* override */
 
 
-  draw() {
-    const meshes = super.draw();
+  draw(meshes = []) {
+    super.draw(meshes);
+    const clientBoxMesh = this.clientBoxMesh;
 
-    if (meshes && meshes.length) {
-      const clientBoxMesh = this.clientBoxMesh;
+    if (clientBoxMesh) {
       Object(_utils_texture__WEBPACK_IMPORTED_MODULE_0__["drawTexture"])(this, clientBoxMesh);
     }
 
@@ -25185,12 +25242,13 @@ async function applyTexture(node, image, updateContours) {
       height,
       textureRect
     } = node.attributes;
+    const oldImage = node.textureImage;
+    node.textureImage = textureImage;
 
-    if (updateContours && node.textureImage !== textureImage && !textureRect && (width == null || height == null)) {
+    if (updateContours && oldImage !== textureImage && !textureRect && (width == null || height == null)) {
       node.updateContours();
     }
 
-    node.textureImage = textureImage;
     node.forceUpdate();
   }
 
@@ -25597,13 +25655,7 @@ class Path extends _node__WEBPACK_IMPORTED_MODULE_3__["default"] {
         mesh.path = path;
       }
 
-      const m = this.renderMatrix;
-      const m2 = mesh.transformMatrix;
-
-      if (!gl_matrix__WEBPACK_IMPORTED_MODULE_1__["mat2d"].equals(m, m2)) {
-        mesh.setTransform(...m);
-      }
-
+      mesh.setTransform(...this.renderMatrix);
       return mesh;
     }
 
@@ -25661,17 +25713,17 @@ class Path extends _node__WEBPACK_IMPORTED_MODULE_3__["default"] {
   /* override */
 
 
-  draw() {
+  draw(meshes = []) {
     const mesh = this.mesh;
 
     if (mesh) {
       Object(_utils_filter__WEBPACK_IMPORTED_MODULE_7__["applyFilters"])(mesh, this.filters);
       Object(_utils_texture__WEBPACK_IMPORTED_MODULE_6__["drawTexture"])(this, mesh);
       Object(_utils_render_event__WEBPACK_IMPORTED_MODULE_10__["default"])(this, mesh);
-      return [mesh];
+      meshes.push(mesh);
     }
 
-    return [];
+    return meshes;
   }
 
 }
@@ -28120,11 +28172,11 @@ class Label extends _block__WEBPACK_IMPORTED_MODULE_3__["default"] {
   /* override */
 
 
-  draw() {
-    const meshes = super.draw();
+  draw(meshes) {
+    super.draw(meshes);
+    const clientBoxMesh = this.clientBoxMesh;
 
-    if (meshes && meshes.length) {
-      const clientBoxMesh = this.clientBoxMesh;
+    if (clientBoxMesh) {
       const textImage = this[_textImage];
 
       if (textImage) {
@@ -28615,13 +28667,16 @@ class Group extends _block__WEBPACK_IMPORTED_MODULE_0__["default"] {
   /* override */
 
 
-  draw() {
+  draw(meshes = []) {
     this.__cacheRenderMatrix = this.renderMatrix;
-    const meshes = [...super.draw()];
-    this.orderedChildren.forEach(child => {
-      const res = child.draw();
-      if (res) meshes.push(...res);
-    });
+    super.draw(meshes);
+    const children = this.orderedChildren;
+
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i];
+      child.draw(meshes);
+    }
+
     this.__cacheRenderMatrix = null;
     return meshes;
   }

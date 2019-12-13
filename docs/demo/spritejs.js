@@ -11488,8 +11488,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return compress; });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(26);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var gl_renderer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(24);
-/* harmony import */ var _flatten_meshes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(42);
+/* harmony import */ var _flatten_meshes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(42);
 
 
 __webpack_require__(1).glMatrix.setMatrixArrayType(Array);
@@ -11497,7 +11496,6 @@ __webpack_require__(1).glMatrix.setMatrixArrayType(Array);
 var _marked =
 /*#__PURE__*/
 _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(compress);
-
 
 
 
@@ -11548,69 +11546,11 @@ var bufferCache = {};
 
 function packData(temp, enableBlend) {
   if (temp.length) {
-    var meshData = Object(_flatten_meshes__WEBPACK_IMPORTED_MODULE_2__["default"])(temp);
-    var positionsCount = meshData.positions.length * meshData.positions[0].length;
-
-    if (!bufferCache.positions || bufferCache.positions.length < positionsCount) {
-      bufferCache.positions = gl_renderer__WEBPACK_IMPORTED_MODULE_1__["default"].FLOAT(meshData.positions);
-      meshData.positions = bufferCache.positions;
-    } else {
-      meshData.positions = gl_renderer__WEBPACK_IMPORTED_MODULE_1__["default"].FLOAT(meshData.positions, bufferCache.positions);
-    }
-
-    var cellsCount = meshData.cells.length * meshData.cells[0].length;
-
-    if (!bufferCache.cells || bufferCache.cells.length < cellsCount) {
-      bufferCache.cells = gl_renderer__WEBPACK_IMPORTED_MODULE_1__["default"].USHORT(meshData.cells);
-      meshData.cells = bufferCache.cells;
-    } else {
-      meshData.cellsCount = cellsCount;
-      meshData.cells = gl_renderer__WEBPACK_IMPORTED_MODULE_1__["default"].USHORT(meshData.cells, bufferCache.cells);
-    }
-
-    var textureCoordCount = meshData.textureCoord.length * meshData.textureCoord[0].length;
-
-    if (meshData.textureCoord) {
-      if (!bufferCache.textureCoord || bufferCache.textureCoord.length < textureCoordCount) {
-        bufferCache.textureCoord = gl_renderer__WEBPACK_IMPORTED_MODULE_1__["default"].FLOAT(meshData.textureCoord);
-        meshData.textureCoord = bufferCache.textureCoord;
-      } else {
-        meshData.textureCoord = gl_renderer__WEBPACK_IMPORTED_MODULE_1__["default"].FLOAT(meshData.textureCoord, bufferCache.textureCoord);
-      }
-    }
-
+    var meshData = Object(_flatten_meshes__WEBPACK_IMPORTED_MODULE_1__["default"])(temp, bufferCache);
     meshData.enableBlend = enableBlend;
 
     if (temp[0].filterCanvas) {
       meshData.filterCanvas = true;
-    }
-
-    var colorCount = meshData.attributes.a_color.length * meshData.attributes.a_color[0].length;
-
-    if (!bufferCache.a_color || bufferCache.a_color.length < colorCount) {
-      bufferCache.a_color = gl_renderer__WEBPACK_IMPORTED_MODULE_1__["default"].UBYTE(meshData.attributes.a_color);
-      meshData.attributes.a_color = {
-        data: bufferCache.a_color
-      };
-    } else {
-      meshData.attributes.a_color = {
-        data: gl_renderer__WEBPACK_IMPORTED_MODULE_1__["default"].UBYTE(meshData.attributes.a_color, bufferCache.a_color)
-      };
-    }
-
-    if (meshData.attributes.a_sourceRect) {
-      var sourceRectCount = meshData.attributes.a_sourceRect.length * meshData.attributes.a_sourceRect[0].length;
-
-      if (!bufferCache.a_sourceRect || bufferCache.a_sourceRect.length < sourceRectCount) {
-        bufferCache.a_sourceRect = gl_renderer__WEBPACK_IMPORTED_MODULE_1__["default"].FLOAT(meshData.attributes.a_sourceRect);
-        meshData.attributes.a_sourceRect = {
-          data: bufferCache.a_sourceRect
-        };
-      } else {
-        meshData.attributes.a_sourceRect = {
-          data: gl_renderer__WEBPACK_IMPORTED_MODULE_1__["default"].FLOAT(meshData.attributes.a_sourceRect, bufferCache.a_sourceRect)
-        };
-      }
     }
 
     meshData.packIndex = temp[0].packIndex;
@@ -11760,52 +11700,199 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__(1).glMatrix.setMatrixArrayType(Array);
 
-function flattenMeshes(meshes) {
+function allocateBuffer(meshes, bufferCache) {
+  var positionsCount = 0;
+  var cellsCount = 0;
+  var textureCoordCount = 0;
+  var sourceRectCount = 0;
+  var colorCount = 0;
+
+  for (var i = 0; i < meshes.length; i++) {
+    var mesh = meshes[i].meshData;
+
+    if (mesh) {
+      var dimension = mesh.positions[0].length;
+      positionsCount += mesh.positions.length * dimension;
+      cellsCount += mesh.cells.length * 3;
+      colorCount += mesh.attributes.a_color.length * 4;
+      var _textureCoord = mesh.textureCoord;
+
+      if (_textureCoord) {
+        textureCoordCount += _textureCoord.length * _textureCoord[0].length;
+      }
+
+      var _sourceRect = mesh.attributes.a_sourceRect;
+
+      if (_sourceRect) {
+        sourceRectCount += _sourceRect.length * 4;
+      }
+    }
+  }
+
+  if (!bufferCache.positions || bufferCache.positions.length < positionsCount) {
+    bufferCache.positions = new Float32Array(positionsCount);
+  }
+
+  if (!bufferCache.cells || bufferCache.cells.length < cellsCount) {
+    bufferCache.cells = new Uint16Array(cellsCount);
+  }
+
+  if (textureCoordCount) {
+    if (!bufferCache.textureCoord || bufferCache.textureCoord.length < textureCoordCount) {
+      bufferCache.textureCoord = new Float32Array(textureCoordCount);
+    }
+  }
+
+  if (!bufferCache.a_color || bufferCache.a_color.length < colorCount) {
+    bufferCache.a_color = new Uint8Array(colorCount);
+  }
+
+  if (sourceRectCount) {
+    if (!bufferCache.a_sourceRect || bufferCache.a_sourceRect.length < sourceRectCount) {
+      bufferCache.a_sourceRect = new Float32Array(sourceRectCount);
+    }
+  }
+
+  return bufferCache;
+}
+
+function flattenMeshes(meshes, bufferCache) {
   var positions = [];
-  var textureCoord = [];
   var cells = [];
+  var textureCoord = [];
   var a_color = [];
   var a_sourceRect = [];
   var idx = 0;
+  var cidx = 0;
   var uniforms = meshes[0] ? meshes[0].uniforms || {} : {};
+
+  if (bufferCache) {
+    allocateBuffer(meshes, bufferCache);
+    cells = bufferCache.cells;
+    positions = bufferCache.positions;
+    textureCoord = bufferCache.textureCoord;
+    a_color = bufferCache.a_color;
+    a_sourceRect = bufferCache.a_sourceRect;
+  }
 
   for (var i = 0; i < meshes.length; i++) {
     var mesh = meshes[i];
 
     if (mesh) {
       if (mesh.meshData) mesh = mesh.meshData;
-      positions.push.apply(positions, _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(mesh.positions));
+
+      if (bufferCache) {
+        var _positions = mesh.positions;
+
+        for (var j = 0; j < _positions.length; j++) {
+          var p = _positions[j];
+          var o = 3 * (idx + j);
+
+          for (var k = 0; k < p.length; k++) {
+            positions[o + k] = p[k];
+          }
+        }
+      } else {
+        var _positions2;
+
+        (_positions2 = positions).push.apply(_positions2, _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(mesh.positions));
+      }
+
       var _cells = mesh.cells;
 
-      for (var j = 0; j < _cells.length; j++) {
-        var cell = _cells[j];
-        cells.push([cell[0] + idx, cell[1] + idx, cell[2] + idx]);
+      for (var _j = 0; _j < _cells.length; _j++) {
+        var cell = _cells[_j];
+
+        if (bufferCache) {
+          var _o = 3 * (cidx + _j);
+
+          cells[_o] = cell[0] + idx;
+          cells[_o + 1] = cell[1] + idx;
+          cells[_o + 2] = cell[2] + idx;
+        } else {
+          cells.push([cell[0] + idx, cell[1] + idx, cell[2] + idx]);
+        }
       } // cells.push(...mesh.cells.map(cell => cell.map(c => c + idx)));
 
 
-      a_color.push.apply(a_color, _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(mesh.attributes.a_color));
+      if (bufferCache) {
+        var _colors = mesh.attributes.a_color;
 
-      if (mesh.attributes.a_sourceRect) {
-        a_sourceRect.push.apply(a_sourceRect, _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(mesh.attributes.a_sourceRect));
+        for (var _j2 = 0; _j2 < _colors.length; _j2++) {
+          var c = _colors[_j2];
+
+          var _o2 = 4 * (idx + _j2);
+
+          a_color[_o2] = c[0];
+          a_color[_o2 + 1] = c[1];
+          a_color[_o2 + 2] = c[2];
+          a_color[_o2 + 3] = c[3];
+        }
+      } else {
+        var _a_color;
+
+        (_a_color = a_color).push.apply(_a_color, _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(mesh.attributes.a_color));
       }
 
-      if (mesh.textureCoord) textureCoord.push.apply(textureCoord, _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(mesh.textureCoord));
+      if (mesh.attributes.a_sourceRect) {
+        if (bufferCache) {
+          var _sourceRect = mesh.attributes.a_sourceRect;
+
+          for (var _j3 = 0; _j3 < _sourceRect.length; _j3++) {
+            var s = _sourceRect[_j3];
+
+            var _o3 = 4 * (idx + _j3);
+
+            a_sourceRect[_o3] = s[0];
+            a_sourceRect[_o3 + 1] = s[1];
+            a_sourceRect[_o3 + 2] = s[2];
+            a_sourceRect[_o3 + 3] = s[3];
+          }
+        } else {
+          var _a_sourceRect;
+
+          (_a_sourceRect = a_sourceRect).push.apply(_a_sourceRect, _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(mesh.attributes.a_sourceRect));
+        }
+      }
+
+      if (mesh.textureCoord) {
+        if (bufferCache) {
+          var _textureCoord = mesh.textureCoord;
+
+          for (var _j4 = 0; _j4 < _textureCoord.length; _j4++) {
+            var t = _textureCoord[_j4];
+
+            var _o4 = 3 * (idx + _j4);
+
+            for (var _k = 0; _k < t.length; _k++) {
+              textureCoord[_o4 + _k] = t[_k];
+            }
+          }
+        } else {
+          var _textureCoord2;
+
+          (_textureCoord2 = textureCoord).push.apply(_textureCoord2, _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(mesh.textureCoord));
+        }
+      }
+
       idx += mesh.positions.length;
+      cidx += mesh.cells.length;
     }
   }
 
   var attributes = {
     a_color: a_color
   };
-  if (a_sourceRect.length > 0) attributes.a_sourceRect = a_sourceRect;
+  if (a_sourceRect && a_sourceRect.length > 0) attributes.a_sourceRect = a_sourceRect;
   var ret = {
     positions: positions,
     cells: cells,
     attributes: attributes,
-    uniforms: uniforms
+    uniforms: uniforms,
+    cellsCount: cidx * 3
   };
 
-  if (textureCoord.length) {
+  if (textureCoord && textureCoord.length) {
     ret.textureCoord = textureCoord;
   }
 
@@ -14653,10 +14740,7 @@ function () {
       mesh.enableBlend = this.enableBlend;
       normalizePoints(mesh.positions, this[_bound]);
 
-      if (!this[_uniforms].u_texSampler) {
-        mesh.textureCoord = mesh.positions.map(function () {
-          return [0, 0];
-        });
+      if (!this[_uniforms].u_texSampler) {// mesh.textureCoord = mesh.positions.map(() => [0, 0]);
       } else {
         this[_applyTexture](mesh, this[_texOptions], false);
       }
@@ -20727,7 +20811,8 @@ function () {
   }, {
     key: "draw",
     value: function draw() {
-      return [];
+      var meshes = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+      return meshes;
     }
   }, {
     key: "renderer",
@@ -26540,15 +26625,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(29);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8__);
 /* harmony import */ var _mesh_js_core__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(12);
-/* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(1);
-/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(93);
-/* harmony import */ var _attribute_block__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(248);
-/* harmony import */ var _utils_color__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(249);
-/* harmony import */ var _utils_border_radius__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(250);
-/* harmony import */ var _utils_filter__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(251);
-/* harmony import */ var _document__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(245);
-/* harmony import */ var _utils_bounding_box__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(252);
-/* harmony import */ var _utils_render_event__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(253);
+/* harmony import */ var _node__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(93);
+/* harmony import */ var _attribute_block__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(248);
+/* harmony import */ var _utils_color__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(249);
+/* harmony import */ var _utils_border_radius__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(250);
+/* harmony import */ var _utils_filter__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(251);
+/* harmony import */ var _document__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(245);
+/* harmony import */ var _utils_bounding_box__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(252);
+/* harmony import */ var _utils_render_event__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(253);
 
 
 
@@ -26560,7 +26644,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 __webpack_require__(1).glMatrix.setMatrixArrayType(Array);
-
 
 
 
@@ -26606,7 +26689,7 @@ function (_Node) {
         }
       }
 
-      return Object(_utils_bounding_box__WEBPACK_IMPORTED_MODULE_17__["default"])(boundingBox, this.renderMatrix);
+      return Object(_utils_bounding_box__WEBPACK_IMPORTED_MODULE_16__["default"])(boundingBox, this.renderMatrix);
     }
   }, {
     key: "setResolution",
@@ -26673,7 +26756,7 @@ function (_Node) {
           var bgcolor = this.attributes.bgcolor;
 
           if (bgcolor && bgcolor.vector) {
-            Object(_utils_color__WEBPACK_IMPORTED_MODULE_13__["setFillColor"])(this[_clientBoxMesh], {
+            Object(_utils_color__WEBPACK_IMPORTED_MODULE_12__["setFillColor"])(this[_clientBoxMesh], {
               color: bgcolor
             });
           }
@@ -26687,7 +26770,7 @@ function (_Node) {
                 borderWidth = _this$attributes.borderWidth,
                 borderDash = _this$attributes.borderDash,
                 borderDashOffset = _this$attributes.borderDashOffset;
-            Object(_utils_color__WEBPACK_IMPORTED_MODULE_13__["setStrokeColor"])(this[_borderBoxMesh], {
+            Object(_utils_color__WEBPACK_IMPORTED_MODULE_12__["setStrokeColor"])(this[_borderBoxMesh], {
               color: borderColor,
               lineWidth: borderWidth,
               lineDash: borderDash,
@@ -26698,7 +26781,7 @@ function (_Node) {
       }
 
       if (this[_clientBoxMesh] && key === 'bgcolor') {
-        Object(_utils_color__WEBPACK_IMPORTED_MODULE_13__["setFillColor"])(this[_clientBoxMesh], {
+        Object(_utils_color__WEBPACK_IMPORTED_MODULE_12__["setFillColor"])(this[_clientBoxMesh], {
           color: newValue
         });
       }
@@ -26709,7 +26792,7 @@ function (_Node) {
             _borderWidth = _this$attributes2.borderWidth,
             _borderDash = _this$attributes2.borderDash,
             _borderDashOffset = _this$attributes2.borderDashOffset;
-        Object(_utils_color__WEBPACK_IMPORTED_MODULE_13__["setStrokeColor"])(this[_borderBoxMesh], {
+        Object(_utils_color__WEBPACK_IMPORTED_MODULE_12__["setStrokeColor"])(this[_borderBoxMesh], {
           color: _borderColor,
           lineWidth: _borderWidth,
           lineDash: _borderDash,
@@ -26722,7 +26805,7 @@ function (_Node) {
       }
 
       if (key === 'filter') {
-        this[_filters] = Object(_utils_filter__WEBPACK_IMPORTED_MODULE_15__["parseFilterString"])(newValue); // if(this[_clientBoxMesh]) {
+        this[_filters] = Object(_utils_filter__WEBPACK_IMPORTED_MODULE_14__["parseFilterString"])(newValue); // if(this[_clientBoxMesh]) {
         //   applyFilters(this[_clientBoxMesh], this[_filters]);
         // }
         // if(this[_borderBoxMesh]) {
@@ -26750,13 +26833,13 @@ function (_Node) {
       var left = -anchorX * offsetSize[0] + bw;
       var top = -anchorY * offsetSize[1] + bw;
       this.borderBox = new _mesh_js_core__WEBPACK_IMPORTED_MODULE_9__["Figure2D"]();
-      Object(_utils_border_radius__WEBPACK_IMPORTED_MODULE_14__["createRadiusBox"])(this.borderBox, [left, top, width, height], borderRadius);
+      Object(_utils_border_radius__WEBPACK_IMPORTED_MODULE_13__["createRadiusBox"])(this.borderBox, [left, top, width, height], borderRadius);
       var clientRect = [left + bw, top + bw, width - borderWidth, height - borderWidth];
       var clientBorderRadius = borderRadius.map(function (r) {
         return Math.max(0, r - bw);
       });
       this.clientBox = new _mesh_js_core__WEBPACK_IMPORTED_MODULE_9__["Figure2D"]();
-      Object(_utils_border_radius__WEBPACK_IMPORTED_MODULE_14__["createRadiusBox"])(this.clientBox, clientRect, clientBorderRadius);
+      Object(_utils_border_radius__WEBPACK_IMPORTED_MODULE_13__["createRadiusBox"])(this.clientBox, clientRect, clientBorderRadius);
     }
     /* override */
 
@@ -26784,34 +26867,34 @@ function (_Node) {
   }, {
     key: "draw",
     value: function draw() {
-      if (!this.isVisible) return [];
-      var ret = [];
+      var meshes = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+      // if(!this.isVisible) return meshes;
       var borderBoxMesh = this.borderBoxMesh;
 
       if (borderBoxMesh) {
-        Object(_utils_filter__WEBPACK_IMPORTED_MODULE_15__["applyFilters"])(borderBoxMesh, this.filters);
-        ret.push(borderBoxMesh);
+        Object(_utils_filter__WEBPACK_IMPORTED_MODULE_14__["applyFilters"])(borderBoxMesh, this.filters);
+        meshes.push(borderBoxMesh);
       }
 
       var clientBoxMesh = this.clientBoxMesh;
 
       if (clientBoxMesh) {
-        Object(_utils_filter__WEBPACK_IMPORTED_MODULE_15__["applyFilters"])(clientBoxMesh, this.filters);
-        ret.push(clientBoxMesh);
+        Object(_utils_filter__WEBPACK_IMPORTED_MODULE_14__["applyFilters"])(clientBoxMesh, this.filters);
+        meshes.push(clientBoxMesh);
       }
 
       if (borderBoxMesh) {
-        Object(_utils_render_event__WEBPACK_IMPORTED_MODULE_18__["default"])(this, borderBoxMesh);
+        Object(_utils_render_event__WEBPACK_IMPORTED_MODULE_17__["default"])(this, borderBoxMesh);
 
         if (clientBoxMesh) {
           clientBoxMesh.beforeRender = null;
           clientBoxMesh.afterRender = null;
         }
       } else if (clientBoxMesh) {
-        Object(_utils_render_event__WEBPACK_IMPORTED_MODULE_18__["default"])(this, clientBoxMesh);
+        Object(_utils_render_event__WEBPACK_IMPORTED_MODULE_17__["default"])(this, clientBoxMesh);
       }
 
-      return ret;
+      return meshes;
     }
   }, {
     key: "contentSize",
@@ -26888,9 +26971,9 @@ function (_Node) {
   }, {
     key: "isVisible",
     get: function get() {
-      var _this$offsetSize = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(this.offsetSize, 2),
-          width = _this$offsetSize[0],
-          height = _this$offsetSize[1];
+      var _this$borderSize2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(this.borderSize, 2),
+          width = _this$borderSize2[0],
+          height = _this$borderSize2[1];
 
       return width > 0 && height > 0;
     }
@@ -26931,6 +27014,8 @@ function (_Node) {
     key: "borderBoxMesh",
     get: function get() {
       if (this.hasBorder) {
+        var _borderBoxMesh2;
+
         var resolution = this.getResolution();
         var borderBoxMesh = this[_borderBoxMesh];
 
@@ -26944,7 +27029,7 @@ function (_Node) {
               borderDash = _this$attributes8.borderDash,
               borderDashOffset = _this$attributes8.borderDashOffset,
               opacity = _this$attributes8.opacity;
-          Object(_utils_color__WEBPACK_IMPORTED_MODULE_13__["setStrokeColor"])(borderBoxMesh, {
+          Object(_utils_color__WEBPACK_IMPORTED_MODULE_12__["setStrokeColor"])(borderBoxMesh, {
             color: borderColor,
             lineWidth: borderWidth,
             lineDash: borderDash,
@@ -26958,14 +27043,7 @@ function (_Node) {
           borderBoxMesh.box = this.borderBox;
         }
 
-        var m = this.renderMatrix;
-        var m2 = borderBoxMesh.transformMatrix;
-
-        if (!gl_matrix__WEBPACK_IMPORTED_MODULE_10__["mat2d"].equals(m, m2)) {
-          var _borderBoxMesh2;
-
-          (_borderBoxMesh2 = borderBoxMesh).setTransform.apply(_borderBoxMesh2, _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1___default()(m));
-        }
+        (_borderBoxMesh2 = borderBoxMesh).setTransform.apply(_borderBoxMesh2, _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1___default()(this.renderMatrix));
 
         return borderBoxMesh;
       }
@@ -26976,6 +27054,8 @@ function (_Node) {
     key: "clientBoxMesh",
     get: function get() {
       if (this.clientBox) {
+        var _clientBoxMesh2;
+
         var clientBoxMesh = this[_clientBoxMesh];
 
         if (!clientBoxMesh) {
@@ -26988,7 +27068,7 @@ function (_Node) {
               opacity = _this$attributes9.opacity;
 
           if (this.hasBackground) {
-            Object(_utils_color__WEBPACK_IMPORTED_MODULE_13__["setFillColor"])(clientBoxMesh, {
+            Object(_utils_color__WEBPACK_IMPORTED_MODULE_12__["setFillColor"])(clientBoxMesh, {
               color: bgcolor
             });
           }
@@ -27001,14 +27081,7 @@ function (_Node) {
           clientBoxMesh.box = this.clientBox;
         }
 
-        var m = this.renderMatrix;
-        var m2 = clientBoxMesh.transformMatrix;
-
-        if (!gl_matrix__WEBPACK_IMPORTED_MODULE_10__["mat2d"].equals(m, m2)) {
-          var _clientBoxMesh2;
-
-          (_clientBoxMesh2 = clientBoxMesh).setTransform.apply(_clientBoxMesh2, _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1___default()(m));
-        }
+        (_clientBoxMesh2 = clientBoxMesh).setTransform.apply(_clientBoxMesh2, _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1___default()(this.renderMatrix));
 
         return clientBoxMesh;
       }
@@ -27023,12 +27096,12 @@ function (_Node) {
   }]);
 
   return Block;
-}(_node__WEBPACK_IMPORTED_MODULE_11__["default"]);
+}(_node__WEBPACK_IMPORTED_MODULE_10__["default"]);
 
-_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(Block, "Attr", _attribute_block__WEBPACK_IMPORTED_MODULE_12__["default"]);
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(Block, "Attr", _attribute_block__WEBPACK_IMPORTED_MODULE_11__["default"]);
 
 
-_document__WEBPACK_IMPORTED_MODULE_16__["default"].registerNode(Block, 'block');
+_document__WEBPACK_IMPORTED_MODULE_15__["default"].registerNode(Block, 'block');
 
 /***/ }),
 /* 248 */
@@ -27841,10 +27914,13 @@ function (_Block) {
   }, {
     key: "draw",
     value: function draw() {
-      var meshes = _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Sprite.prototype), "draw", this).call(this);
+      var meshes = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 
-      if (meshes && meshes.length) {
-        var clientBoxMesh = this.clientBoxMesh;
+      _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Sprite.prototype), "draw", this).call(this, meshes);
+
+      var clientBoxMesh = this.clientBoxMesh;
+
+      if (clientBoxMesh) {
         Object(_utils_texture__WEBPACK_IMPORTED_MODULE_8__["drawTexture"])(this, clientBoxMesh);
       }
 
@@ -27935,7 +28011,7 @@ function _applyTexture() {
   _applyTexture = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2___default()(
   /*#__PURE__*/
   _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.mark(function _callee(node, image, updateContours) {
-    var textureImage, _node$attributes, width, height, textureRect;
+    var textureImage, _node$attributes, width, height, textureRect, oldImage;
 
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_1___default.a.wrap(function _callee$(_context) {
       while (1) {
@@ -27970,12 +28046,13 @@ function _applyTexture() {
               }
 
               _node$attributes = node.attributes, width = _node$attributes.width, height = _node$attributes.height, textureRect = _node$attributes.textureRect;
+              oldImage = node.textureImage;
+              node.textureImage = textureImage;
 
-              if (updateContours && node.textureImage !== textureImage && !textureRect && (width == null || height == null)) {
+              if (updateContours && oldImage !== textureImage && !textureRect && (width == null || height == null)) {
                 node.updateContours();
               }
 
-              node.textureImage = textureImage;
               node.forceUpdate();
             }
 
@@ -28476,16 +28553,17 @@ function (_Node) {
   }, {
     key: "draw",
     value: function draw() {
+      var meshes = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
       var mesh = this.mesh;
 
       if (mesh) {
         Object(_utils_filter__WEBPACK_IMPORTED_MODULE_15__["applyFilters"])(mesh, this.filters);
         Object(_utils_texture__WEBPACK_IMPORTED_MODULE_14__["drawTexture"])(this, mesh);
         Object(_utils_render_event__WEBPACK_IMPORTED_MODULE_18__["default"])(this, mesh);
-        return [mesh];
+        meshes.push(mesh);
       }
 
-      return [];
+      return meshes;
     }
   }, {
     key: "d",
@@ -28535,6 +28613,8 @@ function (_Node) {
       var path = this.path;
 
       if (path) {
+        var _mesh2;
+
         var mesh = this[_mesh];
 
         if (!mesh) {
@@ -28576,14 +28656,7 @@ function (_Node) {
           mesh.path = path;
         }
 
-        var m = this.renderMatrix;
-        var m2 = mesh.transformMatrix;
-
-        if (!gl_matrix__WEBPACK_IMPORTED_MODULE_9__["mat2d"].equals(m, m2)) {
-          var _mesh2;
-
-          (_mesh2 = mesh).setTransform.apply(_mesh2, _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(m));
-        }
+        (_mesh2 = mesh).setTransform.apply(_mesh2, _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(this.renderMatrix));
 
         return mesh;
       }
@@ -31807,11 +31880,12 @@ function (_Block) {
     key: "draw",
 
     /* override */
-    value: function draw() {
-      var meshes = _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Label.prototype), "draw", this).call(this);
+    value: function draw(meshes) {
+      _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Label.prototype), "draw", this).call(this, meshes);
 
-      if (meshes && meshes.length) {
-        var clientBoxMesh = this.clientBoxMesh;
+      var clientBoxMesh = this.clientBoxMesh;
+
+      if (clientBoxMesh) {
         var textImage = this[_textImage];
 
         if (textImage) {
@@ -32403,14 +32477,18 @@ function (_Block) {
   }, {
     key: "draw",
     value: function draw() {
+      var meshes = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
       this.__cacheRenderMatrix = this.renderMatrix;
 
-      var meshes = _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(_babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Group.prototype), "draw", this).call(this));
+      _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Group.prototype), "draw", this).call(this, meshes);
 
-      this.orderedChildren.forEach(function (child) {
-        var res = child.draw();
-        if (res) meshes.push.apply(meshes, _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(res));
-      });
+      var children = this.orderedChildren;
+
+      for (var i = 0; i < children.length; i++) {
+        var child = children[i];
+        child.draw(meshes);
+      }
+
       this.__cacheRenderMatrix = null;
       return meshes;
     }

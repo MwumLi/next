@@ -29,11 +29,13 @@ export async function applyTexture(node, image, updateContours) {
 
     const {width, height, textureRect} = node.attributes;
 
-    if(updateContours && node.textureImage !== textureImage && !textureRect && (width == null || height == null)) {
+    const oldImage = node.textureImage;
+    node.textureImage = textureImage;
+
+    if(updateContours && oldImage !== textureImage && !textureRect && (width == null || height == null)) {
       node.updateContours();
     }
 
-    node.textureImage = textureImage;
     node.forceUpdate();
   }
   return textureImage;

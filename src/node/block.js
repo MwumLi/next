@@ -1,5 +1,4 @@
 import {Figure2D, Mesh2D} from '@mesh.js/core';
-import {mat2d} from 'gl-matrix';
 import Node from './node';
 import Attr from '../attribute/block';
 import {setFillColor, setStrokeColor} from '../utils/color';
