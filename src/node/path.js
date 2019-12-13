@@ -157,12 +157,7 @@ export default class Path extends Node {
         mesh.contours = path.contours;
         mesh.path = path;
       }
-
-      const m = this.renderMatrix;
-      const m2 = mesh.transformMatrix;
-      if(!mat2d.equals(m, m2)) {
-        mesh.setTransform(...m);
-      }
+      mesh.setTransform(...this.renderMatrix);
       return mesh;
     }
     return null;
@@ -213,16 +208,16 @@ export default class Path extends Node {
   }
 
   /* override */
-  draw() {
+  draw(meshes = []) {
     const mesh = this.mesh;
     if(mesh) {
       applyFilters(mesh, this.filters);
       drawTexture(this, mesh);
       applyRenderEvent(this, mesh);
-      return [mesh];
+      meshes.push(mesh);
     }
 
-    return [];
+    return meshes;
   }
 }
 

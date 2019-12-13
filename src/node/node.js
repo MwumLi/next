@@ -416,8 +416,8 @@ export default class Node {
     };
   }
 
-  draw() {
-    return [];
+  draw(meshes = []) {
+    return meshes;
   }
 }
 

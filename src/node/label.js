@@ -78,10 +78,10 @@ export default class Label extends Block {
   }
 
   /* override */
-  draw() {
-    const meshes = super.draw();
-    if(meshes && meshes.length) {
-      const clientBoxMesh = this.clientBoxMesh;
+  draw(meshes) {
+    super.draw(meshes);
+    const clientBoxMesh = this.clientBoxMesh;
+    if(clientBoxMesh) {
       const textImage = this[_textImage];
       if(textImage) {
         let texture = clientBoxMesh.texture;

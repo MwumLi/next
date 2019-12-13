@@ -60,7 +60,7 @@ export default class Block extends Node {
 
   /* override */
   get isVisible() {
-    const [width, height] = this.offsetSize;
+    const [width, height] = this.borderSize;
     return width > 0 && height > 0;
   }
 
@@ -120,11 +120,7 @@ export default class Block extends Node {
         borderBoxMesh.contours = this.borderBox.contours;
         borderBoxMesh.box = this.borderBox;
       }
-      const m = this.renderMatrix;
-      const m2 = borderBoxMesh.transformMatrix;
-      if(!mat2d.equals(m, m2)) {
-        borderBoxMesh.setTransform(...m);
-      }
+      borderBoxMesh.setTransform(...this.renderMatrix);
       return borderBoxMesh;
     }
     return null;
@@ -153,11 +149,7 @@ export default class Block extends Node {
         clientBoxMesh.contours = this.clientBox.contours;
         clientBoxMesh.box = this.clientBox;
       }
-      const m = this.renderMatrix;
-      const m2 = clientBoxMesh.transformMatrix;
-      if(!mat2d.equals(m, m2)) {
-        clientBoxMesh.setTransform(...m);
-      }
+      clientBoxMesh.setTransform(...this.renderMatrix);
       return clientBoxMesh;
     }
     return null;
@@ -287,21 +279,19 @@ export default class Block extends Node {
   }
 
   /* override */
-  draw() {
-    if(!this.isVisible) return [];
-
-    const ret = [];
+  draw(meshes = []) {
+    // if(!this.isVisible) return meshes;
 
     const borderBoxMesh = this.borderBoxMesh;
     if(borderBoxMesh) {
       applyFilters(borderBoxMesh, this.filters);
-      ret.push(borderBoxMesh);
+      meshes.push(borderBoxMesh);
     }
 
     const clientBoxMesh = this.clientBoxMesh;
     if(clientBoxMesh) {
       applyFilters(clientBoxMesh, this.filters);
-      ret.push(clientBoxMesh);
+      meshes.push(clientBoxMesh);
     }
 
     if(borderBoxMesh) {
@@ -314,7 +304,7 @@ export default class Block extends Node {
       applyRenderEvent(this, clientBoxMesh);
     }
 
-    return ret;
+    return meshes;
   }
 }
 

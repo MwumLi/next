@@ -173,13 +173,14 @@ export default class Group extends Block {
   }
 
   /* override */
-  draw() {
+  draw(meshes = []) {
     this.__cacheRenderMatrix = this.renderMatrix;
-    const meshes = [...super.draw()];
-    this.orderedChildren.forEach((child) => {
-      const res = child.draw();
-      if(res) meshes.push(...res);
-    });
+    super.draw(meshes);
+    const children = this.orderedChildren;
+    for(let i = 0; i < children.length; i++) {
+      const child = children[i];
+      child.draw(meshes);
+    }
     this.__cacheRenderMatrix = null;
 
     return meshes;
