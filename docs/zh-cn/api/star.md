@@ -231,4 +231,4 @@ Copy整个元素。
 
 ##### transition(sec, easing = 'linear')
 
-创建过度动画。
+创建过渡动画。
