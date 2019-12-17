@@ -80,11 +80,11 @@ export default class Label extends Block {
   /* override */
   draw(meshes) {
     super.draw(meshes);
-    const clientBoxMesh = this.clientBoxMesh;
-    if(clientBoxMesh) {
+    const mesh = this.mesh;
+    if(mesh) {
       const textImage = this[_textImage];
       if(textImage) {
-        let texture = clientBoxMesh.texture;
+        let texture = mesh.texture;
 
         if(!texture
           || this[_textureContext] && this[_textureContext] !== this.renderer
@@ -92,7 +92,7 @@ export default class Label extends Block {
           texture = createTexture(textImage, this.renderer);
           this[_updateTextureRect] = true;
         } else {
-          texture = clientBoxMesh.uniforms.u_texSampler;
+          texture = mesh.uniforms.u_texSampler;
         }
 
         if(this[_updateTextureRect]) {
@@ -126,7 +126,7 @@ export default class Label extends Block {
           x -= this.clientSize[0] * anchorX;
           y -= this.clientSize[1] * anchorY;
 
-          clientBoxMesh.setTexture(texture, {
+          mesh.setTexture(texture, {
             rect: [x, y, width, height],
           });
           this[_updateTextureRect] = false;

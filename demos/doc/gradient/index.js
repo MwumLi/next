@@ -10,14 +10,15 @@ const layer = scene.layer();
 const box = new Sprite();
 box.attr({
   borderWidth: 10,
-  borderColor: new Gradient({
-    vector: [0, 0, 170, 170],
-    colors: [
-      {offset: 0, color: 'red'},
-      {offset: 0.5, color: 'yellow'},
-      {offset: 1, color: 'green'},
-    ],
-  }),
+  borderColor: 'blue',
+  // borderColor: new Gradient({
+  //   vector: [0, 0, 170, 170],
+  //   colors: [
+  //     {offset: 0, color: 'red'},
+  //     {offset: 0.5, color: 'yellow'},
+  //     {offset: 1, color: 'green'},
+  //   ],
+  // }),
   // borderColor: 'green',
   bgcolor: new Gradient({
     vector: [0, 150, 150, 0],

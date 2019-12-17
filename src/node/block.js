@@ -8,8 +8,7 @@ import ownerDocument from '../document';
 import getBoundingBox from '../utils/bounding_box';
 import applyRenderEvent from '../utils/render_event';
 
-const _borderBoxMesh = Symbol('borderBoxMesh');
-const _clientBoxMesh = Symbol('clientBoxMesh');
+const _mesh = Symbol('mesh');
 const _filters = Symbol('filters');
 
 export default class Block extends Node {
@@ -74,7 +73,7 @@ export default class Block extends Node {
 
   get originalClientRect() {
     if(this.clientBox) {
-      const boundingBox = this.clientBoxMesh.boundingBox;
+      const boundingBox = this.mesh.boundingBox;
       return [boundingBox[0][0], boundingBox[0][1], boundingBox[1][0] - boundingBox[0][0], boundingBox[1][1] - boundingBox[0][1]];
     }
     return [0, 0, 0, 0];
@@ -88,8 +87,8 @@ export default class Block extends Node {
 
   getBoundingClientRect() {
     let boundingBox = null;
-    if(this.clientBoxMesh) {
-      boundingBox = [...this.clientBoxMesh.boundingBox];
+    if(this.mesh) {
+      boundingBox = [...this.mesh.boundingBox];
       const borderWidth = this.attributes.borderWidth;
       if(borderWidth) {
         boundingBox[0] = [boundingBox[0][0] - borderWidth, boundingBox[0][1] - borderWidth];
@@ -99,57 +98,31 @@ export default class Block extends Node {
     return getBoundingBox(boundingBox, this.renderMatrix);
   }
 
-  get borderBoxMesh() {
-    if(this.hasBorder) {
-      const resolution = this.getResolution();
-      let borderBoxMesh = this[_borderBoxMesh];
-      if(!borderBoxMesh) {
-        borderBoxMesh = new Mesh2D(this.borderBox, resolution);
-        borderBoxMesh.box = this.borderBox;
-        this[_borderBoxMesh] = borderBoxMesh;
-
-        const {borderColor, borderWidth, borderDash, borderDashOffset, opacity} = this.attributes;
-        setStrokeColor(borderBoxMesh,
-          {color: borderColor, lineWidth: borderWidth, lineDash: borderDash, lineDashOffset: borderDashOffset});
-        borderBoxMesh.uniforms.u_opacity = opacity;
-        // if(this[_filters]) {
-        //   applyFilters(borderBoxMesh, this[_filters]);
-        // }
-      } else if(borderBoxMesh.box !== this.borderBox) {
-        borderBoxMesh.contours = this.borderBox.contours;
-        borderBoxMesh.box = this.borderBox;
-      }
-      borderBoxMesh.setTransform(...this.renderMatrix);
-      return borderBoxMesh;
-    }
-    return null;
-  }
-
-  get clientBoxMesh() {
-    if(this.clientBox) {
-      let clientBoxMesh = this[_clientBoxMesh];
-
-      if(!clientBoxMesh) {
-        const resolution = this.getResolution();
-        clientBoxMesh = new Mesh2D(this.clientBox, resolution);
-        clientBoxMesh.box = this.clientBox;
-        this[_clientBoxMesh] = clientBoxMesh;
-
-        const {bgcolor, opacity} = this.attributes;
-
+  get mesh() {
+    const box = this.clientBox;
+    if(box) {
+      let mesh = this[_mesh];
+      if(!mesh) {
+        mesh = new Mesh2D(box, this.getResolution());
+        mesh.box = box;
+        const fillColor = this.attributes.bgcolor;
         if(this.hasBackground) {
-          setFillColor(clientBoxMesh, {color: bgcolor});
+          setFillColor(mesh, {color: fillColor});
         }
-        clientBoxMesh.uniforms.u_opacity = opacity;
-        // if(this[_filters]) {
-        //   applyFilters(clientBoxMesh, this[_filters]);
-        // }
-      } else if(clientBoxMesh.box !== this.clientBox) {
-        clientBoxMesh.contours = this.clientBox.contours;
-        clientBoxMesh.box = this.clientBox;
+        if(this.hasBorder) {
+          const {borderColor, borderWidth, borderDash, borderDashOffset} = this.attributes;
+          setStrokeColor(mesh,
+            {color: borderColor, lineWidth: borderWidth, lineDash: borderDash, lineDashOffset: borderDashOffset});
+        }
+        const opacity = this.attributes.opacity;
+        mesh.uniforms.u_opacity = opacity;
+        this[_mesh] = mesh;
+      } else if(mesh.box !== box) {
+        mesh.contours = box.contours;
+        mesh.path = box;
       }
-      clientBoxMesh.setTransform(...this.renderMatrix);
-      return clientBoxMesh;
+      mesh.setTransform(...this.renderMatrix);
+      return mesh;
     }
     return null;
   }
@@ -161,8 +134,7 @@ export default class Block extends Node {
   /* override */
   setResolution({width, height}) {
     super.setResolution({width, height});
-    if(this.clientBoxMesh) this.clientBoxMesh.setResolution({width, height});
-    if(this.borderBoxMesh) this.borderBoxMesh.setResolution({width, height});
+    if(this.mesh) this.mesh.setResolution({width, height});
   }
 
   // transformPoint(x, y) {
@@ -173,17 +145,6 @@ export default class Block extends Node {
   // }
 
   /* override */
-  isPointCollision(x, y) {
-    const pointerEvents = this.attributes.pointerEvents;
-    if(pointerEvents === 'none') return false;
-    if(pointerEvents !== 'all' && !this.isVisible) return false;
-    if(pointerEvents !== 'visibleStroke' && this.clientBoxMesh.isPointCollision(x, y, 'fill')) {
-      return true;
-    }
-    return pointerEvents !== 'visibleFill' && this.hasBorder && this.borderBoxMesh.isPointCollision(x, y, 'stroke');
-  }
-
-  /* override */
   onPropertyChange(key, newValue, oldValue) { // eslint-disable-line complexity
     super.onPropertyChange(key, newValue, oldValue);
     if(key === 'anchorX' || key === 'anchorY' || key === 'boxSizing' || key === 'width' || key === 'height' || key === 'borderWidth'
@@ -192,35 +153,32 @@ export default class Block extends Node {
       this.updateContours();
     }
     if(key === 'opacity') {
-      if(this[_clientBoxMesh]) this[_clientBoxMesh].uniforms.u_opacity = newValue;
-      if(this[_borderBoxMesh]) this[_borderBoxMesh].uniforms.u_opacity = newValue;
+      if(this[_mesh]) this[_mesh].uniforms.u_opacity = newValue;
     }
-    if(key === 'anchorX' || key === 'anchorY' || key === 'boxSizing') {
-      if(this[_clientBoxMesh]) {
-        const bgcolor = this.attributes.bgcolor;
-        if(bgcolor && bgcolor.vector) {
-          setFillColor(this[_clientBoxMesh], {color: bgcolor});
-        }
-      }
-      if(this[_borderBoxMesh]) {
-        const borderColor = this.attributes.borderColor;
-        if(borderColor && borderColor.vector) {
-          const {borderWidth, borderDash, borderDashOffset} = this.attributes;
-          setStrokeColor(this[_borderBoxMesh],
-            {color: borderColor, lineWidth: borderWidth, lineDash: borderDash, lineDashOffset: borderDashOffset});
-        }
-      }
+    // if(key === 'anchorX' || key === 'anchorY' || key === 'boxSizing') {
+    //   if(this[_mesh]) {
+    //     const bgcolor = this.attributes.bgcolor;
+    //     if(bgcolor && bgcolor.vector) {
+    //       setFillColor(this[_mesh], {color: bgcolor});
+    //     }
+    //     const borderColor = this.attributes.borderColor;
+    //     if(borderColor && borderColor.vector) {
+    //       const {borderWidth, borderDash, borderDashOffset} = this.attributes;
+    //       setStrokeColor(this[_mesh],
+    //         {color: borderColor, lineWidth: borderWidth, lineDash: borderDash, lineDashOffset: borderDashOffset});
+    //     }
+    //   }
+    // }
+    if(this[_mesh] && key === 'bgcolor') {
+      setFillColor(this[_mesh], {color: newValue});
     }
-    if(this[_clientBoxMesh] && key === 'bgcolor') {
-      setFillColor(this[_clientBoxMesh], {color: newValue});
-    }
-    if(this[_borderBoxMesh]
+    if(this[_mesh]
       && (key === 'borderColor'
       || key === 'borderWidth'
       || key === 'borderDash'
       || key === 'borderDashOffset')) {
       const {borderColor, borderWidth, borderDash, borderDashOffset} = this.attributes;
-      setStrokeColor(this[_borderBoxMesh],
+      setStrokeColor(this[_mesh],
         {color: borderColor, lineWidth: borderWidth, lineDash: borderDash, lineDashOffset: borderDashOffset});
     }
     if(key === 'zIndex' && this.parent) {
@@ -228,12 +186,6 @@ export default class Block extends Node {
     }
     if(key === 'filter') {
       this[_filters] = parseFilterString(newValue);
-      // if(this[_clientBoxMesh]) {
-      //   applyFilters(this[_clientBoxMesh], this[_filters]);
-      // }
-      // if(this[_borderBoxMesh]) {
-      //   applyFilters(this[_borderBoxMesh], this[_filters]);
-      // }
     }
   }
 
@@ -248,59 +200,19 @@ export default class Block extends Node {
     const left = -anchorX * offsetSize[0] + bw;
     const top = -anchorY * offsetSize[1] + bw;
 
-    this.borderBox = new Figure2D();
-    createRadiusBox(this.borderBox, [left, top, width, height], borderRadius);
-    const clientRect = [left + bw,
-      top + bw,
-      width - borderWidth,
-      height - borderWidth];
-
-    const clientBorderRadius = borderRadius.map((r) => {
-      return Math.max(0, r - bw);
-    });
-
     this.clientBox = new Figure2D();
-    createRadiusBox(this.clientBox, clientRect, clientBorderRadius);
-  }
-
-  /* override */
-  connect(parent, zOrder) {
-    super.connect(parent, zOrder);
-    this.setResolution(parent.getResolution());
-    this.forceUpdate();
-  }
-
-  /* override */
-  disconnect() {
-    const parent = this.parent;
-    super.disconnect();
-    if(parent) parent.forceUpdate();
+    createRadiusBox(this.clientBox, [left, top, width, height], borderRadius);
   }
 
   /* override */
   draw(meshes = []) {
     // if(!this.isVisible) return meshes;
 
-    const borderBoxMesh = this.borderBoxMesh;
-    if(borderBoxMesh) {
-      applyFilters(borderBoxMesh, this.filters);
-      meshes.push(borderBoxMesh);
-    }
-
-    const clientBoxMesh = this.clientBoxMesh;
-    if(clientBoxMesh) {
-      applyFilters(clientBoxMesh, this.filters);
-      meshes.push(clientBoxMesh);
-    }
-
-    if(borderBoxMesh) {
-      applyRenderEvent(this, borderBoxMesh);
-      if(clientBoxMesh) {
-        clientBoxMesh.beforeRender = null;
-        clientBoxMesh.afterRender = null;
-      }
-    } else if(clientBoxMesh) {
-      applyRenderEvent(this, clientBoxMesh);
+    const mesh = this.mesh;
+    if(mesh) {
+      applyFilters(mesh, this.filters);
+      meshes.push(mesh);
+      applyRenderEvent(this, mesh);
     }
 
     return meshes;

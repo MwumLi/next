@@ -74,12 +74,17 @@ export default class Node {
     this.attributes.zIndex = value;
   }
 
-  get renderMatrix() {
-    if(this.__cacheRenderMatrix) return this.__cacheRenderMatrix;
-    let m = this.transformMatrix;
+  get localMatrix() {
+    const m = this.transformMatrix;
     const {x, y} = this.attributes;
     m[4] += x;
     m[5] += y;
+    return m;
+  }
+
+  get renderMatrix() {
+    if(this.__cacheRenderMatrix) return this.__cacheRenderMatrix;
+    let m = this.localMatrix;
     const parent = this.parent;
     if(parent) {
       const renderMatrix = parent.__cacheRenderMatrix || parent.renderMatrix;
@@ -98,6 +103,22 @@ export default class Node {
       parent = parent.parent;
     }
     return ret;
+  }
+
+  get mesh() {
+    return null;
+  }
+
+  /* override */
+  isPointCollision(x, y) {
+    if(!this.mesh) return false;
+    const pointerEvents = this.attributes.pointerEvents;
+    if(pointerEvents === 'none') return false;
+    if(pointerEvents !== 'all' && !this.isVisible) return false;
+    let which = 'both';
+    if(pointerEvents === 'visibleFill') which = 'fill';
+    if(pointerEvents === 'visibleStroke') which = 'stroke';
+    return this.mesh.isPointCollision(x, y, which);
   }
 
   getOffsetPosition(x, y) {
@@ -142,10 +163,6 @@ export default class Node {
     }
 
     return this;
-  }
-
-  isPointCollision(x, y) {
-    return false;
   }
 
   isVisible() {
@@ -237,7 +254,7 @@ export default class Node {
   }
 
   forceUpdate() {
-    if(this.parent) this.parent.forceUpdate();
+    if(this.isVisible && this.parent) this.parent.forceUpdate();
   }
 
   setAttribute(key, value) {
@@ -301,6 +318,8 @@ export default class Node {
       configurable: true,
     });
     if(parent.timeline) this.activateAnimations();
+    this.setResolution(parent.getResolution());
+    this.forceUpdate();
     this.dispatchEvent({type: 'append', parent, zOrder});
   }
 
@@ -310,6 +329,7 @@ export default class Node {
     delete this.zOrder;
     this.deactivateAnimations();
     this.dispatchEvent({type: 'remove', parent, zOrder});
+    if(parent) parent.forceUpdate();
   }
 
   activateAnimations() {

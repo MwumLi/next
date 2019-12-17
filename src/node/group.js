@@ -1,3 +1,4 @@
+import {Figure2D} from '@mesh.js/core';
 import Block from './block';
 import Attr from '../attribute/group';
 import ownerDocument from '../document';
@@ -7,6 +8,8 @@ const _zOrder = Symbol('zOrder');
 
 const _ordered = Symbol('ordered');
 const _children = Symbol('children');
+
+const _sealed = Symbol('sealed');
 
 export default class Group extends Block {
   static Attr = Attr;
@@ -172,14 +175,63 @@ export default class Group extends Block {
     return super.dispatchPointerEvent(event);
   }
 
+  seal() {
+    function transform(path, m) {
+      const ret = [];
+      for(let i = 0; i < path.length; i++) {
+        const cmd = [...path[i]];
+        for(let j = 1; j < cmd.length; j += 2) {
+          const x = cmd[j];
+          const y = cmd[j + 1];
+          cmd[j] = x * m[0] + y * m[2] + m[4];
+          cmd[j + 1] = x * m[1] + y * m[3] + m[5];
+        }
+        ret.push(cmd);
+      }
+      return ret;
+    }
+    const children = this.orderedChildren;
+    const clientBox = new Figure2D();
+    const localMatrix = this.localMatrix;
+
+    for(let i = 0; i < children.length; i++) {
+      let child = children[i];
+      if(child instanceof Group) {
+        child = child.seal();
+      }
+      if(child.clientBox) {
+        let path = child.clientBox.contours.path;
+        path = transform(path, child.localMatrix);
+        clientBox.addPath(path);
+      }
+      if(child.path) {
+        let path = child.path.contours.path;
+        path = transform(path, child.localMatrix);
+        clientBox.addPath(path);
+      }
+    }
+
+    this[_sealed] = true;
+    this.clientBox = clientBox;
+
+    return {clientBox, localMatrix};
+  }
+
+  /* override */
+  updateContours() {
+    if(!this[_sealed]) super.updateContours();
+  }
+
   /* override */
   draw(meshes = []) {
     this.__cacheRenderMatrix = this.renderMatrix;
     super.draw(meshes);
-    const children = this.orderedChildren;
-    for(let i = 0; i < children.length; i++) {
-      const child = children[i];
-      child.draw(meshes);
+    if(!this[_sealed]) {
+      const children = this.orderedChildren;
+      for(let i = 0; i < children.length; i++) {
+        const child = children[i];
+        child.draw(meshes);
+      }
     }
     this.__cacheRenderMatrix = null;
 

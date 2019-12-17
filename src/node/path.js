@@ -1,5 +1,4 @@
 import {Figure2D, Mesh2D} from '@mesh.js/core';
-import {mat2d} from 'gl-matrix';
 import pasition from 'pasition';
 import Node from './node';
 import Attr from '../attribute/path';
@@ -167,17 +166,6 @@ export default class Path extends Node {
     return this[_filters] || (this.parent && this.parent.filters);
   }
 
-  /* override */
-  isPointCollision(x, y) {
-    const pointerEvents = this.attributes.pointerEvents;
-    if(pointerEvents === 'none') return false;
-    if(pointerEvents !== 'all' && !this.isVisible) return false;
-    let which = 'both';
-    if(pointerEvents === 'visibleFill') which = 'fill';
-    if(pointerEvents === 'visibleStroke') which = 'stroke';
-    return !!this.mesh && this.mesh.isPointCollision(x, y, which);
-  }
-
   getBoundingClientRect() {
     let boundingBox = null;
     if(this.mesh) boundingBox = this.mesh.boundingBox;
@@ -191,20 +179,6 @@ export default class Path extends Node {
     if(this.attributes.normalize) {
       this.path.normalize(...this.path.boundingCenter);
     }
-  }
-
-  /* override */
-  connect(parent, zOrder) {
-    super.connect(parent, zOrder);
-    this.setResolution(parent.getResolution());
-    this.forceUpdate();
-  }
-
-  /* override */
-  disconnect() {
-    const parent = this.parent;
-    super.disconnect();
-    if(parent) parent.forceUpdate();
   }
 
   /* override */

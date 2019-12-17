@@ -51,9 +51,9 @@ export default class Sprite extends Block {
   /* override */
   draw(meshes = []) {
     super.draw(meshes);
-    const clientBoxMesh = this.clientBoxMesh;
-    if(clientBoxMesh) {
-      drawTexture(this, clientBoxMesh);
+    const mesh = this.mesh;
+    if(mesh) {
+      drawTexture(this, mesh);
     }
 
     return meshes;
